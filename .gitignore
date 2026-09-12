@@ -8,3 +8,6 @@ ios/App/build/
 ios/App/Pods/
 ios/App/App/public/
 .DS_Store
+xoio-mahjong-test.apk
+.dl_token
+ci_watch.sh

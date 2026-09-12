@@ -1,4 +1,4 @@
-name: Build iOS (simulator, unsigned)
+name: Build iOS (unsigned IPA)
 
 on:
   push:
@@ -17,13 +17,25 @@ jobs:
         run: npm install
       - name: Cap sync
         run: npx cap sync ios
-      - name: Build (simulator, no code signing)
+      - name: Build (device, unsigned)
         run: |
           cd ios/App
-          xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug \
-            -sdk iphonesimulator -derivedDataPath build CODE_SIGNING_ALLOWED=NO
-      - name: Upload app
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release \
+            -destination 'generic/platform=iOS' -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            CODE_SIGN_ENTITLEMENTS="" build
+      - name: Package unsigned IPA
+        run: |
+          cd ios/App
+          APP=$(find build/Build/Products/Release-iphoneos -maxdepth 1 -name '*.app' | head -1)
+          echo "APP=$APP"
+          rm -rf Payload App-unsigned.ipa
+          mkdir -p Payload
+          cp -R "$APP" Payload/
+          zip -qry App-unsigned.ipa Payload
+          ls -la App-unsigned.ipa
+      - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
-          name: mahjong-ios-simulator-app
-          path: ios/App/build/Build/Products/Debug-iphonesimulator/App.app
+          name: mahjong-ios-ipa
+          path: ios/App/App-unsigned.ipa
