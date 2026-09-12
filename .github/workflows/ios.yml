@@ -40,13 +40,12 @@ jobs:
         with:
           name: mahjong-ios-ipa
           path: ios/App/App-unsigned.ipa
-      - name: Zip Xcode project (ready to open, Pods included)
+      - name: Zip Xcode project (ready to open: ios/ + node_modules/)
         run: |
-          cd ios
-          rm -rf App/build
-          rm -f ../mahjong-xcode-project.zip
-          zip -qry ../mahjong-xcode-project.zip App
-          ls -la ../mahjong-xcode-project.zip
+          rm -rf ios/App/build ios/App/Payload ios/App/App-unsigned.ipa
+          rm -f mahjong-xcode-project.zip
+          zip -qry mahjong-xcode-project.zip ios node_modules
+          ls -la mahjong-xcode-project.zip
       - name: Upload Xcode project
         uses: actions/upload-artifact@v4
         with:
