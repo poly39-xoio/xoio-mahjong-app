@@ -40,7 +40,7 @@ jobs:
         with:
           name: mahjong-ios-ipa
           path: ios/App/App-unsigned.ipa
-      - name: Zip Xcode project (ready to open: ios/ + node_modules/)
+      - name: Zip Xcode project (ready-to-open, ios plus node_modules)
         run: |
           rm -rf ios/App/build ios/App/Payload ios/App/App-unsigned.ipa
           rm -f mahjong-xcode-project.zip

@@ -56,7 +56,8 @@ for a in arts:
                 print('  -> xoio-mahjong-ios.ipa')
             if a['name'] == 'mahjong-ios-xcode-project' and fn.endswith('.zip'):
                 shutil.copy(p, os.path.join(dl_dir, 'mahjong-xcode-project.zip'))
-                print('  -> mahjong-xcode-project.zip')
+                shutil.copy(p, os.path.join(dl_dir, 'mahjong-xcode-project-fixed.zip'))
+                print('  -> mahjong-xcode-project.zip + -fixed.zip')
 
 print('=== dl dir ===')
 for fn in sorted(os.listdir(dl_dir)):
