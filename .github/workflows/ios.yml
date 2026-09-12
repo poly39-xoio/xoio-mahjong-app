@@ -17,18 +17,22 @@ jobs:
         run: npm install
       - name: Cap sync
         run: npx cap sync ios
-      - name: Build (device, unsigned)
+      - name: Build (device, no real signing)
         run: |
           cd ios/App
           xcodebuild -workspace App.xcworkspace -scheme App -configuration Release \
             -destination 'generic/platform=iOS' -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
             CODE_SIGN_ENTITLEMENTS="" build
-      - name: Package unsigned IPA
+      - name: Package IPA (ad-hoc signed for Sideloadly)
         run: |
           cd ios/App
           APP=$(find build/Build/Products/Release-iphoneos -maxdepth 1 -name '*.app' | head -1)
           echo "APP=$APP"
+          # ad-hoc sign so the bundle has a valid signature structure (Sideloadly re-signs it)
+          codesign --force --deep --sign - "$APP" || true
+          echo "--- signature ---"
+          codesign -dv --verbose=4 "$APP" 2>&1 | head -8 || true
           rm -rf Payload App-unsigned.ipa
           mkdir -p Payload
           cp -R "$APP" Payload/
