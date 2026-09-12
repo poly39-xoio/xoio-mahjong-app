@@ -349,14 +349,14 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
     <div class="card">
       <h3>練習模式</h3>
       <div class="stake-grid" id="stake-grid"></div>
-      <div class="buyin-info">
+      <div class="buyin-info" style="display:none">
         <span>設定分數</span>
         <span><b id="buyin-val">—</b> </span>
       </div>
-      <div class="custom-box" id="custom-box">
-        <label>每台分數<input type="number" id="c-tai" min="1" step="1" value="5"></label>
-        <label>底分<input type="number" id="c-base" min="1" step="1" value="50"></label>
-        <label style="flex:0 0 auto;justify-content:center">分數 = <b class="green" id="c-buy">500</b> U</label>
+      <div class="custom-box" id="custom-box" style="display:none">
+        <label style="display:none">每台分數<input type="number" id="c-tai" min="1" step="1" value="5"></label>
+        <label style="display:none">底分<input type="number" id="c-base" min="1" step="1" value="50"></label>
+        <label style="display:none">分數 = <b class="green" id="c-buy">500</b> U</label>
         <div style="width:100%">
           <button class="btn sm" id="btn-custom-add">✅ 送出自訂</button>
           <div class="custom-saved" id="custom-saved">
@@ -366,7 +366,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
         </div>
       </div>
       <button class="btn" id="btn-start">開始練習</button>
-      <div class="fee-note">結算 = 底注 + 台數×每台 · 放炮者付 / 自摸三家各付 · 莊家放炮 +1 台<br>純練習,不涉及任何付費。</div>
+      <div class="fee-note">結算以「台數」計:放炮者付 / 自摸三家各付 · 莊家放炮 +1 台<br>純練習,不涉及任何付費。</div>
     </div>
     <div class="card" style="margin-top:4px">
       <h3>👥 配對中</h3>
@@ -381,6 +381,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
       <div class="round-info"><b id="r-label">東風圈 第1局</b></div>
       <div class="round-info">餘牌 <b id="wall-count" class="num">0</b></div>
       <div class="round-info">莊家 <b id="dealer-label">東</b> <span class="streak-chip hidden" id="dealer-streak-label"></span></div>
+      <button id="btn-quit" onclick="quitGame()" style="margin-left:auto;background:transparent;border:1px solid #555;color:#bbb;border-radius:8px;padding:4px 12px;font-size:12px;cursor:pointer">退出</button>
     </div>
     <div class="status-tape" id="status-tape">等待開始…</div>
     <div class="turn-clock hidden" id="turn-clock">20</div>
@@ -463,7 +464,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
     <div class="res-card res-card-settle">
       <h2 id="res-title" style="font-size:20px;margin-bottom:6px">🎉 胡牌！</h2>
       <div class="win-big gold" id="res-winner" style="font-size:30px;margin:2px 0 8px">自摸 8台</div>
-      <div class="sub" id="res-sub" style="font-size:13px;margin-bottom:10px">示範結算 · 正式規則引擎開發中</div>
+      <div class="sub" id="res-sub" style="font-size:13px;margin-bottom:10px">結算以台數計 · 示範版</div>
       <div id="next-hint" class="muted hidden" style="font-size:12px;margin:0 0 4px;color:#ffb347"></div>
       <table class="tai-table" id="res-table" style="font-size:14px;margin:8px 0"></table>
       <div style="display:flex;justify-content:center;gap:10px;margin-top:8px">
@@ -1889,10 +1890,9 @@ function endGame(winnerIdx,selfDraw){
     const lastP=G.players[G.lastDiscarder];
     // —— 台數明細共用 ——
     function taiRows(){
-      let r='<tr><td>底注</td><td class="num">'+BASE+' U</td></tr>';
-      let bs=0;
-      ct.breakdown.forEach(b=>{bs+=b.tai; r+='<tr><td>'+b.name+'</td><td class="num">+'+b.tai+'台</td></tr>';});
-      if(bs!==ct.tai) r+='<tr><td>合計台數</td><td class="num"><b>'+ct.tai+'台</b></td></tr>';
+      let r='';
+      ct.breakdown.forEach(b=>{ r+='<tr><td>'+b.name+'</td><td class="num">+'+b.tai+'台</td></tr>';});
+      r+='<tr class="total-row"><td>合計台數</td><td class="num gold"><b>'+ct.tai+'台</b></td></tr>';
       return r;
     }
     if(iAmWinner){
@@ -1900,30 +1900,25 @@ function endGame(winnerIdx,selfDraw){
       title.textContent=huaHu?'🌸 你花胡！':(ct.tai===0?'🎉 你屁胡！':(selfDraw?'🎉 你自摸 胡牌！':'🎉 你胡牌！'));
       win.textContent=ct.tai+'台';
       let rows=taiRows();
-      rows+='<tr><td>台數 × 每台</td><td class="num">'+ct.tai+'台 × '+PER_TAI+'U = '+ct.tai*PER_TAI+'U</td></tr>';
-      rows+='<tr><td>輸家應付(底+台)</td><td class="num"><b>'+perPayer+' U</b></td></tr>';
-      if(dealerExtraTai) rows+='<tr><td>莊家多付 '+dealerExtraTai+' 台(閒家自摸)</td><td class="num red">+'+dealerExtra.toFixed(2)+' U</td></tr>';
-      rows+='<tr class="total-row"><td>'+(selfDraw?'三家共付':'放炮者付')+'</td><td class="num gold">+'+total.toFixed(2)+' U</td></tr>';
-      rows+='<tr><td> 5%</td><td class="num red">−'+fee.toFixed(2)+' U</td></tr>';
-      rows+='<tr class="total-row"><td>贏家實收</td><td class="num green">'+net.toFixed(2)+' U</td></tr>';
+      if(dealerExtraTai) rows+='<tr><td>莊家多付 '+dealerExtraTai+' 台(閒家自摸)</td><td class="num red">+'+dealerExtraTai+'台</td></tr>';
+      rows+='<tr><td>'+(selfDraw?'自摸 · 三家各付':'放炮者付')+'</td><td class="num">'+(selfDraw?'3 家':'1 家')+'</td></tr>';
       table.innerHTML=rows;
-      sub.textContent='你'+winVerb+' '+ct.tai+'台 ·  '+fee.toFixed(2)+' U · 實收 '+net.toFixed(2)+' U';
-      status('🎉 你'+winVerb+' '+ct.tai+'台 → 實收 '+net.toFixed(2)+' U');
-      log('🏁 你'+winVerb+' '+ct.tai+'台 · 實收 '+net.toFixed(2)+' U');
+      sub.textContent='你'+winVerb+' '+ct.tai+'台';
+      status('🎉 你'+winVerb+' '+ct.tai+'台');
+      log('🏁 你'+winVerb+' '+ct.tai+'台');
     }else if(iPay){
       // 你付錢(放炮/自摸被收) → 只顯示你要付多少
       const byName = huaHu ? (who+' 花胡') : (selfDraw ? (who+' 自摸') : (who+' 胡牌'));
       title.textContent=huaHu?('💸 '+who+' 花胡！'):(selfDraw?('💸 '+who+' 自摸 胡牌！'):'💸 你放炮！');
-      win.textContent='− '+payOf(2).toFixed(2)+' U';
+      win.textContent=ct.tai+'台';
       let rows='<tr><td class="muted">'+byName+' '+ct.tai+'台</td></tr>';
       rows+=taiRows();
-      rows+='<tr><td>台數 × 每台</td><td class="num">'+ct.tai+'台 × '+PER_TAI+'U</td></tr>';
-      if(dealerExtraTai && dealer===2) rows+='<tr><td>你是莊家 · 閒家自摸多付 '+dealerExtraTai+' 台</td><td class="num red">+'+dealerExtra.toFixed(2)+' U</td></tr>';
-      rows+='<tr class="total-row red"><td>'+(selfDraw?'你應付':'你放炮應付')+'</td><td class="num"><b>−'+payOf(2).toFixed(2)+' U</b></td></tr>';
+      if(dealerExtraTai && dealer===2) rows+='<tr><td>你是莊家 · 閒家自摸多付 '+dealerExtraTai+' 台</td><td class="num red">+'+dealerExtraTai+'台</td></tr>';
+      rows+='<tr class="total-row red"><td>'+(selfDraw?'你應付':'你放炮應付')+'</td><td class="num"><b>'+ct.tai+'台</b></td></tr>';
       table.innerHTML=rows;
-      sub.textContent=selfDraw?('你付 '+payOf(2).toFixed(2)+' U'+(dealerExtraTai&&dealer===2?' (莊家多付 '+dealerExtraTai+' 台)':'')):('你放炮 · 付 '+payOf(2).toFixed(2)+' U');
-      status('💸 '+(selfDraw?'你付 ':'你放炮付 ')+payOf(2).toFixed(2)+' U');
-      log('💸 '+(selfDraw?'你付 ':'你放炮付 ')+payOf(2).toFixed(2)+' U');
+      sub.textContent=selfDraw?('你付 '+ct.tai+' 台'+(dealerExtraTai&&dealer===2?' (莊家多付 '+dealerExtraTai+' 台)':'')):('你放炮 · 付 '+ct.tai+' 台');
+      status('💸 '+(selfDraw?'你付 ':'你放炮付 ')+ct.tai+' 台');
+      log('💸 '+(selfDraw?'你付 ':'你放炮付 ')+ct.tai+' 台');
     }else{
       // 旁觀: 別家胡牌與你無關(只顯示結果, 不帶/實收細項)
       const payerName = huaHu? '花胡(三家各付)' : (selfDraw? '三家各付' : ((lastP?lastP.name:'放炮者')+' 付'));
@@ -1931,7 +1926,6 @@ function endGame(winnerIdx,selfDraw){
       win.textContent=ct.tai+'台';
       let rows='<tr><td class="muted">'+who+' '+winVerb+' '+ct.tai+'台</td></tr>';
       rows+=taiRows();
-      rows+='<tr><td>台數 × 每台</td><td class="num">'+ct.tai+'台 × '+PER_TAI+'U = '+ct.tai*PER_TAI+'U</td></tr>';
       table.innerHTML=rows;
       sub.textContent=who+' '+winVerb+' '+ct.tai+'台';
       status('🎉 '+who+' '+winVerb+' '+ct.tai+'台');
@@ -1942,8 +1936,14 @@ function endGame(winnerIdx,selfDraw){
   startNextRoundTimer();
 }
 function backLobby(){
-  // 遊戲頁: 退出 → 回主頁
-  window.location.href='mahjong.html';
+  // 遊戲頁: 退出 → 回入口頁
+  window.location.href='free.html';
+}
+function quitGame(){
+  // 主動退出:能關就關,不能關(App Store 限制)就回首頁結束這場
+  try{ if(window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.App && Capacitor.Plugins.App.exitApp){ Capacitor.Plugins.App.exitApp(); } }catch(e){}
+  stopTurnClock(); stopNextRoundTimer();
+  setTimeout(function(){ try{ window.location.href='free.html'; }catch(e){} }, 150);
 }
 function replay(){
   stopNextRoundTimer();
@@ -1958,11 +1958,11 @@ function replay(){
 
 /* ================= 大廳 ================= */
 const STAKES=[
-  {t:1,  b:5,   label:'台1/底5'},
-  {t:2,  b:10,  label:'台2/底10'},
-  {t:4,  b:20,  label:'台4/底20'},
-  {t:10, b:50,  label:'台10/底50'},
-  {t:20, b:100, label:'台20/底100'},
+  {t:1,  b:5,   label:'台1'},
+  {t:2,  b:10,  label:'台2'},
+  {t:4,  b:20,  label:'台4'},
+  {t:10, b:50,  label:'台10'},
+  {t:20, b:100, label:'台20'},
 ];
 let selStake=2;           // 0-4 固定, 5 = 自訂
 let customs=[];           // 已送出的自訂桌型 [{t,b}]
@@ -2029,9 +2029,9 @@ function renderLobby(){
     d.className='stake'+(i===selStake?' sel':'');
     if(i<5){
       const s=STAKES[i];
-      d.innerHTML=`<b>${s.label}</b><small>分數 ${s.b*10}U</small>`;
+      d.innerHTML=`<b>${s.label}</b><small>台數制</small>`;
     }else{
-      d.innerHTML=`<b>自訂</b><small>台/底 自填</small>`;
+      d.innerHTML=`<b>自訂</b><small>自填台數</small>`;
     }
     d.onclick=()=>{selStake=i;renderLobby();updateBuyin();};
     grid.appendChild(d);
