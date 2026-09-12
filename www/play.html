@@ -338,7 +338,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
   .logbox{display:none}
   .backrow.revealed .tile{width:14px;height:20px}
 }
-#bottom-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:max(14px,env(safe-area-inset-bottom));z-index:45;display:flex;gap:10px;align-items:center}
+#bottom-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:max(4px,calc(env(safe-area-inset-bottom) - 20px));z-index:45;display:flex;gap:10px;align-items:center}
 #btn-quit{background:rgba(21,27,33,.94);border:1px solid #ffffff30;color:#cfd6df;border-radius:22px;padding:10px 30px;font-size:13px;font-weight:700;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 #btn-quit:active{opacity:.85}
 
