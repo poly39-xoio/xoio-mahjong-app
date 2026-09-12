@@ -338,9 +338,12 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
   .logbox{display:none}
   .backrow.revealed .tile{width:14px;height:20px}
 }
+#btn-quit{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:45;background:rgba(21,27,33,.94);border:1px solid #ffffff30;color:#cfd6df;border-radius:22px;padding:10px 30px;font-size:13px;font-weight:700;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+#btn-quit:active{opacity:.85}
 </style>
 </head>
 <body>
+<button id="btn-quit" onclick="quitGame()">退出</button>
 <div class="main">
 <button id="btn-lang" class="lang-fab" onclick="window.toggleLiveLang()">EN</button>
 
@@ -381,7 +384,6 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
       <div class="round-info"><b id="r-label">東風圈 第1局</b></div>
       <div class="round-info">餘牌 <b id="wall-count" class="num">0</b></div>
       <div class="round-info">莊家 <b id="dealer-label">東</b> <span class="streak-chip hidden" id="dealer-streak-label"></span></div>
-      <button id="btn-quit" onclick="quitGame()" style="margin-left:auto;background:transparent;border:1px solid #555;color:#bbb;border-radius:8px;padding:4px 12px;font-size:12px;cursor:pointer">退出</button>
     </div>
     <div class="status-tape" id="status-tape">等待開始…</div>
     <div class="turn-clock hidden" id="turn-clock">20</div>
