@@ -29,10 +29,7 @@ jobs:
           cd ios/App
           APP=$(find build/Build/Products/Release-iphoneos -maxdepth 1 -name '*.app' | head -1)
           echo "APP=$APP"
-          # ad-hoc sign so the bundle has a valid signature structure (Sideloadly re-signs it)
           codesign --force --deep --sign - "$APP" || true
-          echo "--- signature ---"
-          codesign -dv --verbose=4 "$APP" 2>&1 | head -8 || true
           rm -rf Payload App-unsigned.ipa
           mkdir -p Payload
           cp -R "$APP" Payload/
@@ -43,3 +40,15 @@ jobs:
         with:
           name: mahjong-ios-ipa
           path: ios/App/App-unsigned.ipa
+      - name: Zip Xcode project (ready to open, Pods included)
+        run: |
+          cd ios
+          rm -rf App/build
+          rm -f ../mahjong-xcode-project.zip
+          zip -qry ../mahjong-xcode-project.zip App
+          ls -la ../mahjong-xcode-project.zip
+      - name: Upload Xcode project
+        uses: actions/upload-artifact@v4
+        with:
+          name: mahjong-ios-xcode-project
+          path: mahjong-xcode-project.zip
