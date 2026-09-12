@@ -1,0 +1,29 @@
+name: Build iOS (simulator, unsigned)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install deps
+        run: npm install
+      - name: Cap sync
+        run: npx cap sync ios
+      - name: Build (simulator, no code signing)
+        run: |
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug \
+            -sdk iphonesimulator -derivedDataPath build CODE_SIGNING_ALLOWED=NO
+      - name: Upload app
+        uses: actions/upload-artifact@v4
+        with:
+          name: mahjong-ios-simulator-app
+          path: ios/App/build/Build/Products/Debug-iphonesimulator/App.app

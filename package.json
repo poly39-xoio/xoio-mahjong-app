@@ -1,0 +1,19 @@
+{
+  "name": "xoio-mahjong-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "XOIO 麻將 · 免費試玩 (Android/iOS app, Capacitor)",
+  "scripts": {
+    "sync": "cap sync",
+    "open:android": "cap open android",
+    "open:ios": "cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/ios": "^6.2.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.0"
+  }
+}
