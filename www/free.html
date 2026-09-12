@@ -45,6 +45,24 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
 .tagchip{display:inline-block;background:#ffffff10;border:1px solid var(--line);border-radius:8px;padding:3px 9px;font-size:12px;margin:3px 4px 0 0;color:var(--sub)}
 .mj-tile{display:inline-block;width:1.25em;height:1.25em;vertical-align:-0.28em;border-radius:.24em;background:#fff;color:#0c5f2e;font-weight:900;text-align:center;line-height:1.25em;font-size:.82em;box-shadow:0 1px 2px rgba(0,0,0,.25);margin:0 .08em}
 .mj-tile::before{content:"發"}
+
+/* ===== 寬螢幕 / iPad 友善 2026-09-12 ===== */
+@media (min-width:760px){
+  body{padding:40px 24px 58px}
+  .wrap{max-width:940px}
+  .icon{width:118px;height:118px;border-radius:28px;font-size:72px;margin-top:8px}
+  h1{font-size:38px}
+  .tag{font-size:19px;margin-top:12px}
+  .sub{font-size:15px;margin-top:12px}
+  .hero-actions{display:flex;gap:14px;max-width:660px;margin:28px auto 0}
+  .cta{margin-top:0;flex:1.5;font-size:18px;padding:19px}
+  .cta2{margin-top:0;flex:1;padding:19px}
+  .grid{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;align-items:stretch;margin-top:18px}
+  .grid>.card,.grid>.aboutlink{margin-top:0}
+  .grid>.aboutlink{align-self:stretch;font-size:17px}
+  .card .li{font-size:14.5px}
+  .foot{margin-top:30px}
+}
 </style>
 </head>
 <body>
@@ -54,8 +72,11 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
   <h1 data-zh="發 · 台灣16張麻將" data-en="Fa · Taiwanese Mahjong">發 · 台灣16張麻將</h1>
   <div class="tag" data-zh="下載到手機,把「發財」的運氣帶著走 <span class='mj-tile'></span>" data-en="Carry the luck of “Fa” (prosperity) <span class='mj-tile'></span>"></div>
   <div class="sub" data-zh="台灣 16 張麻將 · AI 對戰 · 台數教學<br>單機對戰 · 無廣告 · 無內購" data-en="Taiwanese 16-tile Mahjong · Play vs AI · Scoring explained<br>Offline play · no ads · no in-app purchases"></div>
+  <div class="hero-actions">
   <a class="cta" href="play.html" data-zh="開始遊戲" data-en="Start Playing">開始遊戲</a>
   <button class="cta2" onclick="openRules()" data-zh="📖 麻將教學 / 規則" data-en="📖 How to Play / Rules"></button>
+  </div>
+  <div class="grid">
   <div class="card">
     <h2 data-zh="為什麼玩「發」" data-en="Why play “Fa”"></h2>
     <div class="li"><span class="em"><span class='mj-tile'></span></span><span data-zh="<b>邊玩邊學</b><br>每一手自動列出「台數」與牌型理由,新手也看得懂。" data-en="<b>Learn as you play</b><br>Every hand shows the scoring tiles and why — beginners welcome."></span></div>
@@ -64,6 +85,7 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
     <div class="li"><span class="em">🚫</span><span data-zh="<b>無廣告</b><br>一次買斷,乾淨、不打擾。" data-en="<b>No ads</b><br>A clean experience."></span></div>
   </div>
   <a class="aboutlink" href="about.html"><span data-zh="關於 <em class='g'>XOIO</em>" data-en="About <em class='g'>XOIO</em>"></span><span class="ar">›</span></a>
+  </div>
   <div class="foot">© XOIO · Mahjong for everyone</div>
 </div>
 
