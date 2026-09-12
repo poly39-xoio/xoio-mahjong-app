@@ -27,11 +27,13 @@
   ul{padding-left:20px;margin-top:6px}
   a{color:var(--primary);text-decoration:none}
   a:hover{text-decoration:underline}
+  .back{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:9px 16px;font-size:14px;font-weight:700;color:var(--primary);text-decoration:none}
   .foot{margin-top:30px;text-align:center;font-size:12px;color:var(--text-sub);line-height:2}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <a class="back" href="free.html" onclick="if(history.length>1){history.back();return false}">← 返回</a>
   <div class="brand">XOIO</div>
   <h1>關於 XOIO</h1>
   <p class="lead">XOIO 是一間專注打造「鏈上遊戲」的獨立工作室。我們相信 —— 遊戲的公平不該只是口號,而是能被任何人**公開驗證**:規則寫在智慧合約裡,過程與結果留在區塊鏈上。</p>
