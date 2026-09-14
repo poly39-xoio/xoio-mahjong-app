@@ -11,3 +11,7 @@ ios/App/App/public/
 xoio-mahjong-test.apk
 .dl_token
 ci_watch.sh
+AuthKey_*.p8
+*.p8
+APPSTORE_METADATA.md
+asc_api.py
