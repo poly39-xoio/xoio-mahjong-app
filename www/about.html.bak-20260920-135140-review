@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0e11">
+<title>關於 XOIO</title>
+<link rel="icon" type="image/png" sizes="32x32" href="xoio-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="xoio.png">
+<style>
+:root{--card:#151b21;--line:#ffffff14;--pri:#2ad49e;--gold:#ffd166;--txt:#e8eaed;--sub:#9aa5b5}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(circle at 50% -8%,#123a29 0%,#0b0e11 58%) fixed;color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'PingFang TC','Noto Sans TC','Microsoft JhengHei',sans-serif;padding:28px 20px 44px;min-height:100vh}
+.wrap{max-width:430px;margin:0 auto;position:relative}
+.lang{position:absolute;top:-6px;right:0;font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;user-select:none;-webkit-user-select:none}
+.lang b{color:var(--pri)}
+.back{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:9px 16px;font-size:14px;font-weight:800;color:var(--pri);text-decoration:none}
+.brand{font-size:30px;font-weight:900;letter-spacing:3px;color:var(--pri);text-align:center;margin-top:26px}
+h1{font-size:21px;font-weight:900;margin:22px 0 8px;text-align:center;line-height:1.5}
+.lead{color:var(--sub);font-size:14px;line-height:1.95;text-align:center}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:16px}
+section h2{font-size:14.5px;font-weight:800;color:var(--pri);letter-spacing:.6px;margin-bottom:10px}
+section p,section li{font-size:13.5px;line-height:1.9;color:var(--sub)}
+ul{padding-left:19px;margin-top:6px}
+.foot{margin-top:26px;text-align:center;font-size:12px;color:var(--sub);line-height:2}
+
+@media (min-width:760px){
+  body{padding:40px 24px 58px}
+  .wrap{max-width:820px}
+  .brand{font-size:34px}
+  h1{font-size:26px}
+  .lead{font-size:15.5px}
+  section p,section li{font-size:14.5px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="lang" id="langPill" onclick="toggleLang()"></div>
+  <a class="back" href="free.html" onclick="if(history.length>1){history.back();return false}" data-zh="← 返回" data-en="← Back">← 返回</a>
+  <div class="brand">XOIO</div>
+  <h1 data-zh="把麻將,帶給每一個人" data-en="Mahjong for everyone"></h1>
+  <p class="lead" data-zh="我們是一間專注「麻將教學 × 娛樂」的獨立工作室。<br>讓老手打得過癮,讓新手第一次就上手。" data-en="An independent studio focused on <b>teaching</b> and <b>enjoying</b> mahjong.<br>Deep enough for veterans, friendly enough for your very first hand."></p>
+  <section>
+    <h2 data-zh="我們在做什麼" data-en="What we do"></h2>
+    <p data-zh="我們把台灣 16 張麻將做成人人可玩的 App:有 AI 陪你練、有台數教學帶你懂規則,還有一局接一局的實戰節奏。" data-en="We turn Taiwanese 16-tile Mahjong into an app anyone can pick up: an AI to practise with, scoring explained as you play, and a steady four-player rhythm."></p>
+    <ul>
+      <li data-zh="<b>教學</b> —— 每一手列出牌型與台數,看懂「為什麼胡」;英文版同樣完整,讓非華人也能入門。" data-en="<b>Teaching</b> — every hand lists the tiles and scoring so you understand why you won. The English mode is complete, so no Chinese is required."></li>
+      <li data-zh="<b>娛樂</b> —— 一個人也能開桌,隨時來一局,不必等牌咖。" data-en="<b>Fun</b> — one person can start a table anytime. No need to gather friends."></li>
+    </ul>
+  </section>
+  <section>
+    <h2 data-zh="我們的堅持" data-en="Our promise"></h2>
+    <ul>
+      <li data-zh="<b>一次買斷</b> —— 永久暢玩,沒有內購、沒有廣告。" data-en="<b>One-time purchase</b> — yours forever. No in-app purchases, no ads."></li>
+      <li data-zh="<b>乾淨體驗</b> —— 不打擾、不綁帳號、不蒐集不必要的資料。" data-en="<b>Clean by design</b> — no accounts, no intrusive tracking."></li>
+      <li data-zh="<b>持續更新</b> —— 更多牌型解說與玩法,陸續加入。" data-en="<b>Always improving</b> — more scoring guides and modes on the way."></li>
+    </ul>
+  </section>
+  <section>
+    <h2 data-zh="聯絡我們" data-en="Contact"></h2>
+    <p data-zh="合作、媒體或任何問題,歡迎來信:<br><a style='color:var(--pri);text-decoration:none'>io@xoio.io</a>" data-en="Partnerships, press, or any question:<br><a style='color:var(--pri);text-decoration:none'>io@xoio.io</a>"></p>
+  </section>
+  <div class="foot">© XOIO · Mahjong for everyone</div>
+</div>
+<script>
+function getLang(){ try{ return localStorage.getItem('mj_lang')==='en' ? 'en' : 'zh'; }catch(e){ return 'zh'; } }
+function applyLang(){
+  var l=getLang(); document.documentElement.lang=(l==='en'?'en':'zh-Hant');
+  var els=document.querySelectorAll('[data-zh],[data-en]');
+  for(var i=0;i<els.length;i++){ var v=(l==='en')?els[i].getAttribute('data-en'):els[i].getAttribute('data-zh'); if(v!==null) els[i].innerHTML=v; }
+  var p=document.getElementById('langPill'); if(p) p.innerHTML=(l==='en')?'中 / <b>EN</b>':'<b>中</b> / EN';
+  document.title=(l==='en')?'About XOIO':'關於 XOIO';
+}
+function toggleLang(){ try{ localStorage.setItem('mj_lang', getLang()==='en'?'zh':'en'); }catch(e){} applyLang(); }
+applyLang();
+</script>
+</body>
+</html>

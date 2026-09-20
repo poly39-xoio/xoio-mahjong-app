@@ -399,11 +399,11 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
           </div>
         </div>
       </div>
-      <button class="btn" id="btn-start">開始練習</button>
+      <button class="btn" id="btn-start">開始遊戲</button>
       <div class="fee-note">結算以「台數」計:放炮者付 / 自摸三家各付 · 莊家放炮 +1 台<br>純練習,不涉及任何付費。</div>
     </div>
     <div class="card" style="margin-top:4px">
-      <h3>👥 配對中</h3>
+      <h3>👥 準備開局</h3>
       <div class="seats" id="lobby-seats"></div>
       <div class="small muted" style="text-align:center">練習模式:你 + 3 位 AI 玩家(明牌)</div>
     </div>
@@ -497,7 +497,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
     <div class="res-card res-card-settle">
       <h2 id="res-title" style="font-size:20px;margin-bottom:6px">🎉 胡牌！</h2>
       <div class="win-big gold" id="res-winner" style="font-size:30px;margin:2px 0 8px">自摸 8台</div>
-      <div class="sub" id="res-sub" style="font-size:13px;margin-bottom:10px">結算以台數計 · 示範版</div>
+      <div class="sub" id="res-sub" style="font-size:13px;margin-bottom:10px">結算以台數計</div>
       <div id="next-hint" class="muted hidden" style="font-size:12px;margin:0 0 4px;color:#ffb347"></div>
       <table class="tai-table" id="res-table" style="font-size:14px;margin:8px 0"></table>
       <div style="display:flex;justify-content:center;gap:10px;margin-top:8px">
@@ -522,16 +522,16 @@ const EN = {
   '要怎麼吃？':'How to chi?','要怎麼吃':'How to chi','取消不吃':'Cancel','選擇吃法':'Choose chi',
   '攤牌畫面':'Reveal','胡牌！':'Win!','自摸 8台':'Self-draw 8 tai','下一局':'NEXT','退出':'EXIT',
   '確定中途退出?':'Quit mid-game?','確定退出(將賠償)':'QUIT (compensation)','取消':'CANCEL',
-  '配對中':'Matching','餘牌':'Remaining','莊家':'Dealer','等待開始…':'Waiting to start…','莊':'D',
+  '準備開局':'Table setup','餘牌':'Remaining','莊家':'Dealer','等待開始…':'Waiting to start…','莊':'D',
   '選擇桌型 · 底注 / 每台金額（）':'Choose stake · Base / Per-tai',
   '設定分數':'Buy-in per player (base × 10)','每台分數':'Per-tai','底分':'Base',
   '分數 =':'Buy-in =','送出自訂':'Save custom','已存自訂 (':'Saved presets (','送出後會出現在這裡，可點選使用':'Saved presets appear here · tap to use',
-  '開始練習':'Enter table (demo)',
+  '開始遊戲':'Start Playing',
   '結算 = 底注 + 台數×每台 · 放炮者付 / 自摸三家各付 · 莊家放炮 +1 台':'Settlement = base + tai × per-tai · discarder pays / self-draw all pay · dealer discard +1 tai',
-  '純練習,不涉及任何付費。':'Buy-in = base × 10 · 5% fee on winnings · remainder refunded',
-  '練習模式:你 + 3 位 AI 玩家(明牌)':'Demo: you + 3 AI players · real matchmaking coming soon',
-  '示範結算 · 正式規則引擎開發中':'Demo settlement · rules engine in progress',
-  '連線中…':'Connecting…','等待其他玩家…':'Waiting for players…','等待牌局開始…':'Waiting to start…','畫面載入中…':'Loading…',
+  '純練習,不涉及任何付費。':'Pure practice — no payment involved.',
+  '你 + 3 位 AI 玩家,隨時開局':'You + 3 AI players — start anytime',
+  '結算明細':'Settlement',
+  '載入中…':'Loading…','準備中…':'Preparing…','等待牌局開始…':'Waiting to start…','畫面載入中…':'Loading…',
   '結算中…':'Settling…','發牌中…':'Dealing…','退出中…':'Quitting…','結束中…':'Ending…','動作失敗':'Action failed',
   '先點一張手牌,再按出牌':'Pick a hand tile, then Discard','請先點選一張牌':'Pick a tile first',
   '輪到你出牌 — 點一張牌,再按出牌':'Your turn — pick a tile, then Discard','輪到你 — 點一張牌,再按出牌':'Your turn — pick a tile, then Discard',
@@ -566,7 +566,7 @@ const EN = {
   '保險金 5%':'buy-in 5%','(底×10 的 5%),共 15%':'(5% of base×10), 15% total','你的餘額立即結算、牌局解散並退款':'Your balance settles now, the table closes and refunds',
   '其他三位玩家會收到通知':'The other three players are notified','若不按退出、只是關掉或離開頁面 → 視同':'If you do not quit and just close or leave → treated as',
   '掛機托管':'auto-play','牌局會繼續打完,你不用賠償,最後照常結算退款。':'the game continues, no penalty, normal settlement at the end.',
-  '歡迎試玩示範版 — 點「進入牌桌」開始':'Welcome to the demo — click Enter table to start','線上真錢牌局 #':'Live table #','— 連線中…':' — connecting…',
+  '歡迎遊玩 · 點「開始遊戲」開局':'Welcome — tap Start Playing to begin','牌局 #':'Table #','— 載入中…':' — loading…',
   '東風圈 第1局':'East Round 1','南風圈 第1局':'South Round 1',
   '你是莊家 · 閒家自摸多付':'You are dealer · non-dealer self-draw pays extra','你是莊家':'You are dealer','閒家':'non-dealer','多付':'pay extra',
   ' 出牌':' to discard','打出':'discard',' 打 ':' plays ','打':'plays','放炮者':'discarder','三家共付':'all three pay','共':' total',
@@ -2153,7 +2153,7 @@ document.getElementById('btn-replay').addEventListener('click',replay);
 })();
 document.getElementById('btn-back-lobby').addEventListener('click',backLobby);
 renderLobby();
-log('👋 歡迎試玩示範版 — 點「進入牌桌」開始');
+log('👋 歡迎遊玩台灣16張麻將!');
 </script>
 </body>
 </html>

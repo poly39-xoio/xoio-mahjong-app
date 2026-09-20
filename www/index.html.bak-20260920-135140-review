@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0e11">
+<title>發 · 台灣16張麻將</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="manifest" href="free.webmanifest">
+<link rel="apple-touch-icon" href="pwa/mahjong-180.png">
+<style>
+:root{--bg:#0b0e11;--card:#151b21;--line:#ffffff14;--pri:#2ad49e;--gold:#ffd166;--txt:#e8eaed;--sub:#9aa5b5}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(circle at 50% -8%,#123a29 0%,var(--bg) 58%) fixed;color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'PingFang TC','Noto Sans TC','Microsoft JhengHei',sans-serif;padding:28px 20px 40px;min-height:100vh}
+.wrap{max-width:430px;margin:0 auto;position:relative}
+.lang{position:absolute;top:-6px;right:0;font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;user-select:none;-webkit-user-select:none}
+.lang b{color:var(--pri)}
+.icon{width:92px;height:92px;border-radius:22px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:900;color:#0c5f2e;margin:26px auto 16px;box-shadow:0 10px 30px #0007}
+h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
+.tag{text-align:center;color:var(--gold);font-size:15px;margin-top:10px;font-weight:800;line-height:1.6}
+.sub{text-align:center;color:var(--sub);font-size:13px;margin-top:10px;line-height:1.8}
+.cta{display:block;width:100%;margin-top:24px;background:linear-gradient(135deg,#2ad49e,#0e8f5f);color:#04231a;font-weight:900;font-size:17px;border:none;border-radius:15px;padding:17px;text-align:center;letter-spacing:1px;text-decoration:none;cursor:pointer}
+.cta2{display:block;width:100%;margin-top:11px;background:transparent;border:1px solid var(--line);color:var(--txt);font-weight:700;font-size:15px;border-radius:15px;padding:15px;text-align:center;cursor:pointer}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:16px}
+.card h2{font-size:14px;color:var(--pri);letter-spacing:.6px;margin-bottom:10px;font-weight:800}
+.li{display:flex;gap:11px;font-size:13.5px;color:var(--sub);line-height:1.85;margin-top:8px}
+.li b{color:var(--txt)}
+.li .em{font-size:17px;line-height:1.4}
+.aboutlink{display:flex;align-items:center;justify-content:space-between;margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;color:var(--txt);font-size:15px;font-weight:800;text-decoration:none}
+.aboutlink em.g{color:var(--pri);font-style:normal}
+.aboutlink .ar{color:var(--sub);font-size:20px}
+.foot{margin-top:22px;text-align:center;font-size:12px;color:var(--sub)}
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;z-index:60}
+.mask.on{display:block}
+.modal{position:fixed;left:0;right:0;bottom:0;max-height:86vh;background:var(--card);border:1px solid var(--line);border-bottom:0;border-top-left-radius:22px;border-top-right-radius:22px;display:none;flex-direction:column;z-index:61;max-width:430px;margin:0 auto}
+.modal.on{display:flex}
+.mh{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.mh b{font-size:16px;font-weight:900}
+.mh .x{margin-left:auto;color:var(--sub);font-size:18px;cursor:pointer;padding:0 4px}
+.mb{padding:16px 18px 28px;overflow:auto;-webkit-overflow-scrolling:touch}
+.mb h3{font-size:13.5px;color:var(--pri);font-weight:800;margin:15px 0 6px}
+.mb h3:first-child{margin-top:0}
+.mb p,.mb li{font-size:13px;color:var(--sub);line-height:1.85}
+.mb ul{padding-left:18px}
+.tagchip{display:inline-block;background:#ffffff10;border:1px solid var(--line);border-radius:8px;padding:3px 9px;font-size:12px;margin:3px 4px 0 0;color:var(--sub)}
+.mj-tile{display:inline-block;width:1.25em;height:1.25em;vertical-align:-0.28em;border-radius:.24em;background:#fff;color:#0c5f2e;font-weight:900;text-align:center;line-height:1.25em;font-size:.82em;box-shadow:0 1px 2px rgba(0,0,0,.25);margin:0 .08em}
+.mj-tile::before{content:"發"}
+
+/* ===== 寬螢幕 / iPad 友善 2026-09-12 ===== */
+@media (min-width:760px){
+  body{padding:40px 24px 58px}
+  .wrap{max-width:940px}
+  .icon{width:118px;height:118px;border-radius:28px;font-size:72px;margin-top:8px}
+  h1{font-size:38px}
+  .tag{font-size:19px;margin-top:12px}
+  .sub{font-size:15px;margin-top:12px}
+  .hero-actions{display:flex;gap:14px;max-width:660px;margin:28px auto 0}
+  .cta{margin-top:0;flex:1.5;font-size:18px;padding:19px}
+  .cta2{margin-top:0;flex:1;padding:19px}
+  .grid{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;align-items:stretch;margin-top:18px}
+  .grid>.card,.grid>.aboutlink{margin-top:0}
+  .grid>.aboutlink{align-self:stretch;font-size:17px}
+  .card .li{font-size:14.5px}
+  .foot{margin-top:30px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="lang" id="langPill" onclick="toggleLang()"></div>
+  <div class="icon">發</div>
+  <h1 data-zh="發 · 台灣16張麻將" data-en="Fa · Taiwanese Mahjong">發 · 台灣16張麻將</h1>
+  <div class="tag" data-zh="下載到手機,把「發財」的運氣帶著走 <span class='mj-tile'></span>" data-en="Carry the luck of “Fa” (prosperity) <span class='mj-tile'></span>"></div>
+  <div class="sub" data-zh="台灣 16 張麻將 · AI 對戰 · 台數教學<br>單機對戰 · 無廣告 · 無內購" data-en="Taiwanese 16-tile Mahjong · Play vs AI · Scoring explained<br>Offline play · no ads · no in-app purchases"></div>
+  <div class="hero-actions">
+  <a class="cta" href="play.html" data-zh="開始遊戲" data-en="Start Playing">開始遊戲</a>
+  <button class="cta2" onclick="openRules()" data-zh="📖 麻將教學 / 規則" data-en="📖 How to Play / Rules"></button>
+  </div>
+  <div class="grid">
+  <div class="card">
+    <h2 data-zh="為什麼玩「發」" data-en="Why play “Fa”"></h2>
+    <div class="li"><span class="em"><span class='mj-tile'></span></span><span data-zh="<b>邊玩邊學</b><br>每一手自動列出「台數」與牌型理由,新手也看得懂。" data-en="<b>Learn as you play</b><br>Every hand shows the scoring tiles and why — beginners welcome."></span></div>
+    <div class="li"><span class="em">🤖</span><span data-zh="<b>AI 對戰</b><br>一個人也能開桌,四家實戰節奏、隨時來一局。" data-en="<b>Play vs AI</b><br>Start a full four-player table anytime, no friends needed."></span></div>
+    <div class="li"><span class="em">📴</span><span data-zh="<b>單機可玩</b><br>通勤、飛機上都能玩,不用等牌咖。" data-en="<b>Playable offline</b><br>Perfect for commutes and flights."></span></div>
+    <div class="li"><span class="em">🚫</span><span data-zh="<b>無廣告</b><br>一次買斷,乾淨、不打擾。" data-en="<b>No ads</b><br>A clean experience."></span></div>
+  </div>
+  <a class="aboutlink" href="about.html"><span data-zh="關於 <em class='g'>XOIO</em>" data-en="About <em class='g'>XOIO</em>"></span><span class="ar">›</span></a>
+  </div>
+  <div class="foot">© XOIO · Mahjong for everyone</div>
+</div>
+
+<div class="mask" id="rulesMask" onclick="closeRules()"></div>
+<div class="modal" id="rulesModal">
+  <div class="mh"><span>📖</span><b data-zh="台灣 16 張麻將 · 規則" data-en="Taiwanese Mahjong · Rules"></b><span class="x" onclick="closeRules()">✕</span></div>
+  <div class="mb">
+    <h3 data-zh="怎麼玩" data-en="How to play"></h3>
+    <p data-zh="4 人同桌、每人 16 張牌。輪流摸牌、打牌,湊成 5 組面子 + 1 對將就能胡牌。" data-en="4 players, 16 tiles each. Draw and discard in turn; complete 5 sets + 1 pair to win."></p>
+    <h3 data-zh="花牌(台灣特色)" data-en="Flowers (a Taiwanese touch)"></h3>
+    <ul>
+      <li data-zh="8 張花:春 夏 秋 冬 / 梅 蘭 竹 菊" data-en="8 flowers: Spring/Summer/Autumn/Winter · Plum/Orchid/Bamboo/Chrysanthemum"></li>
+      <li data-zh="摸到花自動補牌;「正花」每張 +1 台" data-en="Drawing a flower = draw again; your seat flower scores +1 each"></li>
+      <li data-zh="集滿 8 張花 → 花胡,直接算 8 台" data-en="All 8 flowers = instant “flower win”, 8 points"></li>
+    </ul>
+    <h3 data-zh="莊家 / 連莊" data-en="Dealer / streaks"></h3>
+    <ul>
+      <li data-zh="莊家胡牌或流局(臭莊)→ 連莊" data-en="Dealer wins or a draw → the dealer repeats"></li>
+      <li data-zh="連莊台 = 2N+1(連一拉一 = 3 台)" data-en="Streak bonus = 2N+1 (one streak = 3 points)"></li>
+    </ul>
+    <h3 data-zh="台數(節錄)" data-en="Scoring (excerpt)"></h3>
+    <div>
+      <span class="tagchip" data-zh="1台 莊家" data-en="1pt Dealer"></span><span class="tagchip" data-zh="1台 自摸" data-en="1pt Self-draw"></span><span class="tagchip" data-zh="1台 門清" data-en="1pt Concealed"></span><span class="tagchip" data-zh="1台 獨聽" data-en="1pt Unique wait"></span><span class="tagchip" data-zh="1台 三元牌" data-en="1pt Dragons"></span><span class="tagchip" data-zh="1台 風牌" data-en="1pt Winds"></span><span class="tagchip" data-zh="2台 平胡" data-en="2pt Ping hu"></span><span class="tagchip" data-zh="2台 三暗刻" data-en="2pt 3 concealed"></span><span class="tagchip" data-zh="4台 碰碰胡" data-en="4pt All pungs"></span><span class="tagchip" data-zh="4台 小三元" data-en="4pt Small dragons"></span><span class="tagchip" data-zh="8台 清一色" data-en="8pt Pure suit"></span><span class="tagchip" data-zh="8台 大三元" data-en="8pt Big dragons"></span>
+    </div>
+    <p style="margin-top:8px" data-zh="※ 屁胡(無台種)= 0 台,照常可以胡。" data-en="※ A win with no scoring pattern = 0 points — still a valid win."></p>
+    <h3 data-zh="結算" data-en="Settlement"></h3>
+    <p data-zh="放炮者付;自摸則三家各付。結算以「台數」計。" data-en="The discarder pays; on a self-draw all three pay. Counted in points (tai)."></p>
+  </div>
+</div>
+
+<script>
+function getLang(){ try{ return localStorage.getItem('mj_lang')==='en' ? 'en' : 'zh'; }catch(e){ return 'zh'; } }
+function applyLang(){
+  var l=getLang();
+  document.documentElement.lang = (l==='en' ? 'en' : 'zh-Hant');
+  var els=document.querySelectorAll('[data-zh],[data-en]');
+  for(var i=0;i<els.length;i++){
+    var el=els[i];
+    var v = (l==='en') ? el.getAttribute('data-en') : el.getAttribute('data-zh');
+    if(v!==null) el.innerHTML=v;
+  }
+  var pill=document.getElementById('langPill');
+  if(pill) pill.innerHTML = (l==='en') ? '中 / <b>EN</b>' : '<b>中</b> / EN';
+  document.title = (l==='en') ? 'Fa · Taiwanese Mahjong' : '發 · 台灣16張麻將';
+}
+function toggleLang(){
+  var next = (getLang()==='en') ? 'zh' : 'en';
+  try{ localStorage.setItem('mj_lang', next); }catch(e){}
+  applyLang();
+}
+function openRules(){ document.getElementById('rulesMask').classList.add('on'); document.getElementById('rulesModal').classList.add('on'); }
+function closeRules(){ document.getElementById('rulesMask').classList.remove('on'); document.getElementById('rulesModal').classList.remove('on'); }
+applyLang();
+</script>
+</body>
+</html>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0b0e11">
-<title>發 · 台灣16張麻將</title>
+<title>麻將16張</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="manifest" href="free.webmanifest">
 <link rel="apple-touch-icon" href="pwa/mahjong-180.png">
@@ -69,7 +69,7 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
 <div class="wrap">
   <div class="lang" id="langPill" onclick="toggleLang()"></div>
   <div class="icon">發</div>
-  <h1 data-zh="發 · 台灣16張麻將" data-en="Fa · Taiwanese Mahjong">發 · 台灣16張麻將</h1>
+  <h1 data-zh="麻將16張" data-en="Mahjong 16">麻將16張</h1>
   <div class="tag" data-zh="下載到手機,把「發財」的運氣帶著走 <span class='mj-tile'></span>" data-en="Carry the luck of “Fa” (prosperity) <span class='mj-tile'></span>"></div>
   <div class="sub" data-zh="台灣 16 張麻將 · AI 對戰 · 台數教學<br>單機對戰 · 無廣告 · 無內購" data-en="Taiwanese 16-tile Mahjong · Play vs AI · Scoring explained<br>Offline play · no ads · no in-app purchases"></div>
   <div class="hero-actions">
@@ -129,7 +129,7 @@ function applyLang(){
   }
   var pill=document.getElementById('langPill');
   if(pill) pill.innerHTML = (l==='en') ? '中 / <b>EN</b>' : '<b>中</b> / EN';
-  document.title = (l==='en') ? 'Fa · Taiwanese Mahjong' : '發 · 台灣16張麻將';
+  document.title = (l==='en') ? 'Mahjong 16' : '麻將16張';
 }
 function toggleLang(){
   var next = (getLang()==='en') ? 'zh' : 'en';
