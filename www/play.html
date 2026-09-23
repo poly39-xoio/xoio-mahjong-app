@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>麻將 · 練習</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 @font-face{font-family:'Huninn';src:url('fonts/Huninn.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Inter';src:url('fonts/Inter-latin.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:'JetBrains Mono';src:url('fonts/JetBrainsMono-latin.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:swap}
 :root {
   --bg-body:#0b0e11; --bg-card:#151920; --bg-element:#1e2329;
   --border:#2b303b; --primary:#2ad49e; --primary-glow:rgba(42,212,158,.4);
@@ -517,7 +517,7 @@ const HUA   = ['春','夏','秋','冬','梅','蘭','竹','菊'];
 const SUITS = ['wan','tong','tiao'];
 
 /* ================= i18n (zh/en) — 語言沿用大廳 localStorage mj_lang ================= */
-const MJ_LANG = (function(){ try{ return localStorage.getItem('mj_lang')==='en' ? 'en' : 'zh'; }catch(e){ return 'zh'; } })();
+const MJ_LANG = (function(){ try{ var v=localStorage.getItem('mj_lang'); if(v==='en'||v==='zh') return v; }catch(e){} try{ var ls=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'']; for(var i=0;i<ls.length;i++){ var t=(ls[i]||'').toLowerCase(); if(t.indexOf('zh')===0) return 'zh'; } if(ls.length&&ls[0]) return 'en'; }catch(e){} return 'zh'; })();
 const EN = {
   '吃':'CHI','碰':'PONG','槓':'KONG','胡':'HU','過':'PASS','出牌':'DISCARD',
   '要怎麼吃？':'How to chi?','要怎麼吃':'How to chi','取消不吃':'Cancel','選擇吃法':'Choose chi',

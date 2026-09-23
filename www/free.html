@@ -12,7 +12,9 @@
 :root{--bg:#0b0e11;--card:#151b21;--line:#ffffff14;--pri:#2ad49e;--gold:#ffd166;--txt:#e8eaed;--sub:#9aa5b5}
 *{box-sizing:border-box;margin:0;padding:0}
 @font-face{font-family:'Huninn';src:url('fonts/Huninn.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
-body{background:radial-gradient(circle at 50% -8%,#123a29 0%,var(--bg) 58%) fixed;color:var(--txt);font-family:'Huninn',-apple-system,BlinkMacSystemFont,'PingFang TC','Noto Sans TC','Microsoft JhengHei',sans-serif;padding:28px 20px 40px;min-height:100vh}
+@font-face{font-family:'Inter';src:url('fonts/Inter-latin.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:'JetBrains Mono';src:url('fonts/JetBrainsMono-latin.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:swap}
+body{background:radial-gradient(circle at 50% -8%,#123a29 0%,var(--bg) 58%) fixed;color:var(--txt);font-family:'Inter','Huninn',-apple-system,BlinkMacSystemFont,'PingFang TC','Noto Sans TC','Microsoft JhengHei',sans-serif;padding:28px 20px 40px;min-height:100vh}
 .wrap{max-width:430px;margin:0 auto;position:relative}
 .lang{position:absolute;top:-6px;right:0;font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;user-select:none;-webkit-user-select:none}
 .lang b{color:var(--pri)}
@@ -70,7 +72,7 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
 <div class="wrap">
   <div class="lang" id="langPill" onclick="toggleLang()"></div>
   <div class="icon">發</div>
-  <h1 data-zh="麻將16張" data-en="Mahjong 16">麻將16張</h1>
+  <h1 data-zh="麻將16張" data-en="MahJong 16">麻將16張</h1>
   <div class="tag" data-zh="下載到手機,把「發財」的運氣帶著走 <span class='mj-tile'></span>" data-en="Carry the luck of “Fa” (prosperity) <span class='mj-tile'></span>"></div>
   <div class="sub" data-zh="台灣 16 張麻將 · AI 對戰 · 台數教學<br>單機對戰 · 無廣告 · 無內購" data-en="Taiwanese 16-tile Mahjong · Play vs AI · Scoring explained<br>Offline play · no ads · no in-app purchases"></div>
   <div class="hero-actions">
@@ -118,7 +120,7 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
 </div>
 
 <script>
-function getLang(){ try{ return localStorage.getItem('mj_lang')==='en' ? 'en' : 'zh'; }catch(e){ return 'zh'; } }
+function getLang(){ try{ var v=localStorage.getItem('mj_lang'); if(v==='en'||v==='zh') return v; }catch(e){} try{ var ls=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'']; for(var i=0;i<ls.length;i++){ var t=(ls[i]||'').toLowerCase(); if(t.indexOf('zh')===0) return 'zh'; } if(ls.length&&ls[0]) return 'en'; }catch(e){} return 'zh'; }
 function applyLang(){
   var l=getLang();
   document.documentElement.lang = (l==='en' ? 'en' : 'zh-Hant');
@@ -130,7 +132,7 @@ function applyLang(){
   }
   var pill=document.getElementById('langPill');
   if(pill) pill.innerHTML = (l==='en') ? '中 / <b>EN</b>' : '<b>中</b> / EN';
-  document.title = (l==='en') ? 'Mahjong 16' : '麻將16張';
+  document.title = (l==='en') ? 'MahJong 16' : '麻將16張';
 }
 function toggleLang(){
   var next = (getLang()==='en') ? 'zh' : 'en';
