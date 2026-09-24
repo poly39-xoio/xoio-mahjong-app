@@ -14,7 +14,8 @@
 @font-face{font-family:'Huninn';src:url('fonts/Huninn.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:'Inter';src:url('fonts/Inter-latin.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
 @font-face{font-family:'JetBrains Mono';src:url('fonts/JetBrainsMono-latin.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:swap}
-body{background:radial-gradient(circle at 50% -8%,#123a29 0%,var(--bg) 58%) fixed;color:var(--txt);font-family:'Inter','Huninn',-apple-system,BlinkMacSystemFont,'PingFang TC','Noto Sans TC','Microsoft JhengHei',sans-serif;padding:28px 20px 40px;min-height:100vh}
+body{background:radial-gradient(circle at 50% -8%,#123a29 0%,var(--bg) 58%) fixed;color:var(--txt);font-family:'JetBrains Mono','Huninn',-apple-system,BlinkMacSystemFont,'PingFang TC','Noto Sans TC','Microsoft JhengHei',sans-serif;padding:28px 20px 40px;min-height:100vh}
+button,input,select,textarea{font-family:inherit}
 .wrap{max-width:430px;margin:0 auto;position:relative}
 .lang{position:absolute;top:-6px;right:0;font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;user-select:none;-webkit-user-select:none}
 .lang b{color:var(--pri)}
@@ -50,7 +51,7 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
 .mj-tile::before{content:"發"}
 
 /* ===== 寬螢幕 / iPad 友善 2026-09-12 ===== */
-@media (min-width:760px){
+@media (min-width:760px) and (min-height:601px){
   body{padding:40px 24px 58px}
   .wrap{max-width:940px}
   .icon{width:118px;height:118px;border-radius:28px;font-size:72px;margin-top:8px}
@@ -58,13 +59,34 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
   .tag{font-size:19px;margin-top:12px}
   .sub{font-size:15px;margin-top:12px}
   .hero-actions{display:flex;gap:14px;max-width:660px;margin:28px auto 0}
-  .cta{margin-top:0;flex:1.5;font-size:18px;padding:19px}
-  .cta2{margin-top:0;flex:1;padding:19px}
+  .cta{margin-top:0;flex:1;font-size:17px;padding:18px}
+  .cta2{margin-top:0;flex:1;font-size:17px;padding:18px}
   .grid{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;align-items:stretch;margin-top:18px}
   .grid>.card,.grid>.aboutlink{margin-top:0}
   .grid>.aboutlink{align-self:stretch;font-size:17px}
   .card .li{font-size:14.5px}
   .foot{margin-top:30px}
+}
+
+/* ===== 手機橫向(短螢幕)緊湊版 2026-09-24 ===== */
+@media (orientation:landscape) and (max-height:601px){
+  body{padding:8px 16px 6px}
+  .wrap{max-width:920px}
+  .lang{top:-2px}
+  .icon{width:44px;height:44px;border-radius:12px;font-size:26px;margin:0 auto 4px;box-shadow:0 4px 12px #0007}
+  h1{font-size:18px}
+  .tag{font-size:12px;margin-top:3px;line-height:1.35}
+  .sub{font-size:11px;margin-top:3px;line-height:1.4}
+  .hero-actions{display:flex;gap:10px;margin-top:8px;max-width:none}
+  .cta,.cta2{flex:1;margin-top:0;font-size:15px;padding:12px;border-radius:12px}
+  .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:12px;align-items:start;margin-top:9px}
+  .grid>.card,.grid>.aboutlink{margin-top:0}
+  .card{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px;padding:10px 13px;border-radius:13px}
+  .card h2{grid-column:1/-1;margin-bottom:3px;font-size:12.5px}
+  .li{margin-top:0;font-size:11.5px;line-height:1.45;gap:7px}
+  .li .em{font-size:14px}
+  .aboutlink{padding:11px 13px;border-radius:13px;font-size:13px}
+  .foot{margin-top:6px;font-size:11px}
 }
 </style>
 </head>
@@ -73,7 +95,7 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
   <div class="lang" id="langPill" onclick="toggleLang()"></div>
   <div class="icon">發</div>
   <h1 data-zh="麻將16張" data-en="MahJong 16">麻將16張</h1>
-  <div class="tag" data-zh="下載到手機,把「發財」的運氣帶著走 <span class='mj-tile'></span>" data-en="Carry the luck of “Fa” (prosperity) <span class='mj-tile'></span>"></div>
+  <div class="tag" data-zh="下載到手機,把「發財」的運氣帶著走" data-en="Carry the luck of “Fa” (prosperity)"></div>
   <div class="sub" data-zh="台灣 16 張麻將 · AI 對戰 · 台數教學<br>單機對戰 · 無廣告 · 無內購" data-en="Taiwanese 16-tile Mahjong · Play vs AI · Scoring explained<br>Offline play · no ads · no in-app purchases"></div>
   <div class="hero-actions">
   <a class="cta" href="play.html" data-zh="開始遊戲" data-en="Start Playing">開始遊戲</a>

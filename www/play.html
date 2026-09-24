@@ -13,7 +13,7 @@
   --border:#2b303b; --primary:#2ad49e; --primary-glow:rgba(42,212,158,.4);
   --danger:#f23645; --warning:#e0af68; --muted:#848e9c;
   --text-main:#f0f4f8; --text-sub:#848e9c;
-  --font-ui:'Inter','Huninn',sans-serif; --font-num:'JetBrains Mono','Huninn',monospace;
+  --font-ui:'JetBrains Mono','Huninn',sans-serif; --font-num:'JetBrains Mono','Huninn',monospace;
   --gold:#ffd700; --bg-header:#0e1116; --bg-hover:#252a33;
   --tile-w:56px; --tile-h:80px;
   --tile-w-sm:26px; --tile-h-sm:37px;
@@ -21,13 +21,13 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg-body);color:var(--text-main);font-family:var(--font-ui);min-height:100vh;display:flex;flex-direction:column;align-items:center}
-h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-spacing:.5px}
+h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing:.5px}
 .num{font-family:var(--font-num)}
 .main{display:flex;flex-direction:column;gap:16px;padding:16px;width:100%;max-width:1240px;margin:0 auto;min-height:100vh}
 
 .card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,.2)}
 .card h3{font-size:16px;color:var(--muted);margin-bottom:14px;font-weight:700}
- .btn{width:100%;border:none;border-radius:14px;padding:17px;font-size:17px;font-weight:800;cursor:pointer;color:#04120c;background:linear-gradient(135deg,var(--primary) 0%,#00b894 100%);transition:.2s;text-transform:uppercase;letter-spacing:1px}
+ .btn{width:100%;border:none;border-radius:14px;padding:17px;font-size:17px;font-weight:800;cursor:pointer;color:#04120c;background:linear-gradient(135deg,var(--primary) 0%,#00b894 100%);transition:.2s;text-transform:none;letter-spacing:1px}
 .btn:disabled{background:#333;color:#666;cursor:not-allowed}
 .btn.ghost{background:transparent;color:var(--text-main);border:1px solid var(--border)}
 .btn.ghost:not(:disabled):hover{border-color:var(--primary);color:var(--primary)}
@@ -202,7 +202,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
 .actions .btn{flex:1;max-width:92px;padding:11px 0;font-size:16px;font-weight:700;border-radius:10px;letter-spacing:0;
   background:linear-gradient(160deg,#1b2430,#141b25);color:#cfd8e3;border:1px solid #3a4356;
   text-transform:none;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
-  font-family:'Huninn','PingFang TC','Microsoft JhengHei','Noto Sans TC',sans-serif}
+  font-family:var(--font-ui)}
 .actions .btn:disabled{opacity:.55;cursor:not-allowed}
 .actions .btn:not(:disabled):hover{border-color:var(--primary);color:#fff}
 .actions .btn.actionable:disabled{opacity:1;background:rgba(42,212,158,.16);border-color:var(--primary);color:#7ff5d8}
@@ -273,8 +273,9 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
 .tai-table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
 .tai-table td,.tai-table th{border-bottom:1px solid var(--border);padding:5px 8px}
 #res-table td,#res-table th{padding:5px 8px;font-size:14px}
-.tai-table th{color:var(--muted);text-align:left;font-weight:600;font-size:11px;text-transform:uppercase}
+.tai-table th{color:var(--muted);text-align:left;font-weight:600;font-size:11px;text-transform:none}
 .tai-table .num{text-align:right}
+.tai-table .unit{font-family:var(--font-ui)}
 .total-row td{border-top:2px solid var(--border);border-bottom:none;font-weight:900;font-size:16px;padding-top:10px}
 .gold{color:var(--gold)}
 .green{color:var(--primary)}
@@ -285,7 +286,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
 @media (max-width:640px){
   :root{--tile-w:56px;--tile-h:80px;--tile-w-sm:20px;--tile-h-sm:29px}
   .main{padding:10px 6px;gap:10px}
-  .table-area{min-height:0;height:calc(100vh - 128px)}
+  .table-area{min-height:0;height:calc(100vh - 128px);height:calc(100svh - 128px)}
   .actions .btn{font-size:13px;max-width:76px;padding:10px 0}
   .river-area{bottom:212px}
   .logbox{max-height:44px;font-size:9px}
@@ -298,7 +299,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
 /* 直立且高度也吃緊的小手機: 再壓一點頂部 */
 @media (max-width:640px) and (max-height:700px){
   .main{padding:8px 4px;gap:8px}
-  .table-area{height:calc(100vh - 104px)}
+  .table-area{height:calc(100vh - 104px);height:calc(100svh - 104px)}
 }
 /* ===== 橫向手機/小平板: 高度受限 → 整桌壓進一屏 ===== */
 @media (orientation:landscape) and (max-height:560px){
@@ -308,7 +309,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
   .round-info{font-size:11px}.round-info b{font-size:12px}
   .status-tape{font-size:12px;min-height:14px;padding:0}
   .turn-clock{width:34px;height:34px;font-size:14px;top:38px;right:4px}
-  .table-area{height:calc(100vh - 72px);min-height:0;padding:3px}
+  .table-area{height:calc(100vh - 72px);height:calc(100svh - 72px);min-height:0;padding:3px}
   .dealer-tag{top:32px;font-size:9px;padding:1px 8px}
   .opp-top{gap:1px;margin-bottom:0}
   .opp .tag{font-size:11px;gap:3px}
@@ -362,7 +363,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
 }
 
 /* ===== 寬螢幕(iPad):三家牌放大 2026-09-12 ===== */
-@media (min-width:760px){
+@media (min-width:760px) and (min-height:601px){
   .opp .tag{font-size:16px;gap:8px}
   #opp-top .backrow .bk{width:32px;height:45px;margin-left:-9px;border-radius:5px}
   .opp-side{top:92px}
@@ -372,6 +373,30 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
   .river-area{left:104px;right:104px;top:96px;bottom:248px;gap:6px}
   .river-slot .rt{min-width:30px;height:42px;font-size:13px}
   .river-slot .rv-tag{font-size:11px}
+}
+/* ===== 手機橫向(短螢幕):東西位牌牆分兩排,避免被切掉 2026-09-24 ===== */
+@media (orientation:landscape) and (max-height:601px){
+  .opp-side .backrow{flex-wrap:wrap;max-height:112px;align-content:center;justify-content:center}
+}
+/* ===== 手機橫向:河牌(癈牌)確保完整可見 2026-09-24 ===== */
+@media (orientation:landscape) and (max-height:601px){
+  /* 下方區塊固定高度、單列(不再忽高忽低) */
+  .my-flowers{height:20px;min-height:0;overflow:hidden;flex-wrap:nowrap;flex-direction:row}
+  .my-flowers .flw{font-size:9px;padding:0 4px;height:18px;display:inline-flex;align-items:center;gap:0}
+  .my-flowers .flw img{width:11px;height:15px}
+  .my-flowers .flw .tile{display:none}
+  .my-melds{height:22px;min-height:0;overflow:hidden;flex-wrap:nowrap}
+  .my-melds .tile.sm{width:15px;height:21px}
+  .my-hand{height:48px;min-height:0;overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;align-items:flex-end}
+  .my-hand .tile{width:31px;height:44px}
+  .actions .btn{padding:4px 0;font-size:12px;max-width:64px;height:26px}
+  /* 河道淨空:上不壓、下不疊手牌 */
+  .river-area{left:48px;right:48px;top:40px;bottom:134px;gap:2px}
+  .river-slot{padding:8px 2px 2px;gap:1px}
+  .river-slot .tile.sm{width:21px;height:30px;border-radius:3px}
+  .river-slot .tile.sm .n{font-size:10px}
+  .river-slot .tile.sm .cn{font-size:9px}
+  .river-slot .rv-tag{font-size:8px}
 }
 </style>
 </head>
@@ -430,20 +455,20 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:uppercase;letter-sp
         <div class="opp" id="opp-top">
           <div class="backrow" id="opp-top-back"></div>
           <div class="meld-row" id="opp-top-meld"></div>
-          <div class="tag"><span class="wind">北</span><b id="opp-top-name">AI-1</b><span class="dot2"></span><span class="cnt" id="opp-top-cnt">16</span></div>
+          <div class="tag"><span class="wind" id="wind-top">北</span><b id="opp-top-name">AI-1</b><span class="dot2"></span><span class="cnt" id="opp-top-cnt">16</span></div>
         </div>
       </div>
 
       <!-- left opponent (seat 3) -->
       <div class="opp opp-side left" id="opp-left">
-        <div class="tag"><span class="wind">西</span><b id="opp-left-name">AI-3</b><span class="dot2"></span><span class="cnt" id="opp-left-cnt">16</span></div>
+        <div class="tag"><span class="wind" id="wind-left">西</span><b id="opp-left-name">AI-3</b><span class="dot2"></span><span class="cnt" id="opp-left-cnt">16</span></div>
         <div class="meld-row" id="opp-left-meld"></div>
         <div class="backrow" id="opp-left-back"></div>
       </div>
 
       <!-- right opponent (seat 1) -->
       <div class="opp opp-side right" id="opp-right">
-        <div class="tag"><span class="wind">東</span><b id="opp-right-name">AI-2</b><span class="dot2"></span><span class="cnt" id="opp-right-cnt">16</span></div>
+        <div class="tag"><span class="wind" id="wind-right">東</span><b id="opp-right-name">AI-2</b><span class="dot2"></span><span class="cnt" id="opp-right-cnt">16</span></div>
         <div class="meld-row" id="opp-right-meld"></div>
         <div class="backrow" id="opp-right-back"></div>
       </div>
@@ -519,10 +544,10 @@ const SUITS = ['wan','tong','tiao'];
 /* ================= i18n (zh/en) — 語言沿用大廳 localStorage mj_lang ================= */
 const MJ_LANG = (function(){ try{ var v=localStorage.getItem('mj_lang'); if(v==='en'||v==='zh') return v; }catch(e){} try{ var ls=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'']; for(var i=0;i<ls.length;i++){ var t=(ls[i]||'').toLowerCase(); if(t.indexOf('zh')===0) return 'zh'; } if(ls.length&&ls[0]) return 'en'; }catch(e){} return 'zh'; })();
 const EN = {
-  '吃':'CHI','碰':'PONG','槓':'KONG','胡':'HU','過':'PASS','出牌':'DISCARD',
+  '吃':'Chi','碰':'Pong','槓':'Kong','胡':'Hu','過':'Pass','出牌':'Discard',
   '要怎麼吃？':'How to chi?','要怎麼吃':'How to chi','取消不吃':'Cancel','選擇吃法':'Choose chi',
-  '攤牌畫面':'Reveal','胡牌！':'Win!','自摸 8台':'Self-draw 8 tai','下一局':'NEXT','退出':'EXIT',
-  '確定中途退出?':'Quit mid-game?','確定退出(將賠償)':'QUIT (compensation)','取消':'CANCEL',
+  '攤牌畫面':'Reveal','胡牌！':'Win!','自摸 8台':'Self-draw 8 tai','下一局':'Next','退出':'Exit',
+  '確定中途退出?':'Quit mid-game?','確定退出(將賠償)':'Quit (compensation)','取消':'Cancel',
   '準備開局':'Table setup','餘牌':'Remaining','莊家':'Dealer','等待開始…':'Waiting to start…','莊':'D',
   '選擇桌型 · 底注 / 每台金額（）':'Choose stake · Base / Per-tai',
   '設定分數':'Buy-in per player (base × 10)','每台分數':'Per-tai','底分':'Base',
@@ -540,8 +565,8 @@ const EN = {
   '詢問中…':'Waiting…','詢問中':'Waiting','進行中 — 等待':'In progress — waiting for','已取消 — 再點一張牌':'Cancelled — pick again',
   '已取消 — 可重新點牌':'Cancelled — pick again','輪到你':'Your turn','可 吃/碰/槓/胡 或 過':'Chi / Pong / Kong / Hu or Pass',
   '胡牌結算中':'Settling win…','別家':'another player','玩家':'Player','現在可以':'You can','先摸牌':'Draw first',
-  '流局':'Draw','臭莊 · 莊家連莊':'Draw · dealer repeats','臭莊':'Draw','牌局已結束':'Game over','打下一圈':'NEXT ROUND',
-  '結束(退出)':'END (EXIT)','回首頁':'HOME','四局都打完了。要繼續下一圈嗎?':'Round complete. Continue to the next round?',
+  '流局':'Draw','臭莊 · 莊家連莊':'Draw · dealer repeats','臭莊':'Draw','牌局已結束':'Game over','打下一圈':'Next Round',
+  '結束(退出)':'End (Exit)','回首頁':'Home','四局都打完了。要繼續下一圈嗎?':'Round complete. Continue to the next round?',
   '已解散並退款,感謝遊玩':'Table closed and refunded · thanks for playing','時間到,結算中…':'Time up — settling…',
   '總收':'Total',' 5%':'Fee 5%','實收':'Net','你應付':'You pay','合計台數':'Total tai','台數 × 每台':'tai × per-tai',
   '三家各付(底+台)':'All three pay (base+tai)','放炮者付(底+台)':'Discarder pays (base+tai)','三家各付':'All three pay','放炮者付':'Discarder pays',
@@ -550,7 +575,7 @@ const EN = {
   '你放炮！':'You discarded!','你胡牌！':'You win!','你自摸 胡牌！':'You self-draw win!','你花胡！':'You flower win!',
   '你屁胡！':'You win!','屁胡':'Win','(莊)':'(D)',' (莊)':' (D)','(你)':'(You)','拉':'push',
   '連莊 ×{n} 拉 {n}':'Streak ×{n} (push {n})','連莊 ×':'Streak ×','連莊':'Streak','第{n}局':'Round {n}',
-  '流局(臭莊,連莊)':'Draw (dealer repeats)','東風圈':'East Round','南風圈':'South Round','西風圈':'West Round','北風圈':'North Round',
+  '流局(臭莊,連莊)':'Draw (dealer repeats)','東風圈':'East','南風圈':'South','西風圈':'West','北風圈':'North',
   '東家':'East','南家':'South','西家':'West','北家':'North','自摸 ':'Self-draw ',
   '門清':'Concealed hand','不求':'No claims','正花 ×':'Flower ×','槓上開花':'Kong draw','搶槓':'Robbing kong','海底撈月':'Last tile draw',
   '河底撈魚':'Last discard win','半求人':'Half claimed','全求人':'All claimed','獨聽':'Unique wait','平胡':'Ping hu','字一色':'All honors',
@@ -611,7 +636,7 @@ function localizeNode(node){
   for(i=0;i<els.length;i++){ for(j=0;j<2;j++){ var a2=j?'title':'placeholder'; v=els[i].getAttribute(a2); if(v && /[\u4e00-\u9fff]/.test(v)){ t=trText(v); if(t!==v) els[i].setAttribute(a2,t); } } }
 }
 (function(){ if(MJ_LANG!=='en') return; try{
-  document.title='MAHJONG — Table';
+  document.title='MahJong 16 — Table';
   localizeNode(document.body);
   var mo=new MutationObserver(function(muts){ for(var i=0;i<muts.length;i++){ var m=muts[i]; if(m.type==='characterData'){ localizeNode(m.target); } else if(m.type==='childList'){ m.addedNodes.forEach(localizeNode); } else { localizeNode(m.target); } } });
   mo.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['placeholder','title']});
@@ -995,6 +1020,8 @@ function log(msg){const el=document.getElementById('logbox');const d=document.cr
    出牌順序 = 順時針 (+1): 由莊家東風位(seat1)開始 → 東→南→西→北 連續不跳
 =========================================================================== */
 const SEATS=[{id:'top',wind:'北'},{id:'right',wind:'東'},{id:'me',wind:'南'},{id:'left',wind:'西'}];
+/* John 2026-09-24: 座位風位標籤依語言顯示(東→E 等) */
+(function(){ try{ [['wind-top',0],['wind-right',1],['wind-left',3]].forEach(function(p){ var el=document.getElementById(p[0]); if(el) el.textContent=seatWind(p[1]); }); }catch(e){} })();
 let turn=0; // 出牌序 (順時針 +1)
 let dealer=1; // 莊家從東風位(seat1)開始; 每局 +1 → 東→南→西→北 輪莊
 let roundNo=1;
@@ -1925,8 +1952,8 @@ function endGame(winnerIdx,selfDraw){
     // —— 台數明細共用 ——
     function taiRows(){
       let r='';
-      ct.breakdown.forEach(b=>{ r+='<tr><td>'+b.name+'</td><td class="num">+'+b.tai+'台</td></tr>';});
-      r+='<tr class="total-row"><td>合計台數</td><td class="num gold"><b>'+ct.tai+'台</b></td></tr>';
+      ct.breakdown.forEach(b=>{ r+='<tr><td>'+b.name+'</td><td class="num">+'+b.tai+'<span class="unit">台</span></td></tr>';});
+      r+='<tr class="total-row"><td>合計台數</td><td class="num gold"><b>'+ct.tai+'<span class="unit">台</span></b></td></tr>';
       return r;
     }
     if(iAmWinner){
@@ -1934,8 +1961,8 @@ function endGame(winnerIdx,selfDraw){
       title.textContent=huaHu?'🌸 你花胡！':(ct.tai===0?'🎉 你屁胡！':(selfDraw?'🎉 你自摸 胡牌！':'🎉 你胡牌！'));
       win.textContent=ct.tai+'台';
       let rows=taiRows();
-      if(dealerExtraTai) rows+='<tr><td>莊家多付 '+dealerExtraTai+' 台(閒家自摸)</td><td class="num red">+'+dealerExtraTai+'台</td></tr>';
-      rows+='<tr><td>'+(selfDraw?'自摸 · 三家各付':'放炮者付')+'</td><td class="num">'+(selfDraw?'3 家':'1 家')+'</td></tr>';
+      if(dealerExtraTai) rows+='<tr><td>莊家多付 '+dealerExtraTai+' 台(閒家自摸)</td><td class="num red">+'+dealerExtraTai+'<span class="unit">台</span></td></tr>';
+      rows+='<tr><td>'+(selfDraw?'自摸 · 三家各付':'放炮者付')+'</td><td class="num">'+(selfDraw?'3':'1')+'<span class="unit">'+(MJ_LANG==='en'?(selfDraw?' players':' player'):' 家')+'</span></td></tr>';
       table.innerHTML=rows;
       sub.textContent='你'+winVerb+' '+ct.tai+'台';
       status('🎉 你'+winVerb+' '+ct.tai+'台');
@@ -1947,8 +1974,8 @@ function endGame(winnerIdx,selfDraw){
       win.textContent=ct.tai+'台';
       let rows='<tr><td class="muted">'+byName+' '+ct.tai+'台</td></tr>';
       rows+=taiRows();
-      if(dealerExtraTai && dealer===2) rows+='<tr><td>你是莊家 · 閒家自摸多付 '+dealerExtraTai+' 台</td><td class="num red">+'+dealerExtraTai+'台</td></tr>';
-      rows+='<tr class="total-row red"><td>'+(selfDraw?'你應付':'你放炮應付')+'</td><td class="num"><b>'+ct.tai+'台</b></td></tr>';
+      if(dealerExtraTai && dealer===2) rows+='<tr><td>你是莊家 · 閒家自摸多付 '+dealerExtraTai+' 台</td><td class="num red">+'+dealerExtraTai+'<span class="unit">台</span></td></tr>';
+      rows+='<tr class="total-row red"><td>'+(selfDraw?'你應付':'你放炮應付')+'</td><td class="num"><b>'+ct.tai+'<span class="unit">台</span></b></td></tr>';
       table.innerHTML=rows;
       sub.textContent=selfDraw?('你付 '+ct.tai+' 台'+(dealerExtraTai&&dealer===2?' (莊家多付 '+dealerExtraTai+' 台)':'')):('你放炮 · 付 '+ct.tai+' 台');
       status('💸 '+(selfDraw?'你付 ':'你放炮付 ')+ct.tai+' 台');
