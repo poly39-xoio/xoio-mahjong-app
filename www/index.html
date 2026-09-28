@@ -21,7 +21,12 @@ button,input,select,textarea{font-family:inherit}
 .wrap{max-width:430px;margin:0 auto;position:relative}
 .lang{position:absolute;top:-6px;right:0;font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;user-select:none;-webkit-user-select:none}
 .lang b{color:var(--pri)}
-.icon{width:92px;height:92px;border-radius:22px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:900;color:#0c5f2e;margin:26px auto 16px;box-shadow:0 10px 30px #0007}
+.langmenu{position:absolute;top:30px;right:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px;display:none;flex-direction:column;gap:2px;z-index:50;min-width:132px;box-shadow:0 12px 34px #0008}
+.langmenu.on{display:flex}
+.langmenu button{background:transparent;border:0;color:var(--txt);font-size:14px;font-weight:700;padding:9px 14px;border-radius:8px;text-align:left;cursor:pointer;font-family:inherit}
+.langmenu button:hover{background:#ffffff12}
+.langmenu button.cur{color:var(--pri)}
+.icon{width:92px;height:92px;border-radius:22px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:56px;font-family:'Huninn',sans-serif;font-weight:900;color:#0c5f2e;margin:26px auto 16px;box-shadow:0 10px 30px #0007}
 h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
 .tag{text-align:center;color:var(--gold);font-size:15px;margin-top:10px;font-weight:800;line-height:1.6}
 .sub{text-align:center;color:var(--sub);font-size:13px;margin-top:10px;line-height:1.8}
@@ -49,7 +54,7 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
 .mb p,.mb li{font-size:13px;color:var(--sub);line-height:1.85}
 .mb ul{padding-left:18px}
 .tagchip{display:inline-block;background:#ffffff10;border:1px solid var(--line);border-radius:8px;padding:3px 9px;font-size:12px;margin:3px 4px 0 0;color:var(--sub)}
-.mj-tile{display:inline-block;width:1.25em;height:1.25em;vertical-align:-0.28em;border-radius:.24em;background:#fff;color:#0c5f2e;font-weight:900;text-align:center;line-height:1.25em;font-size:.82em;box-shadow:0 1px 2px rgba(0,0,0,.25);margin:0 .08em}
+.mj-tile{display:inline-block;width:1.25em;height:1.25em;vertical-align:-0.28em;border-radius:.24em;background:#fff;color:#0c5f2e;font-family:'Huninn',sans-serif;font-weight:900;text-align:center;line-height:1.25em;font-size:.82em;box-shadow:0 1px 2px rgba(0,0,0,.25);margin:0 .08em}
 .mj-tile::before{content:"發"}
 
 /* ===== 寬螢幕 / iPad 友善 2026-09-12 ===== */
@@ -94,7 +99,13 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
 </head>
 <body>
 <div class="wrap">
-  <div class="lang" id="langPill" onclick="toggleLang()"></div>
+  <div class="lang" id="langPill" onclick="toggleLangMenu(event)"><span id="langCur"></span></div>
+  <div class="langmenu" id="langMenu">
+    <button type="button" data-l="zh" onclick="pickLang('zh')">中文</button>
+    <button type="button" data-l="en" onclick="pickLang('en')">English</button>
+    <button type="button" data-l="ja" onclick="pickLang('ja')">日本語</button>
+    <button type="button" data-l="ko" onclick="pickLang('ko')">한국어</button>
+  </div>
   <div class="icon">發</div>
   <h1 data-zh="麻將16張" data-en="MahJong 16" data-ja="台湾麻雀 16張" data-ko="타이완 16장 마작">麻將16張</h1>
   <div class="tag" data-zh="下載到手機,把「發財」的運氣帶著走" data-en="Carry the luck of “Fa” (prosperity)" data-ja="「發」の運気をいつでも持ち歩こう" data-ko="‘發(파)’의 행운을 늘 함께"></div>
@@ -145,7 +156,7 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
 
 <script>
 var LANGS=['zh','en','ja','ko'];
-var LNAMES={zh:'中',en:'EN',ja:'日',ko:'韓'};
+var LNAMES={zh:'中文',en:'English',ja:'日本語',ko:'한국어'};
 var TITLES={zh:'麻將16張',en:'MahJong 16',ja:'台湾麻雀 16張',ko:'타이완 16장 마작'};
 function getLang(){
   try{ var v=localStorage.getItem('mj_lang'); if(v==='en'||v==='zh'||v==='ja'||v==='ko') return v; }catch(e){}
@@ -167,15 +178,14 @@ function applyLang(){
     if(v===null) v=el.getAttribute('data-zh');
     if(v!==null) el.innerHTML=v;
   }
-  var p=document.getElementById('langPill');
-  if(p){ var h=''; for(var k=0;k<LANGS.length;k++){ var nm=LANGS[k]; h+= (nm===l? '<b>'+LNAMES[nm]+'</b>' : LNAMES[nm]); if(k<LANGS.length-1) h+=' / '; } p.innerHTML=h; }
+  var c=document.getElementById('langCur'); if(c) c.textContent=(LNAMES[l]||LNAMES.zh)+' ▾';
+  var btns=document.querySelectorAll('#langMenu button');
+  for(var j=0;j<btns.length;j++){ btns[j].className=(btns[j].getAttribute('data-l')===l)?'cur':''; }
   document.title=TITLES[l]||TITLES.zh;
 }
-function toggleLang(){
-  var cur=getLang(); var nx=LANGS[(LANGS.indexOf(cur)+1)%LANGS.length];
-  try{ localStorage.setItem('mj_lang', nx); }catch(e){}
-  applyLang();
-}
+function toggleLangMenu(e){ if(e&&e.stopPropagation) e.stopPropagation(); var m=document.getElementById('langMenu'); if(m) m.classList.toggle('on'); }
+function pickLang(l){ try{ localStorage.setItem('mj_lang', l); }catch(e){} applyLang(); var m=document.getElementById('langMenu'); if(m) m.classList.remove('on'); }
+document.addEventListener('click', function(){ var m=document.getElementById('langMenu'); if(m) m.classList.remove('on'); });
 function openRules(){ document.getElementById('rulesMask').classList.add('on'); document.getElementById('rulesModal').classList.add('on'); }
 function closeRules(){ document.getElementById('rulesMask').classList.remove('on'); document.getElementById('rulesModal').classList.remove('on'); }
 applyLang();

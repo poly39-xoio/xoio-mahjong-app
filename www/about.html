@@ -19,6 +19,11 @@ html[lang="ko"] body{font-family:'JetBrains Mono','Apple SD Gothic Neo','Malgun 
 .wrap{max-width:430px;margin:0 auto;position:relative}
 .lang{position:absolute;top:-6px;right:0;font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;user-select:none;-webkit-user-select:none}
 .lang b{color:var(--pri)}
+.langmenu{position:absolute;top:30px;right:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px;display:none;flex-direction:column;gap:2px;z-index:50;min-width:132px;box-shadow:0 12px 34px #0008}
+.langmenu.on{display:flex}
+.langmenu button{background:transparent;border:0;color:var(--txt);font-size:14px;font-weight:700;padding:9px 14px;border-radius:8px;text-align:left;cursor:pointer;font-family:inherit}
+.langmenu button:hover{background:#ffffff12}
+.langmenu button.cur{color:var(--pri)}
 .back{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:9px 16px;font-size:14px;font-weight:800;color:var(--pri);text-decoration:none}
 .brand{font-size:30px;font-weight:900;letter-spacing:3px;color:var(--pri);text-align:center;margin-top:26px}
 h1{font-size:21px;font-weight:900;margin:22px 0 8px;text-align:center;line-height:1.5}
@@ -41,7 +46,13 @@ ul{padding-left:19px;margin-top:6px}
 </head>
 <body>
 <div class="wrap">
-  <div class="lang" id="langPill" onclick="toggleLang()"></div>
+  <div class="lang" id="langPill" onclick="toggleLangMenu(event)"><span id="langCur"></span></div>
+  <div class="langmenu" id="langMenu">
+    <button type="button" data-l="zh" onclick="pickLang('zh')">中文</button>
+    <button type="button" data-l="en" onclick="pickLang('en')">English</button>
+    <button type="button" data-l="ja" onclick="pickLang('ja')">日本語</button>
+    <button type="button" data-l="ko" onclick="pickLang('ko')">한국어</button>
+  </div>
   <a class="back" href="free.html" onclick="if(history.length>1){history.back();return false}" data-zh="← 返回" data-en="← Back" data-ja="← 戻る" data-ko="← 뒤로">← 返回</a>
   <div class="brand">XOIO</div>
   <h1 data-zh="把麻將,帶給每一個人" data-en="Mahjong for everyone" data-ja="麻雀を、すべての人へ" data-ko="마작을, 모두에게"></h1>
@@ -70,7 +81,7 @@ ul{padding-left:19px;margin-top:6px}
 </div>
 <script>
 var LANGS=['zh','en','ja','ko'];
-var LNAMES={zh:'中',en:'EN',ja:'日',ko:'韓'};
+var LNAMES={zh:'中文',en:'English',ja:'日本語',ko:'한국어'};
 var TITLES={zh:'關於 XOIO',en:'About XOIO',ja:'XOIO について',ko:'XOIO 소개'};
 function getLang(){
   try{ var v=localStorage.getItem('mj_lang'); if(v==='en'||v==='zh'||v==='ja'||v==='ko') return v; }catch(e){}
@@ -92,15 +103,14 @@ function applyLang(){
     if(v===null) v=el.getAttribute('data-zh');
     if(v!==null) el.innerHTML=v;
   }
-  var p=document.getElementById('langPill');
-  if(p){ var h=''; for(var k=0;k<LANGS.length;k++){ var nm=LANGS[k]; h+= (nm===l? '<b>'+LNAMES[nm]+'</b>' : LNAMES[nm]); if(k<LANGS.length-1) h+=' / '; } p.innerHTML=h; }
+  var c=document.getElementById('langCur'); if(c) c.textContent=(LNAMES[l]||LNAMES.zh)+' ▾';
+  var btns=document.querySelectorAll('#langMenu button');
+  for(var j=0;j<btns.length;j++){ btns[j].className=(btns[j].getAttribute('data-l')===l)?'cur':''; }
   document.title=TITLES[l]||TITLES.zh;
 }
-function toggleLang(){
-  var cur=getLang(); var nx=LANGS[(LANGS.indexOf(cur)+1)%LANGS.length];
-  try{ localStorage.setItem('mj_lang', nx); }catch(e){}
-  applyLang();
-}
+function toggleLangMenu(e){ if(e&&e.stopPropagation) e.stopPropagation(); var m=document.getElementById('langMenu'); if(m) m.classList.toggle('on'); }
+function pickLang(l){ try{ localStorage.setItem('mj_lang', l); }catch(e){} applyLang(); var m=document.getElementById('langMenu'); if(m) m.classList.remove('on'); }
+document.addEventListener('click', function(){ var m=document.getElementById('langMenu'); if(m) m.classList.remove('on'); });
 applyLang();
 </script>
 </body>

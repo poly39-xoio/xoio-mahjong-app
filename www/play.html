@@ -78,6 +78,10 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 .round-info{font-size:14px;color:var(--muted)}
 .lang-fab{position:static;height:38px;padding:0 16px;border-radius:22px;font-size:12.5px;padding:0 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg-element);color:var(--text-main);font-size:11px;font-weight:800;cursor:pointer;font-family:var(--font-num);letter-spacing:.5px;transition:.2s}
 .lang-fab:hover{border-color:var(--primary);color:var(--primary)}
+.lang-menu{position:fixed;right:12px;bottom:64px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:6px;display:none;flex-direction:column;gap:2px;z-index:60;min-width:132px;box-shadow:0 12px 34px #0008}
+.lang-menu.on{display:flex}
+.lang-menu button{background:transparent;border:0;color:var(--text-main);font-size:14px;font-weight:700;padding:9px 14px;border-radius:8px;text-align:left;cursor:pointer;font-family:inherit}
+.lang-menu button:hover{background:#ffffff12}
 .round-info b{color:var(--primary);font-size:16px}
 .streak-chip{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:10px;background:var(--danger);color:#fff;font-size:11px;font-weight:800;letter-spacing:.5px;vertical-align:2px;cursor:help;animation:pulse 1.2s infinite}
 .status-tape{text-align:center;font-size:15px;color:var(--warning);min-height:24px;padding:4px 0;font-weight:700}
@@ -148,7 +152,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 .tile.tiao .g{display:grid;grid-template-columns:repeat(3,12px);grid-template-rows:repeat(3,14px);gap:1px}
 .tile.tiao .g i.u{background:linear-gradient(90deg,#4a76d6,#2e5fb0);border-radius:2px;width:5px;height:14px;margin:0 auto;box-shadow:inset -1px 0 1px rgba(0,0,0,.2)}
 /* 字牌/風牌 */
-.tile.feng,.tile.jian,.tile.hua{font-size:30px;font-weight:900}
+.tile.feng,.tile.jian,.tile.hua{font-size:30px;font-weight:900;font-family:'Huninn',sans-serif}
 .tile.feng{background:linear-gradient(160deg,#fdf2f2,#f3dcdc)}
 .tile.feng .n{color:#b22222}
 .tile.jian{background:linear-gradient(160deg,#f7f7fa,#e6e6ee)}
@@ -403,7 +407,13 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 </style>
 </head>
 <body>
-<div id="bottom-bar"><button id="btn-quit" onclick="quitGame()">退出</button><button id="btn-lang" class="lang-fab" onclick="window.toggleLiveLang()">EN</button></div>
+<div id="bottom-bar"><button id="btn-quit" onclick="quitGame()">退出</button><button id="btn-lang" class="lang-fab" onclick="window.openLangMenu(event)">EN</button></div>
+<div id="lang-menu" class="lang-menu">
+  <button type="button" onclick="window.chooseLang('zh')">中文</button>
+  <button type="button" onclick="window.chooseLang('en')">English</button>
+  <button type="button" onclick="window.chooseLang('ja')">日本語</button>
+  <button type="button" onclick="window.chooseLang('ko')">한국어</button>
+</div>
 <div class="main">
 
   <!-- ============ LOBBY ============ -->
@@ -753,12 +763,14 @@ const CUR = DICTS[MJ_LANG] || null;
 const CURK = CUR ? Object.keys(CUR).sort(function(a,b){ return b.length-a.length; }) : [];
 function tl(s){ if(!CUR) return s; return CUR[s]!==undefined ? CUR[s] : s; }
 function tf(fmt, map){ var out=tl(fmt); if(map){ for(var k in map){ out=out.split('{'+k+'}').join(map[k]); } } return out; }
+var _RE=null;
+if(CUR){ try{ _RE=new RegExp(CURK.map(function(k){ return k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|'), 'g'); }catch(e){ _RE=null; } }
 function trText(s){
   if(!CUR || !s) return s;
   if(CUR[s]!==undefined) return CUR[s];
   if(!/[\u4e00-\u9fff]/.test(s)) return s;
-  for(var i=0;i<CURK.length;i++){ var z=CURK[i]; if(s.indexOf(z)>=0) s=s.split(z).join(CUR[z]); }
-  return s;
+  if(!_RE) return s;
+  return s.replace(_RE, function(m){ return CUR[m]!==undefined ? CUR[m] : m; });
 }
 const WINDE={ '東':'E','南':'S','西':'W','北':'N' };
 const WINDK={ '東':'동','南':'남','西':'서','北':'북' };
@@ -780,8 +792,9 @@ function localizeNode(node){
   document.title=({en:'MahJong 16 — Table',ja:'台湾麻雀 16張 — 対局',ko:'타이완 16장 마작 — 대국'})[MJ_LANG]||'MahJong 16 — Table';
   document.documentElement.lang=(MJ_LANG==='zh'?'zh-Hant':MJ_LANG);
   localizeNode(document.body);
-  var mo=new MutationObserver(function(muts){ for(var i=0;i<muts.length;i++){ var m=muts[i]; if(m.type==='characterData'){ localizeNode(m.target); } else if(m.type==='childList'){ m.addedNodes.forEach(localizeNode); } else { localizeNode(m.target); } } });
-  mo.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['placeholder','title']});
+  var _obsOpts={subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['placeholder','title']};
+  var mo=new MutationObserver(function(muts){ mo.disconnect(); try{ for(var i=0;i<muts.length;i++){ var m=muts[i]; if(m.type==='characterData'){ localizeNode(m.target); } else if(m.type==='childList'){ m.addedNodes.forEach(localizeNode); } else { localizeNode(m.target); } } } finally { mo.observe(document.body,_obsOpts); } });
+  mo.observe(document.body,_obsOpts);
  }catch(e){} })();
 
 
@@ -2286,8 +2299,10 @@ if(qTai>0&&qBase>0){
   }
 }
 setTimeout(startGame,120); // 直接進牌桌
-window.toggleLiveLang=function(){ var cur='zh'; try{ var v=localStorage.getItem('mj_lang'); if(v){ cur=v; } }catch(e){} var nx=LANGS[(LANGS.indexOf(cur)+1)%LANGS.length]; try{ localStorage.setItem('mj_lang', nx); }catch(e){} location.reload(); };
-(function(){ var b=document.getElementById('btn-lang'); if(b) b.textContent=LNAMES[MJ_LANG]||'中'; })();
+window.openLangMenu=function(e){ if(e&&e.stopPropagation) e.stopPropagation(); var m=document.getElementById('lang-menu'); if(m) m.classList.toggle('on'); };
+window.chooseLang=function(l){ try{ localStorage.setItem('mj_lang', l); }catch(e){} location.reload(); };
+document.addEventListener('click', function(){ var m=document.getElementById('lang-menu'); if(m) m.classList.remove('on'); });
+(function(){ var b=document.getElementById('btn-lang'); if(b) b.textContent=LNAMES[MJ_LANG]||'中文'; })();
 window.addEventListener('resize',()=>{ if(G&&G.players) fitMyHand(); });
 document.getElementById('btn-discard').addEventListener('click',onDiscardClick);
 document.getElementById('btn-pass').addEventListener('click',onPass);
