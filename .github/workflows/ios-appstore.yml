@@ -47,6 +47,13 @@ jobs:
           cp ~/private_keys/AuthKey_${ASC_KEY_ID}.p8 ~/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8
           ls -la ~/private_keys/
 
+      - name: Prune stale signing certificates
+        continue-on-error: true
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: node scripts/prune_ios_certs.js
+
       - name: Archive
         env:
           KEYID: ${{ secrets.ASC_KEY_ID }}
