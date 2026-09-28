@@ -15,6 +15,8 @@
 @font-face{font-family:'Inter';src:url('fonts/Inter-latin.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
 @font-face{font-family:'JetBrains Mono';src:url('fonts/JetBrainsMono-latin.woff2') format('woff2');font-weight:400 800;font-style:normal;font-display:swap}
 body{background:radial-gradient(circle at 50% -8%,#123a29 0%,var(--bg) 58%) fixed;color:var(--txt);font-family:'JetBrains Mono','Huninn',-apple-system,BlinkMacSystemFont,'PingFang TC','Noto Sans TC','Microsoft JhengHei',sans-serif;padding:28px 20px 40px;min-height:100vh}
+html[lang="ja"] body{font-family:'JetBrains Mono','Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic','Noto Sans JP','Meiryo',-apple-system,sans-serif}
+html[lang="ko"] body{font-family:'JetBrains Mono','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR','Nanum Gothic',-apple-system,sans-serif}
 button,input,select,textarea{font-family:inherit}
 .wrap{max-width:430px;margin:0 auto;position:relative}
 .lang{position:absolute;top:-6px;right:0;font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;user-select:none;-webkit-user-select:none}
@@ -94,71 +96,84 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
 <div class="wrap">
   <div class="lang" id="langPill" onclick="toggleLang()"></div>
   <div class="icon">發</div>
-  <h1 data-zh="麻將16張" data-en="MahJong 16">麻將16張</h1>
-  <div class="tag" data-zh="下載到手機,把「發財」的運氣帶著走" data-en="Carry the luck of “Fa” (prosperity)"></div>
-  <div class="sub" data-zh="台灣 16 張麻將 · AI 對戰 · 台數教學<br>單機對戰 · 無廣告 · 無內購" data-en="Taiwanese 16-tile Mahjong · Play vs AI · Scoring explained<br>Offline play · no ads · no in-app purchases"></div>
+  <h1 data-zh="麻將16張" data-en="MahJong 16" data-ja="台湾麻雀 16張" data-ko="타이완 16장 마작">麻將16張</h1>
+  <div class="tag" data-zh="下載到手機,把「發財」的運氣帶著走" data-en="Carry the luck of “Fa” (prosperity)" data-ja="「發」の運気をいつでも持ち歩こう" data-ko="‘發(파)’의 행운을 늘 함께"></div>
+  <div class="sub" data-zh="台灣 16 張麻將 · AI 對戰 · 台數教學<br>單機對戰 · 無廣告 · 無內購" data-en="Taiwanese 16-tile Mahjong · Play vs AI · Scoring explained<br>Offline play · no ads · no in-app purchases" data-ja="台湾式16枚麻雀 · AI対戦 · 台(点数)解説<br>オフライン対戦 · 広告なし · 課金なし" data-ko="대만식 16장 마작 · AI 대전 · 타이(점수) 해설<br>오프라인 플레이 · 광고 없음 · 인앱 결제 없음"></div>
   <div class="hero-actions">
-  <a class="cta" href="play.html" data-zh="開始遊戲" data-en="Start Playing">開始遊戲</a>
-  <button class="cta2" onclick="openRules()" data-zh="📖 麻將教學 / 規則" data-en="📖 How to Play / Rules"></button>
+  <a class="cta" href="play.html" data-zh="開始遊戲" data-en="Start Playing" data-ja="ゲームを始める" data-ko="게임 시작">開始遊戲</a>
+  <button class="cta2" onclick="openRules()" data-zh="📖 麻將教學 / 規則" data-en="📖 How to Play / Rules" data-ja="📖 遊び方 / ルール" data-ko="📖 게임 방법 / 규칙"></button>
   </div>
   <div class="grid">
   <div class="card">
-    <h2 data-zh="為什麼玩「發」" data-en="Why play “Fa”"></h2>
-    <div class="li"><span class="em"><span class='mj-tile'></span></span><span data-zh="<b>邊玩邊學</b><br>每一手自動列出「台數」與牌型理由,新手也看得懂。" data-en="<b>Learn as you play</b><br>Every hand shows the scoring tiles and why — beginners welcome."></span></div>
-    <div class="li"><span class="em">🤖</span><span data-zh="<b>AI 對戰</b><br>一個人也能開桌,四家實戰節奏、隨時來一局。" data-en="<b>Play vs AI</b><br>Start a full four-player table anytime, no friends needed."></span></div>
-    <div class="li"><span class="em">📴</span><span data-zh="<b>單機可玩</b><br>通勤、飛機上都能玩,不用等牌咖。" data-en="<b>Playable offline</b><br>Perfect for commutes and flights."></span></div>
-    <div class="li"><span class="em">🚫</span><span data-zh="<b>無廣告</b><br>一次買斷,乾淨、不打擾。" data-en="<b>No ads</b><br>A clean experience."></span></div>
+    <h2 data-zh="為什麼玩「發」" data-en="Why play “Fa”" data-ja="「發」で遊ぶ理由" data-ko="‘發(파)’를 하는 이유"></h2>
+    <div class="li"><span class="em"><span class='mj-tile'></span></span><span data-zh="<b>邊玩邊學</b><br>每一手自動列出「台數」與牌型理由,新手也看得懂。" data-en="<b>Learn as you play</b><br>Every hand shows the scoring tiles and why — beginners welcome." data-ja="<b>遊びながら学べる</b><br>毎手ごとに「台(点数)」と役の理由を表示。初心者でもわかる。" data-ko="<b>하면서 배우기</b><br>매번 ‘타이(점수)’와 역의 이유를 표시. 초보자도 이해할 수 있어요."></span></div>
+    <div class="li"><span class="em">🤖</span><span data-zh="<b>AI 對戰</b><br>一個人也能開桌,四家實戰節奏、隨時來一局。" data-en="<b>Play vs AI</b><br>Start a full four-player table anytime, no friends needed." data-ja="<b>AI対戦</b><br>一人でも卓を囲める。いつでもサッと一局。" data-ko="<b>AI 대전</b><br>혼자서도 테이블을 시작. 언제든 한 판."></span></div>
+    <div class="li"><span class="em">📴</span><span data-zh="<b>單機可玩</b><br>通勤、飛機上都能玩,不用等牌咖。" data-en="<b>Playable offline</b><br>Perfect for commutes and flights." data-ja="<b>オフラインで遊べる</b><br>通勤・機内でも。待ち人いらず。" data-ko="<b>오프라인 플레이</b><br>출퇴근·비행기에서도. 기다릴 필요 없음."></span></div>
+    <div class="li"><span class="em">🚫</span><span data-zh="<b>無廣告</b><br>一次買斷,乾淨、不打擾。" data-en="<b>No ads</b><br>A clean experience." data-ja="<b>広告なし</b><br>買い切り。クリーンで快適。" data-ko="<b>광고 없음</b><br>한 번 구매로 영구 플레이. 깔끔하게."></span></div>
   </div>
-  <a class="aboutlink" href="about.html"><span data-zh="關於 <em class='g'>XOIO</em>" data-en="About <em class='g'>XOIO</em>"></span><span class="ar">›</span></a>
+  <a class="aboutlink" href="about.html"><span data-zh="關於 <em class='g'>XOIO</em>" data-en="About <em class='g'>XOIO</em>" data-ja="<em class='g'>XOIO</em> について" data-ko="<em class='g'>XOIO</em> 소개"></span><span class="ar">›</span></a>
   </div>
   <div class="foot">© XOIO · Mahjong for everyone</div>
 </div>
 
 <div class="mask" id="rulesMask" onclick="closeRules()"></div>
 <div class="modal" id="rulesModal">
-  <div class="mh"><span>📖</span><b data-zh="台灣 16 張麻將 · 規則" data-en="Taiwanese Mahjong · Rules"></b><span class="x" onclick="closeRules()">✕</span></div>
+  <div class="mh"><span>📖</span><b data-zh="台灣 16 張麻將 · 規則" data-en="Taiwanese Mahjong · Rules" data-ja="台湾式16枚麻雀 · ルール" data-ko="대만식 16장 마작 · 규칙"></b><span class="x" onclick="closeRules()">✕</span></div>
   <div class="mb">
-    <h3 data-zh="怎麼玩" data-en="How to play"></h3>
-    <p data-zh="4 人同桌、每人 16 張牌。輪流摸牌、打牌,湊成 5 組面子 + 1 對將就能胡牌。" data-en="4 players, 16 tiles each. Draw and discard in turn; complete 5 sets + 1 pair to win."></p>
-    <h3 data-zh="花牌(台灣特色)" data-en="Flowers (a Taiwanese touch)"></h3>
+    <h3 data-zh="怎麼玩" data-en="How to play" data-ja="遊び方" data-ko="게임 방법"></h3>
+    <p data-zh="4 人同桌、每人 16 張牌。輪流摸牌、打牌,湊成 5 組面子 + 1 對將就能胡牌。" data-en="4 players, 16 tiles each. Draw and discard in turn; complete 5 sets + 1 pair to win." data-ja="4人で1台、手牌は各16枚。順にツモ・打牌を繰り返し、5面子+1雀頭を揃えれば上がり。" data-ko="4명이 한 테이블, 각자 16장. 돌아가며 뽑고 버리기. 5개 멜드+1개 머리를 만들면 화료."></p>
+    <h3 data-zh="花牌(台灣特色)" data-en="Flowers (a Taiwanese touch)" data-ja="花牌(台湾ならでは)" data-ko="꽃패(대만 특색)"></h3>
     <ul>
-      <li data-zh="8 張花:春 夏 秋 冬 / 梅 蘭 竹 菊" data-en="8 flowers: Spring/Summer/Autumn/Winter · Plum/Orchid/Bamboo/Chrysanthemum"></li>
-      <li data-zh="摸到花自動補牌;「正花」每張 +1 台" data-en="Drawing a flower = draw again; your seat flower scores +1 each"></li>
-      <li data-zh="集滿 8 張花 → 花胡,直接算 8 台" data-en="All 8 flowers = instant “flower win”, 8 points"></li>
+      <li data-zh="8 張花:春 夏 秋 冬 / 梅 蘭 竹 菊" data-en="8 flowers: Spring/Summer/Autumn/Winter · Plum/Orchid/Bamboo/Chrysanthemum" data-ja="花8枚:春夏秋冬 / 梅蘭竹菊" data-ko="꽃 8장: 춘하추동 / 매란국죽"></li>
+      <li data-zh="摸到花自動補牌;「正花」每張 +1 台" data-en="Drawing a flower = draw again; your seat flower scores +1 each" data-ja="花をツモると自動でツモり直し。「正花(自席の花)」は1枚ごとに+1台" data-ko="꽃을 뽑으면 자동으로 다시 뽑기. ‘정화(정좌 꽃)’는 장당 +1타이"></li>
+      <li data-zh="集滿 8 張花 → 花胡,直接算 8 台" data-en="All 8 flowers = instant “flower win”, 8 points" data-ja="花8枚を揃えると → 花胡、8台確定" data-ko="꽃 8장을 모두 모으면 → 화호(花胡), 8타이 확정"></li>
     </ul>
-    <h3 data-zh="莊家 / 連莊" data-en="Dealer / streaks"></h3>
+    <h3 data-zh="莊家 / 連莊" data-en="Dealer / streaks" data-ja="親 / 連荘" data-ko="친 / 연장"></h3>
     <ul>
-      <li data-zh="莊家胡牌或流局(臭莊)→ 連莊" data-en="Dealer wins or a draw → the dealer repeats"></li>
-      <li data-zh="連莊台 = 2N+1(連一拉一 = 3 台)" data-en="Streak bonus = 2N+1 (one streak = 3 points)"></li>
+      <li data-zh="莊家胡牌或流局(臭莊)→ 連莊" data-en="Dealer wins or a draw → the dealer repeats" data-ja="親が上がるか流局(臭荘)→ 連荘" data-ko="친이 화료하거나 유국(臭莊) → 연장"></li>
+      <li data-zh="連莊台 = 2N+1(連一拉一 = 3 台)" data-en="Streak bonus = 2N+1 (one streak = 3 points)" data-ja="連荘台 = 2N+1(連一拉一 = 3台)" data-ko="연장 타이 = 2N+1(한 번 연장 = 3타이)"></li>
     </ul>
-    <h3 data-zh="台數(節錄)" data-en="Scoring (excerpt)"></h3>
+    <h3 data-zh="台數(節錄)" data-en="Scoring (excerpt)" data-ja="台数(抜粋)" data-ko="타이(발췌)"></h3>
     <div>
-      <span class="tagchip" data-zh="1台 莊家" data-en="1pt Dealer"></span><span class="tagchip" data-zh="1台 自摸" data-en="1pt Self-draw"></span><span class="tagchip" data-zh="1台 門清" data-en="1pt Concealed"></span><span class="tagchip" data-zh="1台 獨聽" data-en="1pt Unique wait"></span><span class="tagchip" data-zh="1台 三元牌" data-en="1pt Dragons"></span><span class="tagchip" data-zh="1台 風牌" data-en="1pt Winds"></span><span class="tagchip" data-zh="2台 平胡" data-en="2pt Ping hu"></span><span class="tagchip" data-zh="2台 三暗刻" data-en="2pt 3 concealed"></span><span class="tagchip" data-zh="4台 碰碰胡" data-en="4pt All pungs"></span><span class="tagchip" data-zh="4台 小三元" data-en="4pt Small dragons"></span><span class="tagchip" data-zh="8台 清一色" data-en="8pt Pure suit"></span><span class="tagchip" data-zh="8台 大三元" data-en="8pt Big dragons"></span>
+      <span class="tagchip" data-zh="1台 莊家" data-en="1pt Dealer" data-ja="1台 親" data-ko="1타이 친"></span><span class="tagchip" data-zh="1台 自摸" data-en="1pt Self-draw" data-ja="1台 ツモ" data-ko="1타이 쯔모"></span><span class="tagchip" data-zh="1台 門清" data-en="1pt Concealed" data-ja="1台 門前清" data-ko="1타이 멘젠"></span><span class="tagchip" data-zh="1台 獨聽" data-en="1pt Unique wait" data-ja="1台 単騎待ち" data-ko="1타이 단기 대기"></span><span class="tagchip" data-zh="1台 三元牌" data-en="1pt Dragons" data-ja="1台 三元牌" data-ko="1타이 삼원패"></span><span class="tagchip" data-zh="1台 風牌" data-en="1pt Winds" data-ja="1台 風牌" data-ko="1타이 풍패"></span><span class="tagchip" data-zh="2台 平胡" data-en="2pt Ping hu" data-ja="2台 平和" data-ko="2타이 핑후"></span><span class="tagchip" data-zh="2台 三暗刻" data-en="2pt 3 concealed" data-ja="2台 三暗刻" data-ko="2타이 삼암각"></span><span class="tagchip" data-zh="4台 碰碰胡" data-en="4pt All pungs" data-ja="4台 対々和" data-ko="4타이 뽕뽕후"></span><span class="tagchip" data-zh="4台 小三元" data-en="4pt Small dragons" data-ja="4台 小三元" data-ko="4타이 소삼원"></span><span class="tagchip" data-zh="8台 清一色" data-en="8pt Pure suit" data-ja="8台 清一色" data-ko="8타이 청일색"></span><span class="tagchip" data-zh="8台 大三元" data-en="8pt Big dragons" data-ja="8台 大三元" data-ko="8타이 대삼원"></span>
     </div>
-    <p style="margin-top:8px" data-zh="※ 屁胡(無台種)= 0 台,照常可以胡。" data-en="※ A win with no scoring pattern = 0 points — still a valid win."></p>
-    <h3 data-zh="結算" data-en="Settlement"></h3>
-    <p data-zh="放炮者付;自摸則三家各付。結算以「台數」計。" data-en="The discarder pays; on a self-draw all three pay. Counted in points (tai)."></p>
+    <p style="margin-top:8px" data-zh="※ 屁胡(無台種)= 0 台,照常可以胡。" data-en="※ A win with no scoring pattern = 0 points — still a valid win." data-ja="※ 役なしの上がり(屁胡)= 0台。それでも上がりは有効。" data-ko="※ 역 없는 화료(屁胡)= 0타이. 그래도 화료는 유효."></p>
+    <h3 data-zh="結算" data-en="Settlement" data-ja="精算" data-ko="정산"></h3>
+    <p data-zh="放炮者付;自摸則三家各付。結算以「台數」計。" data-en="The discarder pays; on a self-draw all three pay. Counted in points (tai)." data-ja="放銃者が支払う。ツモなら3人で分担。台数で計算。" data-ko="방총한 사람이 지불. 쯔모면 3명이 분담. 타이로 계산."></p>
   </div>
 </div>
 
 <script>
-function getLang(){ try{ var v=localStorage.getItem('mj_lang'); if(v==='en'||v==='zh') return v; }catch(e){} try{ var ls=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'']; for(var i=0;i<ls.length;i++){ var t=(ls[i]||'').toLowerCase(); if(t.indexOf('zh')===0) return 'zh'; } if(ls.length&&ls[0]) return 'en'; }catch(e){} return 'zh'; }
+var LANGS=['zh','en','ja','ko'];
+var LNAMES={zh:'中',en:'EN',ja:'日',ko:'韓'};
+var TITLES={zh:'麻將16張',en:'MahJong 16',ja:'台湾麻雀 16張',ko:'타이완 16장 마작'};
+function getLang(){
+  try{ var v=localStorage.getItem('mj_lang'); if(v==='en'||v==='zh'||v==='ja'||v==='ko') return v; }catch(e){}
+  try{ var ls=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||''];
+    for(var i=0;i<ls.length;i++){ var t=(ls[i]||'').toLowerCase();
+      if(t.indexOf('zh')===0) return 'zh';
+      if(t.indexOf('ja')===0) return 'ja';
+      if(t.indexOf('ko')===0) return 'ko';
+    }
+    if(ls.length&&ls[0]) return 'en';
+  }catch(e){}
+  return 'zh';
+}
 function applyLang(){
-  var l=getLang();
-  document.documentElement.lang = (l==='en' ? 'en' : 'zh-Hant');
-  var els=document.querySelectorAll('[data-zh],[data-en]');
+  var l=getLang(); document.documentElement.lang=(l==='zh'?'zh-Hant':l);
+  var els=document.querySelectorAll('[data-zh]');
   for(var i=0;i<els.length;i++){
-    var el=els[i];
-    var v = (l==='en') ? el.getAttribute('data-en') : el.getAttribute('data-zh');
+    var el=els[i]; var v=el.getAttribute('data-'+l);
+    if(v===null) v=el.getAttribute('data-zh');
     if(v!==null) el.innerHTML=v;
   }
-  var pill=document.getElementById('langPill');
-  if(pill) pill.innerHTML = (l==='en') ? '中 / <b>EN</b>' : '<b>中</b> / EN';
-  document.title = (l==='en') ? 'MahJong 16' : '麻將16張';
+  var p=document.getElementById('langPill');
+  if(p){ var h=''; for(var k=0;k<LANGS.length;k++){ var nm=LANGS[k]; h+= (nm===l? '<b>'+LNAMES[nm]+'</b>' : LNAMES[nm]); if(k<LANGS.length-1) h+=' / '; } p.innerHTML=h; }
+  document.title=TITLES[l]||TITLES.zh;
 }
 function toggleLang(){
-  var next = (getLang()==='en') ? 'zh' : 'en';
-  try{ localStorage.setItem('mj_lang', next); }catch(e){}
+  var cur=getLang(); var nx=LANGS[(LANGS.indexOf(cur)+1)%LANGS.length];
+  try{ localStorage.setItem('mj_lang', nx); }catch(e){}
   applyLang();
 }
 function openRules(){ document.getElementById('rulesMask').classList.add('on'); document.getElementById('rulesModal').classList.add('on'); }
