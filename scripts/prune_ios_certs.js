@@ -5,7 +5,9 @@
 const fs = require('fs'), crypto = require('crypto'), os = require('os'), path = require('path');
 const KEYID = process.env.ASC_KEY_ID;
 const ISSUER = process.env.ASC_ISSUER_ID;
-const KEEP = parseInt(process.env.KEEP || '3', 10);
+// Apple 上限:每帳號 3 張(每種類型)。CI 每次 archive 會新建 1 張,
+// 因此預設只保留 1 張(可留 2 個空位),避免「max certificates」再爆。
+const KEEP = parseInt(process.env.KEEP || '1', 10);
 const P8 = process.env.ASC_KEY_PATH || path.join(os.homedir(), 'private_keys', `AuthKey_${KEYID}.p8`);
 const API = 'https://api.appstoreconnect.apple.com';
 
