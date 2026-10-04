@@ -18,9 +18,9 @@
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 button,input{font-family:inherit}
-html,body{margin:0;height:100%}
+html,body{margin:0}
 body{background:var(--bg);color:var(--txt);font-family:'Campton','Avenir Next','Montserrat','Huninn','Noto Sans JP','Noto Sans KR',sans-serif;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;padding:calc(10px + env(safe-area-inset-top)) 10px calc(12px + env(safe-area-inset-bottom));gap:10px}
+  display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;padding:calc(10px + env(safe-area-inset-top)) 10px calc(52px + env(safe-area-inset-bottom));gap:10px;-webkit-overflow-scrolling:touch}
 header{width:100%;max-width:460px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 @media(max-width:430px){header{gap:6px}.meta{gap:5px;margin-left:auto}.chip{padding:4px 7px}}
 .brand{font-weight:500;font-size:21px;letter-spacing:.5px;position:relative;top:4px}
@@ -127,7 +127,7 @@ html[lang="en"] #pnum{font-size:13px}
   <div class="meta">
     <button class="chip" id="btnRec">記錄</button>
     <button class="chip" id="btnAns">答案</button>
-    <span class="langwrap"><button class="chip" id="btnLang">中文 ▾</button><div class="langmenu" id="langMenu"><button type="button" data-l="zh" onclick="pickLang('zh')">中文</button><button type="button" data-l="en" onclick="pickLang('en')">English</button><button type="button" data-l="ja" onclick="pickLang('ja')">日本語</button><button type="button" data-l="ko" onclick="pickLang('ko')">한국어</button></div></span>
+    <span class="langwrap"><button class="chip" id="btnLang">中文 ▾</button><div class="langmenu" id="langMenu"><button type="button" data-l="zh" onclick="pickLang('zh')">中文</button><button type="button" data-l="en" onclick="pickLang('en')">EN</button><button type="button" data-l="ja" onclick="pickLang('ja')">日本語</button><button type="button" data-l="ko" onclick="pickLang('ko')">한국어</button></div></span>
     <span class="chip" id="pnum">#1</span>
     <span class="timer" id="timer">00:00</span>
     <span class="chip" id="btnPause">⏸</span>
@@ -368,7 +368,7 @@ function start(i, fresh){
 
 // 事件
 document.getElementById('btnNotes').onclick=function(){ notesMode=!notesMode; this.classList.toggle('on',notesMode); };
-function L_NAME(l){ return ({zh:'中文',en:'English',ja:'日本語',ko:'한국어'})[l]||'中文'; }
+function L_NAME(l){ return ({zh:'中文',en:'EN',ja:'日本語',ko:'한국어'})[l]||'中文'; }
 function toggleLangMenu(e){ if(e&&e.stopPropagation) e.stopPropagation(); var m=document.getElementById('langMenu'); if(m) m.classList.toggle('on'); }
 function pickLang(l){ lang=(LANGS.indexOf(l)>=0?l:'zh'); try{ localStorage.setItem('sudoku_lang',lang); }catch(e){} applyLang(); var m=document.getElementById('langMenu'); if(m) m.classList.remove('on'); }
 document.getElementById('btnLang').onclick=toggleLangMenu;
