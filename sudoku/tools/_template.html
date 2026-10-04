@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0f1720">
+<title>數獨 Sudoku</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&family=Huninn&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1720; --card:#18232e; --line:#2c3a48; --line-strong:#5a6b7d;
+  --txt:#e8eef4; --muted:#8ca0b3; --give:#e8eef4; --user:#4fc3f7; --sel:#1e3a4d;
+  --peer:#16242e; --same:#2a3b2a; --same-txt:#8bd68b; --err:#e05555; --accent:#4fc3f7;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+button,input{font-family:inherit}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--txt);font-family:'Campton','Avenir Next','Montserrat','Huninn','Noto Sans JP','Noto Sans KR',sans-serif;
+  display:flex;flex-direction:column;align-items:center;min-height:100dvh;padding:10px 10px calc(12px + env(safe-area-inset-bottom));gap:10px}
+header{width:100%;max-width:460px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+@media(max-width:430px){header{gap:6px}.meta{gap:5px;margin-left:auto}.chip{padding:4px 7px}}
+.brand{font-weight:500;font-size:21px;letter-spacing:.5px;position:relative;top:4px}
+.brand small{font-weight:500;font-size:15px;color:var(--muted);margin-left:6px}
+.meta{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:5px 9px;font-weight:500;font-size:13px;color:var(--txt);cursor:pointer}
+.chip.lv{color:var(--accent)}
+#btnLang{font-family:inherit;line-height:1;color:var(--accent)}
+.langwrap{position:relative;display:inline-flex}
+.langmenu{position:absolute;top:calc(100% + 6px);right:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px;display:none;flex-direction:column;gap:2px;z-index:50;min-width:132px;box-shadow:0 12px 34px #0008}
+.langmenu.on{display:flex}
+.langmenu button{background:transparent;border:0;color:var(--txt);font-size:14px;font-weight:500;padding:9px 14px;border-radius:8px;text-align:left;cursor:pointer;font-family:inherit}
+.langmenu button:hover{background:#ffffff12}
+.langmenu button.cur{color:var(--accent)}
+.timer{font-variant-numeric:tabular-nums;font-weight:500;font-size:15px;color:var(--txt);display:inline-block;min-width:56px;text-align:center}
+#pnum{display:inline-block;min-width:46px;text-align:center;font-size:13px}
+
+.board-wrap{position:relative;width:100%;max-width:460px;aspect-ratio:1}
+#board{display:grid;grid-template-columns:repeat(9,1fr);grid-template-rows:repeat(9,1fr);width:100%;height:100%;
+  background:var(--line-strong);border:3px solid var(--line-strong);border-radius:12px;overflow:hidden;gap:1px}
+.cell{position:relative;display:flex;align-items:center;justify-content:center;background:var(--card);
+  font-size:clamp(18px,6.2vw,30px);font-weight:500;color:var(--user);cursor:pointer;user-select:none;transition:background .08s}
+.cell.given{color:var(--give);font-weight:500}
+.cell.bl{border-left:2px solid var(--line-strong)}
+.cell.bt{border-top:2px solid var(--line-strong)}
+.cell.peer{background:var(--peer)}
+.cell.same{background:var(--same)}
+.cell.same .v{color:var(--same-txt)}
+.cell.sel{background:var(--sel);box-shadow:inset 0 0 0 2px var(--accent)}
+.cell.err .v{color:var(--err)}
+.cell.hint .v{color:#ffd873}
+.v{line-height:1}
+.notes{position:absolute;inset:2px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
+  font-size:clamp(7px,2.1vw,10px);font-weight:500;color:var(--muted)}
+.notes span{display:flex;align-items:center;justify-content:center}
+
+.pause-ov{position:absolute;inset:0;background:rgba(15,23,32,.92);border-radius:12px;display:none;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px;z-index:5;font-weight:500}
+.pause-ov.on{display:flex}
+.pause-ov button{padding:10px 20px;border-radius:10px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-weight:500;font-size:15px}
+
+.pad{width:100%;max-width:460px;display:grid;grid-template-columns:repeat(9,1fr);gap:6px}
+.pad button{aspect-ratio:1/.92;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--txt);
+  font-size:clamp(18px,5.4vw,26px);font-weight:500;cursor:pointer}
+.pad button:active{background:var(--sel)}
+.pad button.dim{opacity:.32}
+
+.tools{width:100%;max-width:460px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.tools button{padding:11px 0;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--txt);
+  font-size:15px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.tools button.on{background:var(--accent);color:#07212e;border-color:var(--accent)}
+.tools button:active{opacity:.85}
+.tools button .ico{width:16px;height:16px;flex:none;background-color:currentColor;-webkit-mask:var(--u) center/contain no-repeat;mask:var(--u) center/contain no-repeat}
+
+.levels{width:100%;max-width:460px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.levels button{padding:12px 0;border-radius:10px;border:1px solid var(--line);background:var(--card);font-weight:500;font-size:15px;cursor:pointer;transition:background .12s,color .12s}
+.levels button[data-d="easy"]{background:#34506D;border-color:#34506D;color:#fff}
+.levels button[data-d="medium"]{background:#1B3B5A;border-color:#1B3B5A;color:#fff}
+.levels button[data-d="hard"]{background:#112A46;border-color:#112A46;color:#fff}
+.levels button[data-d="expert"]{background:#0A1B2E;border-color:#0A1B2E;color:#fff}
+.levels button.on{background:#cfe4f5;border-color:#cfe4f5;color:#0A1B2E}
+
+.navbar{width:100%;max-width:460px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.navbar button{padding:9px 14px;min-width:64px;font-size:18px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--txt);font-weight:500;cursor:pointer}
+.navbar .cur{display:inline-flex;align-items:center;gap:4px;font-weight:500;font-size:15px}
+#navInp{width:3.4em;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:8px;color:var(--txt);font:inherit;font-weight:500;padding:7px 4px;-moz-appearance:textfield;appearance:textfield}
+#navInp::-webkit-outer-spin-button,#navInp::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.picker{width:100%;max-width:460px;display:flex;flex-wrap:wrap;gap:5px;max-height:132px;overflow:auto}
+.picker button{min-width:34px;padding:6px 7px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--muted);font-weight:500;font-size:12px;cursor:pointer}
+.picker button.d1{color:#8bd68b}.picker button.d2{color:#ffd873}.picker button.d3{color:#ff9f6b}.picker button.d4{color:#ff7b7b}
+.picker button.cur{background:var(--accent);color:#07212e;border-color:var(--accent)}
+#picker{display:none}
+.foot{font-size:14px;color:var(--muted);text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#000a;color:#fff;
+  padding:9px 16px;border-radius:10px;font-weight:500;font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
+.toast.on{opacity:1}
+.panel{position:fixed;inset:0;background:rgba(8,12,17,.86);display:none;align-items:center;justify-content:center;z-index:30;padding:14px}
+.panel.on{display:flex}
+.panel-card{background:var(--bg);border:1px solid var(--line);border-radius:14px;width:100%;max-width:460px;max-height:86vh;display:flex;flex-direction:column;padding:12px}
+.panel-head{position:relative;display:flex;align-items:center;justify-content:flex-end;font-weight:500;font-size:16px;margin-bottom:10px}
+#ansNum{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:17px;font-weight:500;color:var(--txt)}
+.panel-head button{background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1}
+.panel-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;overflow:auto;padding:2px}
+.panel-grid button{aspect-ratio:1;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--txt);font-weight:500;font-size:14px;cursor:pointer}
+.panel-grid button.d1{background:#34506D;border-color:#34506D;color:#fff}
+.panel-grid button.d2{background:#1B3B5A;border-color:#1B3B5A;color:#fff}
+.panel-grid button.d3{background:#112A46;border-color:#112A46;color:#fff}
+.panel-grid button.d4{background:#0A1B2E;border-color:#0A1B2E;color:#fff}
+.panel-grid button.done{background:var(--user);border-color:var(--user);color:#07212e}
+.ans-board{display:grid;grid-template-columns:repeat(9,1fr);gap:1px;background:var(--line-strong);border:3px solid var(--line-strong);border-radius:12px;overflow:hidden;width:100%}
+.ans-board div{aspect-ratio:1;background:var(--card);font-weight:500;display:flex;align-items:center;justify-content:center;font-size:clamp(14px,4.6vw,22px)}
+.ans-board div.g{color:var(--txt)}
+.ans-board div.a{color:var(--user)}
+html[lang="en"] *{text-transform:uppercase}
+html[lang="en"] .brand{text-transform:none}
+html[lang="en"] .langmenu button{text-transform:none}
+html[lang="en"] .tools button,html[lang="en"] .levels button,html[lang="en"] .pause-ov button,html[lang="en"] .foot,html[lang="en"] .toast{font-size:13px}
+html[lang="en"] #pnum{font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">數獨</div>
+  <div class="meta">
+    <button class="chip" id="btnRec">記錄</button>
+    <button class="chip" id="btnAns">答案</button>
+    <span class="langwrap"><button class="chip" id="btnLang">中文 ▾</button><div class="langmenu" id="langMenu"><button type="button" data-l="zh" onclick="pickLang('zh')">中文</button><button type="button" data-l="en" onclick="pickLang('en')">English</button><button type="button" data-l="ja" onclick="pickLang('ja')">日本語</button><button type="button" data-l="ko" onclick="pickLang('ko')">한국어</button></div></span>
+    <span class="chip" id="pnum">#1</span>
+    <span class="timer" id="timer">00:00</span>
+    <span class="chip" id="btnPause">⏸</span>
+  </div>
+</header>
+
+<div class="board-wrap">
+  <div id="board"></div>
+  <div class="pause-ov" id="pauseOv"><div id="pauseMsg">已暫停</div><button id="btnResume">繼續</button></div>
+</div>
+
+<div class="pad" id="pad"></div>
+
+<div class="tools">
+  <button id="btnNotes"><span class="ico" style="--u:url('assets/notes.png?v=20261004e')"></span><span id="notesTxt">筆記</span></button>
+  <button id="btnUndo"><span class="ico" style="--u:url('assets/undo.png?v=20261004e')"></span><span id="undoTxt">復原</span></button>
+  <button id="btnHint"><span class="ico" style="--u:url('assets/hint.png?v=20261004e')"></span><span id="hintTxt">提示</span></button>
+  <button id="btnErase"><span class="ico" style="--u:url('assets/erase.png?v=20261004e')"></span><span id="eraseTxt">擦掉</span></button>
+</div>
+
+<div class="levels" id="levels"></div>
+
+<div class="navbar">
+  <button id="btnPrev">◀</button>
+  <span class="cur"><input id="navInp" type="number" min="1" inputmode="numeric" value="1"><span id="navTotal">/ 100</span></span>
+  <button id="btnNext">▶</button>
+</div>
+
+<div class="picker" id="picker"></div>
+<div class="foot">© XOIO</div>
+<div class="toast" id="toast"></div>
+<div class="panel" id="panel"><div class="panel-card"><div class="panel-head"><button id="panelClose">✕</button></div><div class="panel-grid" id="panelGrid"></div></div></div>
+<div class="panel" id="ansView"><div class="panel-card"><div class="panel-head"><span id="ansNum"></span><button id="ansViewClose">✕</button></div><div class="ans-board" id="ansBoard"></div></div></div>
+
+<script>
+const PUZZLES = __PUZZLES_JSON__;
+const LV = {
+  zh:{easy:'簡單', medium:'中等', hard:'困難', expert:'專家'},
+  en:{easy:'Easy', medium:'Medium', hard:'Hard', expert:'Expert'},
+  ja:{easy:'簡単', medium:'普通', hard:'難しい', expert:'上級'},
+  ko:{easy:'쉬움', medium:'보통', hard:'어려움', expert:'전문가'}
+};
+const T = {
+  zh:{brand:'數獨', notes:'筆記', undo:'復原', hint:'提示', erase:'擦掉', paused:'已暫停', resume:'繼續', done:'完成', full:'已填滿', hintDone:'提示已填入', wrong:n=>'有 '+n+' 格填錯(已標紅)', ok:'目前都對 👍', langBtn:'EN', rec:'記錄', ans:'答案', recTitle:'記錄(實心＝已過關,點擊前往)', ansTitle:'答案(點號碼看解答)', ansShown:'已顯示第 {n} 題解答'},
+  en:{brand:'Sudoku', notes:'Notes', undo:'Undo', hint:'Hint', erase:'Erase', paused:'Paused', resume:'Resume', done:'Done', full:'Already full', hintDone:'Hint placed', wrong:n=>n+' cells wrong (red)', ok:'All correct 👍', langBtn:'日本語', rec:'Record', ans:'Answer', recTitle:'Progress (solid = solved; tap to go)', ansTitle:'Answer (tap a number)', ansShown:'Showing answer for #{n}'},
+  ja:{brand:'数独', notes:'メモ', undo:'戻す', hint:'ヒント', erase:'消す', paused:'一時停止', resume:'再開', done:'完成', full:'すでに埋まっています', hintDone:'ヒントを入力しました', wrong:n=>n+' マス間違い(赤)', ok:'今のところ全部正しい 👍', langBtn:'한국어', rec:'記録', ans:'答え', recTitle:'記録(塗り＝クリア、タップで移動)', ansTitle:'答え(番号をタップで解答)', ansShown:'#{n} の解答を表示中'},
+  ko:{brand:'스도쿠', notes:'메모', undo:'되돌리기', hint:'힌트', erase:'지우기', paused:'일시정지', resume:'계속', done:'완료', full:'이미 가득 찼습니다', hintDone:'힌트를 입력했습니다', wrong:n=>n+'칸 틀림(빨강)', ok:'지금까지 모두 정답 👍', langBtn:'中文', rec:'기록', ans:'정답', recTitle:'기록(채워짐＝완료, 탭하면 이동)', ansTitle:'정답(번호를 눌러 해답 보기)', ansShown:'#{n} 해답 표시 중'}
+};
+let LANGS = ['zh','en','ja','ko'];
+let lang = (function(){ try{ var v=localStorage.getItem('sudoku_lang'); return LANGS.indexOf(v)>=0?v:'zh'; }catch(e){ return 'zh'; } })();
+function L(){ return T[lang]; }
+function lvLabel(d){ return LV[lang][d]; }
+const N = PUZZLES.length;
+let idx = 0, grid = [], notes = [], sel = -1, notesMode = false, paused = false;
+let hist = [], t0 = 0, elapsed = 0, timer = null, solvedFlag = false;
+
+const boardEl = document.getElementById('board');
+const padEl = document.getElementById('pad');
+const pickerEl = document.getElementById('picker');
+const toastEl = document.getElementById('toast');
+const store = {
+  get(){ try{ return JSON.parse(localStorage.getItem('sudoku_v1')||'{}'); }catch(e){ return {}; } },
+  set(o){ try{ localStorage.setItem('sudoku_v1', JSON.stringify(o)); }catch(e){} }
+};
+function save(){ const s = store.get(); s[idx] = { grid: grid, notes: notes.map(function(x){return Array.from(x);}), elapsed: elapsed, solved: solvedFlag }; store.set(s); }
+function loadState(i){ const s = store.get(); return s[i] || null; }
+
+function puzzle(){ return PUZZLES[idx]; }
+function isGiven(r,c){ return puzzle().p[r][c] !== 0; }
+
+function buildBoard(){
+  boardEl.innerHTML='';
+  for(let r=0;r<9;r++)for(let c=0;c<9;c++){
+    const d=document.createElement('div');
+    d.className='cell'+(c%3===0&&c>0?' bl':'')+(r%3===0&&r>0?' bt':'');
+    d.dataset.r=r; d.dataset.c=c; d.dataset.i=r*9+c;
+    d.onclick=()=>select(r*9+c);
+    boardEl.appendChild(d);
+  }
+  padEl.innerHTML='';
+  for(let v=1;v<=9;v++){ const b=document.createElement('button'); b.textContent=v; b.dataset.v=v; b.onclick=()=>input(v); padEl.appendChild(b); }
+}
+function cells(){ return boardEl.children; }
+function cellAt(i){ return boardEl.children[i]; }
+
+function peers(i){ const r=Math.floor(i/9), c=i%9, s=new Set();
+  for(let k=0;k<9;k++){ s.add(r*9+k); s.add(k*9+c); }
+  const br=Math.floor(r/3)*3, bc=Math.floor(c/3)*3;
+  for(let a=0;a<3;a++)for(let b=0;b<3;b++) s.add((br+a)*9+bc+b);
+  return s;
+}
+function conflicts(){
+  const bad=new Set();
+  for(let r=0;r<9;r++)for(let c=0;c<9;c++){
+    const v=grid[r*9+c]; if(!v) continue;
+    for(let k=0;k<9;k++){
+      if(k!==c && grid[r*9+k]===v) bad.add(r*9+c);
+      if(k!==r && grid[k*9+c]===v) bad.add(r*9+c);
+    }
+    const br=Math.floor(r/3)*3, bc=Math.floor(c/3)*3;
+    for(let a=0;a<3;a++)for(let b=0;b<3;b++){ const j=(br+a)*9+bc+b; if(j!==r*9+c && grid[j]===v) bad.add(r*9+c); }
+  }
+  return bad;
+}
+function render(){
+  const bad=conflicts();
+  const selV = sel>=0 ? grid[sel] : 0;
+  const pset = sel>=0 ? peers(sel) : new Set();
+  for(let i=0;i<81;i++){
+    const el=cellAt(i), r=Math.floor(i/9), c=i%9, v=grid[i];
+    el.className='cell'+(c%3===0&&c>0?' bl':'')+(r%3===0&&r>0?' bt':'')+(isGiven(r,c)?' given':'');
+    if(sel>=0 && pset.has(i) && i!==sel) el.classList.add('peer');
+    if(selV && v===selV && i!==sel) el.classList.add('same');
+    if(i===sel) el.classList.add('sel');
+    if(v && bad.has(i) && !isGiven(r,c)) el.classList.add('err');
+    if(v){ el.innerHTML='<span class="v">'+v+'</span>'; }
+    else if(notes[i] && notes[i].size){
+      let h='<div class="notes">';
+      for(let k=1;k<=9;k++) h+='<span>'+(notes[i].has(k)?k:'')+'</span>';
+      el.innerHTML=h+'</div>';
+    } else el.innerHTML='';
+  }
+  // 數字盤剩餘計數
+  const cnt={}; for(const v of grid) if(v) cnt[v]=(cnt[v]||0)+1;
+  for(const b of padEl.children){ const v=+b.dataset.v; b.classList.toggle('dim', (cnt[v]||0)>=9); }
+  // (上方難度 chip 已於 2026-10-04 依 John 要求移除)
+  document.getElementById('pnum').textContent = '#'+puzzle().n;
+  const _ni=document.getElementById('navInp'); if(_ni && document.activeElement!==_ni) _ni.value=idx+1;
+  const _nt=document.getElementById('navTotal'); if(_nt) _nt.textContent='/ '+N;
+  document.querySelectorAll('#picker button').forEach(b=>b.classList.toggle('cur', +b.dataset.i===idx));
+  document.querySelectorAll('#levels button').forEach(b=>b.classList.toggle('on', b.dataset.d===puzzle().diff));
+}
+function select(i){ if(paused) return; if(isGiven(Math.floor(i/9), i%9)){ sel=i; render(); return; } sel=(sel===i?-1:i); render(); }
+
+function input(v){
+  if(paused||sel<0||isGiven(Math.floor(sel/9), sel%9)) return;
+  pushHist();
+  if(notesMode){
+    if(grid[sel]) grid[sel]=0;
+    const s = notes[sel]= notes[sel]||new Set();
+    s.has(v)?s.delete(v):s.add(v);
+  } else {
+    grid[sel] = (grid[sel]===v)?0:v;
+    if(grid[sel]) notes[sel]=new Set();
+  }
+  afterChange();
+}
+function erase(){ if(paused||sel<0||isGiven(Math.floor(sel/9),sel%9)) return; pushHist(); grid[sel]=0; notes[sel]=new Set(); afterChange(); }
+function pushHist(){ hist.push({g:grid.slice(), n:notes.map(s=>new Set(s))}); if(hist.length>200) hist.shift(); }
+function undo(){ if(!hist.length) return; const h=hist.pop(); grid=h.g; notes=h.n; afterChange(); }
+
+function afterChange(){
+  render(); save();
+  if(grid.every((v,i)=>v===puzzle().s[Math.floor(i/9)][i%9])){
+    solvedFlag=true; stopTimer(); save();
+    toast(L().done, true);
+  }
+}
+function hint(){
+  if(paused) return;
+  let target = (sel>=0 && !grid[sel]) ? sel : -1;
+  if(target<0){ const empty=[]; for(let i=0;i<81;i++) if(!grid[i]) empty.push(i); if(!empty.length){ toast(L().full); return; } target=empty[Math.floor(Math.random()*empty.length)]; }
+  pushHist();
+  grid[target]=puzzle().s[Math.floor(target/9)][target%9];
+  cells()[target].classList.add('hint');
+  afterChange();
+  toast(L().hintDone);
+}
+function checkWrong(){
+  const s=puzzle().s; let n=0;
+  for(let i=0;i<81;i++) if(grid[i] && grid[i]!==s[Math.floor(i/9)][i%9]){ cells()[i].classList.add('err'); n++; }
+  toast(n? L().wrong(n) : L().ok);
+}
+function restart(){ if(!confirm('重來這一題?')) return; start(idx, true); }
+
+function fmt(s){ const m=Math.floor(s/60), ss=s%60; return String(m).padStart(2,'0')+':'+String(ss).padStart(2,'0'); }
+function stopTimer(){ if(timer){ clearInterval(timer); timer=null; } }
+function startTimer(){ stopTimer(); t0=Date.now()-elapsed*1000; timer=setInterval(()=>{ if(!paused){ elapsed=Math.floor((Date.now()-t0)/1000); document.getElementById('timer').textContent=fmt(elapsed); } },500); }
+function toast(m, sticky){ toastEl.textContent=m; toastEl.classList.add('on'); clearTimeout(toastEl._t); if(!sticky) toastEl._t=setTimeout(()=>toastEl.classList.remove('on'),1600); }
+function solvedMap(){ const s=store.get(); const m={}; Object.keys(s).forEach(function(k){ if(s[k]&&s[k].solved) m[k]=1; }); return m; }
+function openPanel(mode){
+  toastEl.classList.remove('on');
+  const g=document.getElementById('panelGrid'); g.innerHTML='';
+  const sm=solvedMap();
+  PUZZLES.forEach(function(pz,i){
+    const b=document.createElement('button'); b.textContent=pz.n;
+    b.className='d'+({easy:1,medium:2,hard:3,expert:4}[pz.diff]||1);
+    if(mode==='rec' && (sm[i] || (i===idx && solvedFlag))) b.classList.add('done');
+    b.onclick=function(){ closePanel(); if(mode==='rec'){ start(i, true); } else { showAnswer(i); } };
+    g.appendChild(b);
+  });
+  document.getElementById('panel').classList.add('on');
+}
+function closePanel(){ document.getElementById('panel').classList.remove('on'); }
+function showAnswer(i){
+  toastEl.classList.remove('on');
+  const pz=PUZZLES[i];
+  document.getElementById('ansNum').textContent='#'+pz.n;
+  const el=document.getElementById('ansBoard'); el.innerHTML='';
+  for(let r=0;r<9;r++)for(let c=0;c<9;c++){ const d=document.createElement('div'); d.textContent=pz.s[r][c]; d.className = pz.p[r][c] ? 'g' : 'a'; el.appendChild(d); }
+  document.getElementById('ansView').classList.add('on');
+}
+
+function start(i, fresh){
+  idx=(i+N)%N; sel=-1; hist=[]; solvedFlag=false; paused=false;
+  document.getElementById('pauseOv').classList.remove('on');
+  toastEl.classList.remove('on');
+  const st = fresh? null : loadState(idx);
+  grid = (st && Array.isArray(st.grid) && st.grid.length===81)? st.grid.slice() : puzzle().p.flat();
+  if(Array.isArray(grid[0])) grid=puzzle().p.flat();
+  notes = (st && Array.isArray(st.notes)) ? st.notes.map(a=>new Set(Array.isArray(a)?a:[])) : Array.from({length:81},()=>new Set());
+  while(notes.length<81) notes.push(new Set());
+  elapsed = st? (st.elapsed||0) : 0;
+  document.getElementById('timer').textContent=fmt(elapsed);
+  startTimer(); render(); window.scrollTo(0,0);
+}
+
+// 事件
+document.getElementById('btnNotes').onclick=function(){ notesMode=!notesMode; this.classList.toggle('on',notesMode); };
+function L_NAME(l){ return ({zh:'中文',en:'English',ja:'日本語',ko:'한국어'})[l]||'中文'; }
+function toggleLangMenu(e){ if(e&&e.stopPropagation) e.stopPropagation(); var m=document.getElementById('langMenu'); if(m) m.classList.toggle('on'); }
+function pickLang(l){ lang=(LANGS.indexOf(l)>=0?l:'zh'); try{ localStorage.setItem('sudoku_lang',lang); }catch(e){} applyLang(); var m=document.getElementById('langMenu'); if(m) m.classList.remove('on'); }
+document.getElementById('btnLang').onclick=toggleLangMenu;
+document.addEventListener('click', function(){ var m=document.getElementById('langMenu'); if(m) m.classList.remove('on'); });
+document.getElementById('btnRec').onclick=function(){ openPanel('rec'); };
+document.getElementById('btnAns').onclick=function(){ openPanel('ans'); };
+document.getElementById('panelClose').onclick=closePanel;
+document.getElementById('ansViewClose').onclick=function(){ document.getElementById('ansView').classList.remove('on'); };
+document.getElementById('btnErase').onclick=erase;
+document.getElementById('btnUndo').onclick=undo;
+document.getElementById('btnHint').onclick=hint;
+document.getElementById('btnPrev').onclick=()=>start(idx-1);
+document.getElementById('btnNext').onclick=()=>start(idx+1);
+(function(){const ni=document.getElementById('navInp'); if(!ni) return;
+  ni.addEventListener('change',function(){ let v=parseInt(ni.value,10); if(isNaN(v)){ ni.value=idx+1; return; } v=Math.max(1,Math.min(N,v)); ni.value=v; start(v-1); });
+  ni.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); ni.blur(); } });
+})();
+document.getElementById('btnPause').onclick=togglePause;
+document.getElementById('btnResume').onclick=togglePause;
+function togglePause(){ paused=!paused; document.getElementById('pauseOv').classList.toggle('on',paused); document.getElementById('btnPause').textContent=paused?'▶':'⏸'; }
+document.addEventListener('keydown',e=>{ if(e.key>='1'&&e.key<='9') input(+e.key); else if(e.key==='Backspace'||e.key==='Delete') erase(); else if(e.key==='z'&&(e.ctrlKey||e.metaKey)) undo(); });
+
+function buildPicker(){
+  pickerEl.innerHTML='';
+  PUZZLES.forEach((p,i)=>{ const b=document.createElement('button'); b.textContent=p.n; b.dataset.i=i;
+    b.className='d'+({easy:1,medium:2,hard:3,expert:4}[p.diff]||1);
+    b.onclick=()=>{ start(i); pickerEl.classList.remove(); };
+    pickerEl.appendChild(b);
+  });
+}
+function buildLevels(){
+  const el=document.getElementById('levels'); el.innerHTML='';
+  ['easy','medium','hard','expert'].forEach(d=>{
+    const b=document.createElement('button'); b.dataset.d=d; b.textContent=lvLabel(d);
+    b.onclick=()=>jumpToDiff(d); el.appendChild(b);
+  });
+}
+function applyLang(){
+  var _lb=document.getElementById('btnLang'); if(_lb) _lb.textContent=L_NAME(lang)+' ▾';
+  var _btns=document.querySelectorAll('#langMenu button'); for(var _i=0;_i<_btns.length;_i++){ _btns[_i].className=(_btns[_i].getAttribute('data-l')===lang)?'cur':''; }
+  document.querySelector('.brand').textContent = L().brand;
+  var _rc=document.getElementById('btnRec'); if(_rc) _rc.textContent=L().rec;
+  var _an=document.getElementById('btnAns'); if(_an) _an.textContent=L().ans;
+  var _nt=document.getElementById('notesTxt'); if(_nt) _nt.textContent = L().notes;
+  var _ut=document.getElementById('undoTxt'); if(_ut) _ut.textContent = L().undo;
+  var _ht=document.getElementById('hintTxt'); if(_ht) _ht.textContent = L().hint;
+  var _et=document.getElementById('eraseTxt'); if(_et) _et.textContent = L().erase;
+  var pm=document.getElementById('pauseMsg'); if(pm) pm.textContent = L().paused;
+  var br=document.getElementById('btnResume'); if(br) br.textContent = L().resume;
+  document.documentElement.lang = ({zh:'zh-Hant',en:'en',ja:'ja',ko:'ko'})[lang]||'zh-Hant';
+  buildLevels(); render();
+}
+function jumpToDiff(d){
+  const list=[]; PUZZLES.forEach((p,i)=>{ if(p.diff===d) list.push(i); });
+  if(!list.length) return;
+  let i=list[Math.floor(Math.random()*list.length)];
+  if(list.length>1 && i===idx) i=list[(list.indexOf(i)+1)%list.length];
+  start(i);
+}
+buildBoard(); buildPicker(); start(0); applyLang();
+window.addEventListener('beforeunload', save);
+// demo 自動更新:偵測到新版就自動重新載入(包成 App 時移除)
+let __ver=null;
+setInterval(function(){ fetch('version.json?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){ if(__ver===null){ __ver=t; } else if(t!==__ver){ __ver=t; location.reload(); } }).catch(function(){}); },4000);
+</script>
+</body>
+</html>
