@@ -20,7 +20,7 @@
 button,input{font-family:inherit}
 html,body{margin:0;height:100%}
 body{background:var(--bg);color:var(--txt);font-family:'Campton','Avenir Next','Montserrat','Huninn','Noto Sans JP','Noto Sans KR',sans-serif;
-  display:flex;flex-direction:column;align-items:center;min-height:100dvh;padding:10px 10px calc(12px + env(safe-area-inset-bottom));gap:10px}
+  display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;padding:calc(10px + env(safe-area-inset-top)) 10px calc(12px + env(safe-area-inset-bottom));gap:10px}
 header{width:100%;max-width:460px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 @media(max-width:430px){header{gap:6px}.meta{gap:5px;margin-left:auto}.chip{padding:4px 7px}}
 .brand{font-weight:500;font-size:21px;letter-spacing:.5px;position:relative;top:4px}
@@ -131,6 +131,7 @@ html[lang="en"] #pnum{font-size:13px}
     <span class="chip" id="pnum">#1</span>
     <span class="timer" id="timer">00:00</span>
     <span class="chip" id="btnPause">⏸</span>
+    <span class="chip" id="btnSnd">🔊</span>
   </div>
 </header>
 
@@ -262,6 +263,19 @@ function render(){
 }
 function select(i){ if(paused) return; if(isGiven(Math.floor(i/9), i%9)){ sel=i; render(); return; } sel=(sel===i?-1:i); render(); }
 
+/* ===== 音效(Web Audio,無需音檔) ===== */
+let actx=null;
+let muted=(function(){try{return localStorage.getItem('sudoku_mute')==='1';}catch(e){return false;}})();
+function _ac(){ try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx&&actx.state==='suspended') actx.resume(); }catch(e){} return actx; }
+function _tone(f,dur,type,vol,when){ if(muted) return; const a=_ac(); if(!a) return; const t0=a.currentTime+(when||0); try{ const o=a.createOscillator(), g=a.createGain(); o.type=type||'sine'; o.frequency.setValueAtTime(f,t0); g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(vol||0.06,t0+0.012); g.gain.exponentialRampToValueAtTime(0.0001,t0+dur); o.connect(g); g.connect(a.destination); o.start(t0); o.stop(t0+dur+0.03); }catch(e){} }
+function sPlace(){ _tone(680,0.09,'sine',0.05); }
+function sNote(){ _tone(520,0.05,'sine',0.03); }
+function sErase(){ _tone(360,0.07,'sine',0.035); }
+function sWrongSet(){ _tone(200,0.16,'sawtooth',0.04); }
+function sErr(){ _tone(180,0.18,'square',0.045); _tone(150,0.18,'square',0.03,0.02); }
+function sHint(){ _tone(880,0.09,'triangle',0.05); _tone(1245,0.12,'triangle',0.05,0.09); }
+function sWin(){ [523,659,784,1047].forEach(function(f,i){ _tone(f,0.22,'sine',0.06,i*0.13); }); }
+
 function input(v){
   if(paused||sel<0||isGiven(Math.floor(sel/9), sel%9)) return;
   pushHist();
@@ -269,21 +283,26 @@ function input(v){
     if(grid[sel]) grid[sel]=0;
     const s = notes[sel]= notes[sel]||new Set();
     s.has(v)?s.delete(v):s.add(v);
+    sNote();
   } else {
     grid[sel] = (grid[sel]===v)?0:v;
     if(grid[sel]) notes[sel]=new Set();
+    if(!grid[sel]) sErase();
+    else if(grid[sel]===puzzle().s[Math.floor(sel/9)][sel%9]) sPlace();
+    else sWrongSet();
   }
   afterChange();
 }
-function erase(){ if(paused||sel<0||isGiven(Math.floor(sel/9),sel%9)) return; pushHist(); grid[sel]=0; notes[sel]=new Set(); afterChange(); }
+function erase(){ if(paused||sel<0||isGiven(Math.floor(sel/9),sel%9)) return; pushHist(); grid[sel]=0; notes[sel]=new Set(); sErase(); afterChange(); }
 function pushHist(){ hist.push({g:grid.slice(), n:notes.map(s=>new Set(s))}); if(hist.length>200) hist.shift(); }
-function undo(){ if(!hist.length) return; const h=hist.pop(); grid=h.g; notes=h.n; afterChange(); }
+function undo(){ if(!hist.length) return; const h=hist.pop(); grid=h.g; notes=h.n; sErase(); afterChange(); }
 
 function afterChange(){
   render(); save();
   if(grid.every((v,i)=>v===puzzle().s[Math.floor(i/9)][i%9])){
     solvedFlag=true; stopTimer(); save();
     toast(L().done, true);
+    sWin();
   }
 }
 function hint(){
@@ -294,11 +313,13 @@ function hint(){
   grid[target]=puzzle().s[Math.floor(target/9)][target%9];
   cells()[target].classList.add('hint');
   afterChange();
+  sHint();
   toast(L().hintDone);
 }
 function checkWrong(){
   const s=puzzle().s; let n=0;
   for(let i=0;i<81;i++) if(grid[i] && grid[i]!==s[Math.floor(i/9)][i%9]){ cells()[i].classList.add('err'); n++; }
+  if(n) sErr();
   toast(n? L().wrong(n) : L().ok);
 }
 function restart(){ if(!confirm('重來這一題?')) return; start(idx, true); }
@@ -351,6 +372,8 @@ function L_NAME(l){ return ({zh:'中文',en:'English',ja:'日本語',ko:'한국�
 function toggleLangMenu(e){ if(e&&e.stopPropagation) e.stopPropagation(); var m=document.getElementById('langMenu'); if(m) m.classList.toggle('on'); }
 function pickLang(l){ lang=(LANGS.indexOf(l)>=0?l:'zh'); try{ localStorage.setItem('sudoku_lang',lang); }catch(e){} applyLang(); var m=document.getElementById('langMenu'); if(m) m.classList.remove('on'); }
 document.getElementById('btnLang').onclick=toggleLangMenu;
+function sSndIcon(){ var b=document.getElementById('btnSnd'); if(b) b.textContent=muted?'🔇':'🔊'; }
+document.getElementById('btnSnd').onclick=function(){ muted=!muted; try{localStorage.setItem('sudoku_mute',muted?'1':'0');}catch(e){} sSndIcon(); if(!muted) sPlace(); };
 document.addEventListener('click', function(){ var m=document.getElementById('langMenu'); if(m) m.classList.remove('on'); });
 document.getElementById('btnRec').onclick=function(){ openPanel('rec'); };
 document.getElementById('btnAns').onclick=function(){ openPanel('ans'); };
@@ -407,7 +430,7 @@ function jumpToDiff(d){
   if(list.length>1 && i===idx) i=list[(list.indexOf(i)+1)%list.length];
   start(i);
 }
-buildBoard(); buildPicker(); start(0); applyLang();
+buildBoard(); buildPicker(); start(0); applyLang(); sSndIcon();
 window.addEventListener('beforeunload', save);
 // demo 自動更新:偵測到新版就自動重新載入(包成 App 時移除)
 let __ver=null;
