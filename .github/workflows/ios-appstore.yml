@@ -2,6 +2,11 @@ name: iOS App Store build & upload
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'www/**'
+      - 'ios/App/App.xcodeproj/project.pbxproj'
+      - '.github/workflows/ios-appstore.yml'
 
 concurrency:
   group: ios-appstore
