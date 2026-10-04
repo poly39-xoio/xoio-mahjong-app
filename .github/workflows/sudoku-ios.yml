@@ -1,6 +1,10 @@
 name: Sudoku iOS build & upload
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'sudoku/**'
+      - '.github/workflows/sudoku-ios.yml'
 concurrency:
   group: sudoku-ios
   cancel-in-progress: false
