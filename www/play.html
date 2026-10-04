@@ -1908,18 +1908,9 @@ function stopTurnClock(){
 /* ===== 局間: 結算畫面出現後, 15 秒沒按「下一局」→ 自動進入下一局 (正式規格一致) ===== */
 let roundTimer=null, roundLeft=0;
 function startNextRoundTimer(){
+  // 2026-10-04 John:取消「結算後自動下一局」倒數 —— 不顯示、不自動;改由玩家按「下一局」
   stopNextRoundTimer();
-  const el=document.getElementById('next-hint'); if(!el) return;
-  const secs=AUTOPLAY?3:20;   // demo 全自動示範縮短, 真人 20s
-  roundLeft=secs;
-  el.textContent='⏱ '+roundLeft+' 秒後自動進入下一局…';
-  el.classList.remove('hidden');
-  roundTimer=setInterval(()=>{
-    roundLeft--;
-    if(roundLeft<=0){ stopNextRoundTimer(); replay(); return; }
-    const e2=document.getElementById('next-hint');
-    if(e2) e2.textContent='⏱ '+roundLeft+' 秒後自動進入下一局…';
-  },1000);
+  return;
 }
 function stopNextRoundTimer(){
   if(roundTimer){ clearInterval(roundTimer); roundTimer=null; }
