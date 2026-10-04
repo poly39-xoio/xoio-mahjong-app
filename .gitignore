@@ -15,3 +15,6 @@ AuthKey_*.p8
 *.p8
 APPSTORE_METADATA.md
 asc_api.py
+
+.env
+*.env
