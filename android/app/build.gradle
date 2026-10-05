@@ -7,8 +7,8 @@ android {
         applicationId "io.xoio.mahjong"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 15
+        versionName "1.0.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,10 +16,27 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    // 簽章:若 android/keystore.properties 存在(本機簽章用)才啟用;
+    // CI 無此檔 → release 維持未簽章(由上傳流程另行簽章)。
+    def ksPropsFile = rootProject.file('keystore.properties')
+    if (!ksPropsFile.exists()) ksPropsFile = file('../keystore.properties')
+    if (ksPropsFile.exists()) {
+        def ksProps = new Properties()
+        ksProps.load(new FileInputStream(ksPropsFile))
+        signingConfigs {
+            release {
+                storeFile file(ksProps['storeFile'])
+                storePassword ksProps['storePassword']
+                keyAlias ksProps['keyAlias']
+                keyPassword ksProps['keyPassword']
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (signingConfigs.findByName('release')) signingConfig signingConfigs.release
         }
     }
 }
