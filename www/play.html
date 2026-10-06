@@ -605,7 +605,7 @@ const EN = {
   '連莊 ×{n} 拉 {n}':'Streak ×{n} (push {n})','連莊 ×':'Streak ×','連莊':'Streak','第{n}局':'Round {n}',
   '流局(臭莊,連莊)':'Draw (dealer repeats)','東風圈':'East','南風圈':'South','西風圈':'West','北風圈':'North',
   '東家':'East','南家':'South','西家':'West','北家':'North','自摸 ':'Self-draw ',
-  '門清':'Concealed hand','不求':'No claims','正花 ×':'Flower ×','槓上開花':'Kong draw','搶槓':'Robbing kong','海底撈月':'Last tile draw',
+  '門清':'Concealed hand','不求':'No claims','正花 ×':'Flower ×','槓上開花':'Kong draw','海底撈月':'Last tile draw',
   '河底撈魚':'Last discard win','半求人':'Half claimed','全求人':'All claimed','獨聽':'Unique wait','平胡':'Ping hu','字一色':'All honors',
   '清一色':'Pure suit','混一色':'Mixed suit','大三元':'Big three dragons','小三元':'Small three dragons','三元牌 ×':'Dragon ×',
   '大四喜':'Big four winds','小四喜':'Small four winds','風圈':'Round wind','風牌':'Seat wind','五暗刻':'Five concealed pungs',
@@ -672,7 +672,7 @@ const JA = {
   '連莊 ×{n} 拉 {n}':'連荘 ×{n} 続行 {n}','連莊 ×':'連荘 ×','連莊':'連荘','第{n}局':'第{n}局',
   '流局(臭莊,連莊)':'流局(臭荘、連荘)','東風圈':'東場','南風圈':'南場','西風圈':'西場','北風圈':'北場',
   '東家':'東家','南家':'南家','西家':'西家','北家':'北家','自摸 ':'ツモ ',
-  '門清':'門前清','不求':'不求人','正花 ×':'正花 ×','槓上開花':'嶺上開花','搶槓':'搶槓','海底撈月':'海底摸月',
+  '門清':'門前清','不求':'不求人','正花 ×':'正花 ×','槓上開花':'嶺上開花','海底撈月':'海底摸月',
   '河底撈魚':'河底撈魚','半求人':'半求人','全求人':'全求人','獨聽':'単騎待ち','平胡':'平和','字一色':'字一色',
   '清一色':'清一色','混一色':'混一色','大三元':'大三元','小三元':'小三元','三元牌 ×':'三元牌 ×',
   '大四喜':'大四喜','小四喜':'小四喜','風圈':'場風','風牌':'自風','五暗刻':'五暗刻',
@@ -739,7 +739,7 @@ const KO = {
   '連莊 ×{n} 拉 {n}':'연장 ×{n} 계속 {n}','連莊 ×':'연장 ×','連莊':'연장','第{n}局':'제{n}판',
   '流局(臭莊,連莊)':'유국(臭莊, 연장)','東風圈':'동풍전','南風圈':'남풍전','西風圈':'서풍전','北風圈':'북풍전',
   '東家':'동가','南家':'남가','西家':'서가','北家':'북가','自摸 ':'쯔모 ',
-  '門清':'멘젠','不求':'불구인','正花 ×':'정화 ×','槓上開花':'영상개화','搶槓':'창캉','海底撈月':'해저로월',
+  '門清':'멘젠','不求':'불구인','正花 ×':'정화 ×','槓上開花':'영상개화','海底撈月':'해저로월',
   '河底撈魚':'하저로어','半求人':'반구인','全求人':'전구인','獨聽':'단기 대기','平胡':'핑후','字一色':'자일색',
   '清一色':'청일색','混一色':'혼일색','大三元':'대삼원','小三元':'소삼원','三元牌 ×':'삼원패 ×',
   '大四喜':'대사희','小四喜':'소사희','風圈':'장풍','風牌':'자풍','五暗刻':'오암각',
@@ -1049,7 +1049,6 @@ function calcTai(hand, selfDraw, isDealer, seatIdx, roundNo, streak, melds, flow
   if(zhen>0){tai+=zhen;breakdown.push({name:'正花 ×'+zhen,tai:zhen})}
   // 情境 1台項
   if(ctx.gangShang){tai+=1;breakdown.push({name:'槓上開花',tai:1})}
-  if(ctx.qiangGang){tai+=1;breakdown.push({name:'搶槓',tai:1})}
   if(ctx.haiDi){tai+=1;breakdown.push({name:'海底撈月',tai:1})}
   if(ctx.heDi){tai+=1;breakdown.push({name:'河底撈魚',tai:1})}
 
@@ -1426,7 +1425,7 @@ function aiChooseDiscard(p){
 /* ================= 主流程 ================= */
 async function deal(){
   stopTurnClock();
-  G={wall:shuffle(buildWall()),players:[],drawTile:null,phase:'play',selected:null,lastDiscard:null,lastDiscarder:-1,askQueue:[],askTile:null,askFrom:-1};
+  G={wall:shuffle(buildWall()),players:[],drawTile:null,phase:'play',selected:null,lastDiscard:null,lastDiscarder:-1,askQueue:[],askTile:null,askFrom:-1,_discardsMade:0,_seatFirstDraw:[true,true,true,true],_seatFirstDrawTenpai:[false,false,false,false],_seatDiscards:[0,0,0,0],_dealerInitialTenpai:false,_curFirstDraw:false};
   for(let i=0;i<4;i++){G.players.push({hand:[],melds:[],river:[],hiddenCnt:16,name:(i===2?ME.name:AI_NAMES[i<2?i:i-1]),flowers:[]});}
   turn=dealer;
   renderWall();
@@ -1490,6 +1489,7 @@ async function deal(){
   renderMyHand(); // 發牌完成立即顯示自己的手牌(不用等輪到自己)
   await sleep(AUTOPLAY?150:500);
   log('發牌完成 · 莊家 '+seatWind(dealer)+' 先摸牌');
+  G._dealerInitialTenpai = !!findWinningTile(G.players[dealer].hand, meldCount(G.players[dealer])); // 天聽:莊家起手即聽
   draw(turn);
 }
 function findWinningTile(hand16, openMelds){
@@ -1544,6 +1544,7 @@ function draw(seatIdx){
   }
   p.hand.push(t);
   G.drawTile=t;
+  G._curFirstDraw=!!G._seatFirstDraw[seatIdx]; G._seatFirstDraw[seatIdx]=false;
   sfx('draw');
   renderWall();
   if(seatIdx===2){renderMyHand();}
@@ -1631,6 +1632,9 @@ function discard(seatIdx,t){
   log(seatWind(seatIdx)+'家 打出 '+tileName(t));
   if(seatIdx===2)renderMyHand();
   refreshAll();
+  // 情境台追蹤: 地聽(第一次出牌後即聽牌、且無吃碰) / 出牌計數(天胡/地胡/人胡)
+  if(G._seatDiscards[seatIdx]===0 && (!p.melds || p.melds.length===0) && findWinningTile(p.hand, meldCount(p))) G._seatFirstDrawTenpai[seatIdx]=true;
+  G._seatDiscards[seatIdx]++; G._discardsMade++;
   beginAsk(seatIdx);
 }
 // ============ 出牌後詢問 吃/碰/槓/胡 ============
@@ -2082,7 +2086,7 @@ function endGame(winnerIdx,selfDraw){
     const huaHu=(p.flowers||[]).length>=8; // 花胡(八仙過海)
     const meldTiles=(p.melds||[]).flatMap(m=>m.tiles);
     const winTileX=huaHu?null:(selfDraw?G.drawTile:G.lastDiscard);
-    const ct=calcTai(p.hand,selfDraw,winnerIdx===dealer, winnerIdx, roundNo, dealerStreak, p.melds||[], p.flowers, meldTiles, winTileX, !selfDraw && G.lastDiscarder===dealer, {gangShang: selfDraw && winKongDraw});
+    const ct=calcTai(p.hand,selfDraw,winnerIdx===dealer, winnerIdx, roundNo, dealerStreak, p.melds||[], p.flowers, meldTiles, winTileX, !selfDraw && G.lastDiscarder===dealer, {gangShang: selfDraw && winKongDraw, haiDi: !!selfDraw && G.wall.length===0, heDi: !selfDraw && G.wall.length===0, tianHu: !!selfDraw && winnerIdx===dealer && G._discardsMade===0, diHu: !!selfDraw && winnerIdx!==dealer && !!G._curFirstDraw && G._discardsMade<=1, renHu: !selfDraw && winnerIdx!==dealer && G._discardsMade===1 && G.lastDiscarder===dealer, tianTing: winnerIdx===dealer && !!G._dealerInitialTenpai, diTing: winnerIdx!==dealer && !!G._seatFirstDrawTenpai[winnerIdx]});
     // 注意: winVerb 必須在 ct 之後(ct.tai 判斷屁胡 0 台)
     const winVerb=huaHu?'花胡':(ct.tai===0?'屁胡':(selfDraw?'自摸':'胡牌'));
     lastHuSeat=winnerIdx;
