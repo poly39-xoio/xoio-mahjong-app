@@ -432,9 +432,10 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
   .opp-side .meld-row .tile.sm{width:34px;height:48px;min-width:34px}
   .river-slot .rt{min-width:40px;height:56px;font-size:15px}
 }
-/* 2026-10-06 John:iPad 橫向 — 左右二家手牌分兩行、每行 8 顆(避免長出螢幕) */
+/* 2026-10-06 John:iPad 橫向 — 左右二家手牌分兩行、每行 8 顆;明牌也分行(避免長出螢幕) */
 @media (min-width:760px) and (orientation:landscape){
   .opp-side .backrow{flex-wrap:wrap;max-height:280px;align-content:flex-start;justify-content:center}
+  .opp-side .meld-row{flex-direction:row;flex-wrap:wrap;max-width:132px;justify-content:center}
 }
 </style>
 </head>
@@ -1301,8 +1302,8 @@ function fitMyHand(){
   const n=tiles.length, gap=3;
   // 牌面上限由 CSS --tile-w 控制 (桌面 56 / 手機直立 48 / 橫向 34), 避免把牌縮成小不點
   const maxW=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tile-w'))||56;
-  // 手機直立(≤640 portrait)+ 所有 iPad(≥760): 手牌分兩層(下層最多 8 張),避免橫向一多就長出螢幕
-  if(matchMedia('(max-width:640px) and (orientation:portrait)').matches || matchMedia('(min-width:760px)').matches){
+  // 手機直立(≤640 portrait)+ iPad 直立(≥760 portrait): 手牌分兩層(下層最多 8 張)
+  if(matchMedia('(max-width:640px) and (orientation:portrait)').matches || matchMedia('(min-width:760px) and (orientation:portrait)').matches){
     const lower=Math.min(8,n);   // 下層固定最多 8 張
     const upper=n-lower;         // 上層 = 其餘, 出牌時先減少 → 直到上層歸零才動下層
     const maxRow=Math.max(upper,lower,1);
