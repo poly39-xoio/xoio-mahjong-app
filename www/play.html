@@ -90,8 +90,6 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 .turn-clock.warn{border-color:var(--danger);color:var(--danger);animation:pulse 1s infinite}
 .turn-clock.hidden{display:none}
 .table-area{position:relative;border:1px solid #5a4726;border-radius:16px;background:linear-gradient(180deg,#3a2e1a,#2b2214);min-height:660px;padding:10px;overflow:hidden}
-/* 2026-10-06 John:大螢幕/iPad 讓牌桌也撐滿高度(原本只有手機版撐滿,iPad 會下面留一大片黑) */
-.table-area{height:calc(100vh - 86px);height:calc(100svh - 86px);height:calc(100dvh - 86px)}
 
 /* opponents */
 .opp-top{display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:6px}
@@ -425,6 +423,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 /* 2026-10-06 John:iPad 手牌縮到排得下(原本排不下右邊那張被切)+ 其他三家牌適度放大 */
 @media (min-width:760px){
   :root{--tile-w:64px;--tile-h:92px}
+  .table-area{height:calc(100dvh - 86px);min-height:0}
   .my-hand{flex-wrap:wrap!important;align-content:flex-end!important;justify-content:center!important;min-height:0!important}
   #opp-top .backrow .bk{width:42px;height:58px;margin-left:-12px}
   .opp-side .backrow .bk{width:34px;height:48px;margin:0 0 -15px 0}
@@ -436,6 +435,10 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 @media (min-width:760px) and (orientation:landscape){
   .opp-side .backrow{flex-wrap:wrap;max-height:280px;align-content:flex-start;justify-content:center}
   .opp-side .meld-row{flex-direction:row;flex-wrap:wrap;max-width:132px;justify-content:center}
+}
+/* 2026-10-06 John:手機直立 — 左右二家明牌分行(避免一多就長掉) */
+@media (max-width:640px) and (orientation:portrait){
+  .opp-side .meld-row{flex-wrap:wrap;max-height:132px;justify-content:center}
 }
 </style>
 </head>
