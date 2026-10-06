@@ -419,9 +419,9 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 /* 2026-10-04 John:手機版隱藏上方狀態提示(對齊網頁版) */
 .status-tape{display:none}
 /* 2026-10-06 John:iPad/大螢幕自適應——收掉底部出牌記錄 log、不橫向溢出 */
-@media (min-width:760px){ .logbox{display:none} body{overflow-x:hidden} }
+@media (min-width:760px) and (min-height:601px){ .logbox{display:none} body{overflow-x:hidden} }
 /* 2026-10-06 John:iPad 手牌縮到排得下(原本排不下右邊那張被切)+ 其他三家牌適度放大 */
-@media (min-width:760px){
+@media (min-width:760px) and (min-height:601px){
   :root{--tile-w:64px;--tile-h:92px}
   .table-area{height:calc(100dvh - 86px);min-height:0}
   .my-hand{flex-wrap:wrap!important;align-content:flex-end!important;justify-content:center!important;min-height:0!important}
@@ -432,13 +432,13 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
   .river-slot .rt{min-width:40px;height:56px;font-size:15px}
 }
 /* 2026-10-06 John:iPad 橫向 — 左右二家手牌分兩行、每行 8 顆;明牌也分行(避免長出螢幕) */
-@media (min-width:760px) and (orientation:landscape){
+@media (min-width:760px) and (min-height:601px) and (orientation:landscape){
   .opp-side .backrow{flex-wrap:wrap;max-height:280px;align-content:flex-start;justify-content:center}
   .opp-side .meld-row{flex-direction:row;flex-wrap:wrap;max-width:132px;justify-content:center}
 }
 /* 2026-10-06 John:手機直立 — 左右二家明牌分行(避免一多就長掉) */
 @media (max-width:640px) and (orientation:portrait){
-  .opp-side .meld-row{flex-wrap:wrap;max-height:132px;justify-content:center}
+  .opp-side .meld-row{flex-wrap:wrap;max-height:84px;justify-content:center}
 }
 </style>
 </head>
