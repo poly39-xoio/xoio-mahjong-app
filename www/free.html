@@ -37,9 +37,10 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
 .li{display:flex;gap:11px;font-size:13.5px;color:var(--sub);line-height:1.85;margin-top:8px}
 .li b{color:var(--txt)}
 .li .em{font-size:17px;line-height:1.4}
-.aboutlink{display:flex;align-items:center;justify-content:space-between;margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;color:var(--txt);font-size:15px;font-weight:800;text-decoration:none}
-.aboutlink em.g{color:var(--pri);font-style:normal}
-.aboutlink .ar{color:var(--sub);font-size:20px}
+.contactbox{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.contactbox .ct-h{font-size:14px;font-weight:800;color:var(--pri);letter-spacing:.4px;margin-bottom:7px}
+.contactbox .ct-p{font-size:13.5px;color:var(--sub);line-height:1.9}
+.contactbox .ct-p .ct-mail{color:var(--pri);font-weight:800}
 .foot{margin-top:22px;text-align:center;font-size:12px;color:var(--sub)}
 .mask{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;z-index:60}
 .mask.on{display:block}
@@ -69,8 +70,8 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
   .cta{margin-top:0;flex:1;font-size:17px;padding:18px}
   .cta2{margin-top:0;flex:1;font-size:17px;padding:18px}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch;margin-top:18px}
-  .grid>.card,.grid>.aboutlink{margin-top:0}
-  .grid>.aboutlink{align-self:stretch;font-size:17px}
+  .grid>.card,.grid>.contactbox{margin-top:0}
+  .grid>.contactbox{align-self:stretch}
   .card .li{font-size:14.5px}
   .foot{margin-top:30px}
 }
@@ -109,7 +110,6 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
   <div class="icon">發</div>
   <h1 data-zh="麻將16張" data-en="MahJong 16" data-ja="台湾麻雀 16張" data-ko="타이완 16장 마작">麻將16張</h1>
   <div class="tag" data-zh="下載到手機,把「發財」的運氣帶著走" data-en="Carry the luck of “Fa” (prosperity)" data-ja="「發」の運気をいつでも持ち歩こう" data-ko="‘發(파)’의 행운을 늘 함께"></div>
-  <div class="sub" data-zh="台灣 16 張麻將 · AI 對戰 · 台數教學<br>單機對戰 · 無廣告 · 無內購" data-en="Taiwanese 16-tile Mahjong · Play vs AI · Scoring explained<br>Offline play · no ads · no in-app purchases" data-ja="台湾式16枚麻雀 · AI対戦 · 台(点数)解説<br>オフライン対戦 · 広告なし · 課金なし" data-ko="대만식 16장 마작 · AI 대전 · 타이(점수) 해설<br>오프라인 플레이 · 광고 없음 · 인앱 결제 없음"></div>
   <div class="hero-actions">
   <a class="cta" href="play.html" data-zh="開始遊戲" data-en="Start Playing" data-ja="ゲームを始める" data-ko="게임 시작">開始遊戲</a>
   <button class="cta2" onclick="openRules()" data-zh="📖 麻將教學 / 規則" data-en="📖 How to Play / Rules" data-ja="📖 遊び方 / ルール" data-ko="📖 게임 방법 / 규칙"></button>
@@ -117,12 +117,15 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
   <div class="grid">
   <div class="card">
     <h2 data-zh="為什麼玩「發」" data-en="Why play “Fa”" data-ja="「發」で遊ぶ理由" data-ko="‘發(파)’를 하는 이유"></h2>
-    <div class="li"><span class="em"><span class='mj-tile'></span></span><span data-zh="<b>邊玩邊學</b><br>每一手自動列出「台數」與牌型理由,新手也看得懂。" data-en="<b>Learn as you play</b><br>Every hand shows the scoring tiles and why — beginners welcome." data-ja="<b>遊びながら学べる</b><br>毎手ごとに「台(点数)」と役の理由を表示。初心者でもわかる。" data-ko="<b>하면서 배우기</b><br>매번 ‘타이(점수)’와 역의 이유를 표시. 초보자도 이해할 수 있어요."></span></div>
+    <div class="li"><span class="em"><span class='mj-tile'></span></span><span data-zh="<b>邊玩邊學</b><br>胡牌自動列出「台數」與牌型理由,清楚易懂。" data-en="<b>Learn as you play</b><br>On every win it lists the scoring tiles and why — clear and easy to follow." data-ja="<b>遊びながら学べる</b><br>アガリごとに「台(点数)」と役の理由を自動表示。わかりやすい。" data-ko="<b>하면서 배우기</b><br>화료할 때마다 ‘타이(점수)’와 역의 이유를 자동 표시. 알기 쉬워요."></span></div>
     <div class="li"><span class="em">🤖</span><span data-zh="<b>AI 對戰</b><br>一個人也能開桌,四家實戰節奏、隨時來一局。" data-en="<b>Play vs AI</b><br>Start a full four-player table anytime, no friends needed." data-ja="<b>AI対戦</b><br>一人でも卓を囲める。いつでもサッと一局。" data-ko="<b>AI 대전</b><br>혼자서도 테이블을 시작. 언제든 한 판."></span></div>
-    <div class="li"><span class="em">📴</span><span data-zh="<b>單機可玩</b><br>通勤、飛機上都能玩,不用等牌咖。" data-en="<b>Playable offline</b><br>Perfect for commutes and flights." data-ja="<b>オフラインで遊べる</b><br>通勤・機内でも。待ち人いらず。" data-ko="<b>오프라인 플레이</b><br>출퇴근·비행기에서도. 기다릴 필요 없음."></span></div>
-    <div class="li"><span class="em">🚫</span><span data-zh="<b>無廣告</b><br>一次買斷,乾淨、不打擾。" data-en="<b>No ads</b><br>A clean experience." data-ja="<b>広告なし</b><br>買い切り。クリーンで快適。" data-ko="<b>광고 없음</b><br>한 번 구매로 영구 플레이. 깔끔하게."></span></div>
+    <div class="li"><span class="em">📴</span><span data-zh="<b>單機可玩</b><br>無聊時、通勤、飛機上都能玩,無需連網。" data-en="<b>Playable offline</b><br>Bored, commuting, or on a flight — play with no internet." data-ja="<b>オフラインで遊べる</b><br>退屈なときも、通勤中も、機内でも。ネット接続不要。" data-ko="<b>오프라인 플레이</b><br>심심할 때, 출퇴근길, 비행기에서도. 인터넷 연결 없이."></span></div>
+    <div class="li"><span class="em">🚫</span><span data-zh="<b>無廣告</b><br>一次買斷、無廣告、不打擾,給你最乾淨的 App。" data-en="<b>No ads</b><br>Buy once. No ads, no interruptions — the cleanest app for you." data-ja="<b>広告なし</b><br>買い切り、広告なし、邪魔なし。いちばんクリーンなアプリを。" data-ko="<b>광고 없음</b><br>한 번 구매, 광고 없음, 방해 없음 — 가장 깔끔한 앱."></span></div>
   </div>
-  <a class="aboutlink" href="about.html"><span data-zh="關於 <em class='g'>XOIO</em>" data-en="About <em class='g'>XOIO</em>" data-ja="<em class='g'>XOIO</em> について" data-ko="<em class='g'>XOIO</em> 소개"></span><span class="ar">›</span></a>
+  <div class="contactbox">
+    <div class="ct-h" data-zh="聯絡我們" data-en="Contact" data-ja="お問い合わせ" data-ko="문의"></div>
+    <div class="ct-p" data-zh="合作、媒體或任何問題,歡迎來信:<span class='ct-mail'>io@xoio.io</span>" data-en="Partnerships, press, or any question:<span class='ct-mail'>io@xoio.io</span>" data-ja="提携・取材・ご質問はこちらまで:<span class='ct-mail'>io@xoio.io</span>" data-ko="제휴·미디어·문의는 이메일로:<span class='ct-mail'>io@xoio.io</span>"></div>
+  </div>
   </div>
   <div class="foot">© XOIO · Mahjong for everyone</div>
 </div>

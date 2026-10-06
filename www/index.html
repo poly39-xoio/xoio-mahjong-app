@@ -37,9 +37,10 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
 .li{display:flex;gap:11px;font-size:13.5px;color:var(--sub);line-height:1.85;margin-top:8px}
 .li b{color:var(--txt)}
 .li .em{font-size:17px;line-height:1.4}
-.aboutlink{display:flex;align-items:center;justify-content:space-between;margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;color:var(--txt);font-size:15px;font-weight:800;text-decoration:none}
-.aboutlink em.g{color:var(--pri);font-style:normal}
-.aboutlink .ar{color:var(--sub);font-size:20px}
+.contactbox{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.contactbox .ct-h{font-size:14px;font-weight:800;color:var(--pri);letter-spacing:.4px;margin-bottom:7px}
+.contactbox .ct-p{font-size:13.5px;color:var(--sub);line-height:1.9}
+.contactbox .ct-p .ct-mail{color:var(--pri);font-weight:800}
 .foot{margin-top:22px;text-align:center;font-size:12px;color:var(--sub)}
 .mask{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;z-index:60}
 .mask.on{display:block}
@@ -69,8 +70,8 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
   .cta{margin-top:0;flex:1;font-size:17px;padding:18px}
   .cta2{margin-top:0;flex:1;font-size:17px;padding:18px}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch;margin-top:18px}
-  .grid>.card,.grid>.aboutlink{margin-top:0}
-  .grid>.aboutlink{align-self:stretch;font-size:17px}
+  .grid>.card,.grid>.contactbox{margin-top:0}
+  .grid>.contactbox{align-self:stretch}
   .card .li{font-size:14.5px}
   .foot{margin-top:30px}
 }
@@ -109,7 +110,6 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
   <div class="icon">發</div>
   <h1 data-zh="麻將16張" data-en="MahJong 16" data-ja="台湾麻雀 16張" data-ko="타이완 16장 마작">麻將16張</h1>
   <div class="tag" data-zh="下載到手機,把「發財」的運氣帶著走" data-en="Carry the luck of “Fa” (prosperity)" data-ja="「發」の運気をいつでも持ち歩こう" data-ko="‘發(파)’의 행운을 늘 함께"></div>
-  <div class="sub" data-zh="台灣 16 張麻將 · AI 對戰 · 台數教學<br>單機對戰 · 無廣告 · 無內購" data-en="Taiwanese 16-tile Mahjong · Play vs AI · Scoring explained<br>Offline play · no ads · no in-app purchases" data-ja="台湾式16枚麻雀 · AI対戦 · 台(点数)解説<br>オフライン対戦 · 広告なし · 課金なし" data-ko="대만식 16장 마작 · AI 대전 · 타이(점수) 해설<br>오프라인 플레이 · 광고 없음 · 인앱 결제 없음"></div>
   <div class="hero-actions">
   <a class="cta" href="play.html" data-zh="開始遊戲" data-en="Start Playing" data-ja="ゲームを始める" data-ko="게임 시작">開始遊戲</a>
   <button class="cta2" onclick="openRules()" data-zh="📖 麻將教學 / 規則" data-en="📖 How to Play / Rules" data-ja="📖 遊び方 / ルール" data-ko="📖 게임 방법 / 규칙"></button>
@@ -117,12 +117,15 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
   <div class="grid">
   <div class="card">
     <h2 data-zh="為什麼玩「發」" data-en="Why play “Fa”" data-ja="「發」で遊ぶ理由" data-ko="‘發(파)’를 하는 이유"></h2>
-    <div class="li"><span class="em"><span class='mj-tile'></span></span><span data-zh="<b>邊玩邊學</b><br>每一手自動列出「台數」與牌型理由,新手也看得懂。" data-en="<b>Learn as you play</b><br>Every hand shows the scoring tiles and why — beginners welcome." data-ja="<b>遊びながら学べる</b><br>毎手ごとに「台(点数)」と役の理由を表示。初心者でもわかる。" data-ko="<b>하면서 배우기</b><br>매번 ‘타이(점수)’와 역의 이유를 표시. 초보자도 이해할 수 있어요."></span></div>
+    <div class="li"><span class="em"><span class='mj-tile'></span></span><span data-zh="<b>邊玩邊學</b><br>胡牌自動列出「台數」與牌型理由,清楚易懂。" data-en="<b>Learn as you play</b><br>On every win it lists the scoring tiles and why — clear and easy to follow." data-ja="<b>遊びながら学べる</b><br>アガリごとに「台(点数)」と役の理由を自動表示。わかりやすい。" data-ko="<b>하면서 배우기</b><br>화료할 때마다 ‘타이(점수)’와 역의 이유를 자동 표시. 알기 쉬워요."></span></div>
     <div class="li"><span class="em">🤖</span><span data-zh="<b>AI 對戰</b><br>一個人也能開桌,四家實戰節奏、隨時來一局。" data-en="<b>Play vs AI</b><br>Start a full four-player table anytime, no friends needed." data-ja="<b>AI対戦</b><br>一人でも卓を囲める。いつでもサッと一局。" data-ko="<b>AI 대전</b><br>혼자서도 테이블을 시작. 언제든 한 판."></span></div>
-    <div class="li"><span class="em">📴</span><span data-zh="<b>單機可玩</b><br>通勤、飛機上都能玩,不用等牌咖。" data-en="<b>Playable offline</b><br>Perfect for commutes and flights." data-ja="<b>オフラインで遊べる</b><br>通勤・機内でも。待ち人いらず。" data-ko="<b>오프라인 플레이</b><br>출퇴근·비행기에서도. 기다릴 필요 없음."></span></div>
-    <div class="li"><span class="em">🚫</span><span data-zh="<b>無廣告</b><br>一次買斷,乾淨、不打擾。" data-en="<b>No ads</b><br>A clean experience." data-ja="<b>広告なし</b><br>買い切り。クリーンで快適。" data-ko="<b>광고 없음</b><br>한 번 구매로 영구 플레이. 깔끔하게."></span></div>
+    <div class="li"><span class="em">📴</span><span data-zh="<b>單機可玩</b><br>無聊時、通勤、飛機上都能玩,無需連網。" data-en="<b>Playable offline</b><br>Bored, commuting, or on a flight — play with no internet." data-ja="<b>オフラインで遊べる</b><br>退屈なときも、通勤中も、機内でも。ネット接続不要。" data-ko="<b>오프라인 플레이</b><br>심심할 때, 출퇴근길, 비행기에서도. 인터넷 연결 없이."></span></div>
+    <div class="li"><span class="em">🚫</span><span data-zh="<b>無廣告</b><br>一次買斷、無廣告、不打擾,給你最乾淨的 App。" data-en="<b>No ads</b><br>Buy once. No ads, no interruptions — the cleanest app for you." data-ja="<b>広告なし</b><br>買い切り、広告なし、邪魔なし。いちばんクリーンなアプリを。" data-ko="<b>광고 없음</b><br>한 번 구매, 광고 없음, 방해 없음 — 가장 깔끔한 앱."></span></div>
   </div>
-  <a class="aboutlink" href="about.html"><span data-zh="關於 <em class='g'>XOIO</em>" data-en="About <em class='g'>XOIO</em>" data-ja="<em class='g'>XOIO</em> について" data-ko="<em class='g'>XOIO</em> 소개"></span><span class="ar">›</span></a>
+  <div class="contactbox">
+    <div class="ct-h" data-zh="聯絡我們" data-en="Contact" data-ja="お問い合わせ" data-ko="문의"></div>
+    <div class="ct-p" data-zh="合作、媒體或任何問題,歡迎來信:<span class='ct-mail'>io@xoio.io</span>" data-en="Partnerships, press, or any question:<span class='ct-mail'>io@xoio.io</span>" data-ja="提携・取材・ご質問はこちらまで:<span class='ct-mail'>io@xoio.io</span>" data-ko="제휴·미디어·문의는 이메일로:<span class='ct-mail'>io@xoio.io</span>"></div>
+  </div>
   </div>
   <div class="foot">© XOIO · Mahjong for everyone</div>
 </div>
@@ -133,24 +136,72 @@ h1{text-align:center;font-size:26px;font-weight:900;letter-spacing:1px}
   <div class="mb">
     <h3 data-zh="怎麼玩" data-en="How to play" data-ja="遊び方" data-ko="게임 방법"></h3>
     <p data-zh="4 人同桌、每人 16 張牌。輪流摸牌、打牌,湊成 5 組面子 + 1 對將就能胡牌。" data-en="4 players, 16 tiles each. Draw and discard in turn; complete 5 sets + 1 pair to win." data-ja="4人で1台、手牌は各16枚。順にツモ・打牌を繰り返し、5面子+1雀頭を揃えれば上がり。" data-ko="4명이 한 테이블, 각자 16장. 돌아가며 뽑고 버리기. 5개 멜드+1개 머리를 만들면 화료."></p>
-    <h3 data-zh="花牌(台灣特色)" data-en="Flowers (a Taiwanese touch)" data-ja="花牌(台湾ならでは)" data-ko="꽃패(대만 특색)"></h3>
+    <h3 data-zh="一、莊家 / 連莊拉莊" data-en="1. Dealer / dealer streak" data-ja="一、親 / 連荘" data-ko="1. 친 / 연장"></h3>
     <ul>
-      <li data-zh="8 張花:春 夏 秋 冬 / 梅 蘭 竹 菊" data-en="8 flowers: Spring/Summer/Autumn/Winter · Plum/Orchid/Bamboo/Chrysanthemum" data-ja="花8枚:春夏秋冬 / 梅蘭竹菊" data-ko="꽃 8장: 춘하추동 / 매란국죽"></li>
-      <li data-zh="摸到花自動補牌;「正花」每張 +1 台" data-en="Drawing a flower = draw again; your seat flower scores +1 each" data-ja="花をツモると自動でツモり直し。「正花(自席の花)」は1枚ごとに+1台" data-ko="꽃을 뽑으면 자동으로 다시 뽑기. ‘정화(정좌 꽃)’는 장당 +1타이"></li>
-      <li data-zh="集滿 8 張花 → 花胡,直接算 8 台" data-en="All 8 flowers = instant “flower win”, 8 points" data-ja="花8枚を揃えると → 花胡、8台確定" data-ko="꽃 8장을 모두 모으면 → 화호(花胡), 8타이 확정"></li>
+      <li data-zh="莊家台 1 台:莊家胡牌或自摸多算一台;莊家放槍也要多給胡家一台(由莊家支付)。" data-en="Dealer +1 tai: the dealer scores one extra on a win (self-draw or off a discard); if the dealer discards the winning tile, the dealer also pays the winner one extra tai." data-ja="親台 1台:親のアガリ(ツモ・ロン)は1台加算;親が放銃した場合も、アガリ手に1台多く支払う。" data-ko="친 타이 1대:친이 화료(쯔모·론)하면 1타이 추가;친이 방총해도 아가리에게 1타이 더 지불."></li>
+      <li data-zh="連莊:莊家胡牌或流局(臭莊)→ 連莊,莊家不變、連莊次數 +1。" data-en="Streak: the dealer wins or a washout (draw) → dealer stays, streak +1." data-ja="連荘:親がアガるか流局(臭荘)→ 連荘、親はそのまま・連荘数 +1。" data-ko="연장:친이 화료하거나 유국(臭莊) → 연장, 친 유지·연장 횟수 +1."></li>
+      <li data-zh="輪莊:閒家胡牌 → 莊家順時針換下家,連莊次數重置。" data-en="Rotation: a non-dealer win → the dealer passes to the next player clockwise, streak resets." data-ja="輪荘:子がアガる → 親は時計回りに次の家へ、連荘数リセット。" data-ko="윤장:자가 화료 → 친은 시계 방향 다음 사람으로, 연장 횟수 리셋."></li>
+      <li data-zh="連莊拉莊台數 = 2N+1(N=連莊次數):連一=3 台、連二=5 台、連三=7 台…" data-en="Streak bonus = 2N+1 (N = streak count): 1st = 3 tai, 2nd = 5, 3rd = 7…" data-ja="連荘台 = 2N+1(N=連荘数):連一=3台、連二=5台、連三=7台…" data-ko="연장 타이 = 2N+1(N=연장 횟수):연1=3타이, 연2=5, 연3=7…"></li>
+      <li data-zh="莊家放炮連莊台照算:莊家連莊中放炮,連莊台照算給胡家。" data-en="Dealer-discard streak still counts: if the dealer is on a streak and discards the winning tile, the streak tai is still paid to the winner." data-ja="親の放銃でも連荘台は計算:親が連荘中に放銃した場合も、連荘台はアガリ手に加算。" data-ko="친 방총에도 연장 타이 계산:친이 연장 중 방총하면 연장 타이도 아가리에게 계산."></li>
+      <li data-zh="閒家自摸:莊家那份多付「莊家台1 + 連莊台照算」(無連莊多付1、連一多付3、連二多付5…)。" data-en="Non-dealer self-draw: the dealer's share pays extra dealer tai 1 + streak tai (no streak +1, 1st +3, 2nd +5…)." data-ja="子のツモ:親の分は「親台1 + 連荘台」を多く支払う(連荘なし+1、連一+3、連二+5…)。" data-ko="자의 쯔모:친 몫은 친 타이1 + 연장 타이를 더 지불(연장 없음 +1, 연1 +3, 연2 +5…)."></li>
     </ul>
-    <h3 data-zh="莊家 / 連莊" data-en="Dealer / streaks" data-ja="親 / 連荘" data-ko="친 / 연장"></h3>
+    <h3 data-zh="二、花牌(台灣特色)" data-en="2. Flowers (a Taiwanese touch)" data-ja="二、花牌(台湾ならでは)" data-ko="2. 꽃패(대만 특색)"></h3>
     <ul>
-      <li data-zh="莊家胡牌或流局(臭莊)→ 連莊" data-en="Dealer wins or a draw → the dealer repeats" data-ja="親が上がるか流局(臭荘)→ 連荘" data-ko="친이 화료하거나 유국(臭莊) → 연장"></li>
-      <li data-zh="連莊台 = 2N+1(連一拉一 = 3 台)" data-en="Streak bonus = 2N+1 (one streak = 3 points)" data-ja="連荘台 = 2N+1(連一拉一 = 3台)" data-ko="연장 타이 = 2N+1(한 번 연장 = 3타이)"></li>
+      <li data-zh="共 8 張:春、夏、秋、冬、梅、蘭、竹、菊;摸到花自動補牌。" data-en="8 flowers: Spring, Summer, Autumn, Winter · Plum, Orchid, Bamboo, Chrysanthemum; drawing a flower draws again." data-ja="全8枚:春夏秋冬・梅蘭竹菊。花を引いたら自動で補充。" data-ko="총 8장:춘하추동·매란국죽;꽃을 뽑으면 자동 보충."></li>
+      <li data-zh="正花(花牌台):拿到與座位風位對應的花,每張 +1 台。對應:東(梅春)、南(蘭夏)、西(竹秋)、北(菊冬)。" data-en="Seat flower: a flower matching your seat wind scores +1 each. East (Plum, Spring) · South (Orchid, Summer) · West (Bamboo, Autumn) · North (Chrysanthemum, Winter)." data-ja="正花(花牌台):自席の風位に対応する花1枚ごとに+1台。対応:東(梅・春)、南(蘭・夏)、西(竹・秋)、北(菊・冬)。" data-ko="정화(꽃패 타이):자리 바람에 맞는 꽃 장당 +1타이. 대응:동(매·춘), 남(란·하), 서(죽·추), 북(국·동)."></li>
+      <li data-zh="八仙過海(花胡):集滿 8 張花直接花胡、算 8 台,三家支付。" data-en="Eight flowers (flower win): all 8 flowers = instant win, 8 tai, paid by all three." data-ja="八仙過海(花胡):花8枚を揃えると即花胡、8台、3人払い。" data-ko="팔선과해(화호):꽃 8장을 모으면 즉시 화호, 8타이, 3인 지불."></li>
     </ul>
-    <h3 data-zh="台數(節錄)" data-en="Scoring (excerpt)" data-ja="台数(抜粋)" data-ko="타이(발췌)"></h3>
-    <div>
-      <span class="tagchip" data-zh="1台 莊家" data-en="1pt Dealer" data-ja="1台 親" data-ko="1타이 친"></span><span class="tagchip" data-zh="1台 自摸" data-en="1pt Self-draw" data-ja="1台 ツモ" data-ko="1타이 쯔모"></span><span class="tagchip" data-zh="1台 門清" data-en="1pt Concealed" data-ja="1台 門前清" data-ko="1타이 멘젠"></span><span class="tagchip" data-zh="1台 獨聽" data-en="1pt Unique wait" data-ja="1台 単騎待ち" data-ko="1타이 단기 대기"></span><span class="tagchip" data-zh="1台 三元牌" data-en="1pt Dragons" data-ja="1台 三元牌" data-ko="1타이 삼원패"></span><span class="tagchip" data-zh="1台 風牌" data-en="1pt Winds" data-ja="1台 風牌" data-ko="1타이 풍패"></span><span class="tagchip" data-zh="2台 平胡" data-en="2pt Ping hu" data-ja="2台 平和" data-ko="2타이 핑후"></span><span class="tagchip" data-zh="2台 三暗刻" data-en="2pt 3 concealed" data-ja="2台 三暗刻" data-ko="2타이 삼암각"></span><span class="tagchip" data-zh="4台 碰碰胡" data-en="4pt All pungs" data-ja="4台 対々和" data-ko="4타이 뽕뽕후"></span><span class="tagchip" data-zh="4台 小三元" data-en="4pt Small dragons" data-ja="4台 小三元" data-ko="4타이 소삼원"></span><span class="tagchip" data-zh="8台 清一色" data-en="8pt Pure suit" data-ja="8台 清一色" data-ko="8타이 청일색"></span><span class="tagchip" data-zh="8台 大三元" data-en="8pt Big dragons" data-ja="8台 大三元" data-ko="8타이 대삼원"></span>
-    </div>
-    <p style="margin-top:8px" data-zh="※ 屁胡(無台種)= 0 台,照常可以胡。" data-en="※ A win with no scoring pattern = 0 points — still a valid win." data-ja="※ 役なしの上がり(屁胡)= 0台。それでも上がりは有効。" data-ko="※ 역 없는 화료(屁胡)= 0타이. 그래도 화료는 유효."></p>
-    <h3 data-zh="結算" data-en="Settlement" data-ja="精算" data-ko="정산"></h3>
-    <p data-zh="放炮者付;自摸則三家各付。結算以「台數」計。" data-en="The discarder pays; on a self-draw all three pay. Counted in points (tai)." data-ja="放銃者が支払う。ツモなら3人で分担。台数で計算。" data-ko="방총한 사람이 지불. 쯔모면 3명이 분담. 타이로 계산."></p>
+    <h3 data-zh="三、台數表" data-en="3. Scoring table" data-ja="三、台数表" data-ko="3. 타이표"></h3>
+    <p data-zh="屁胡(0 台):胡牌但無任何台種成立 = 0 台,只收底注(無基本台白送)。" data-en="Zero-tai win (屁胡): a winning hand with no scoring pattern = 0 tai, collects only the base (no free basic tai)." data-ja="屁胡(0台):役が何も成立しないアガリ = 0台、底のみ受け取り(基本台のサービスなし)。" data-ko="피후(0타이):어떤 역도 성립하지 않는 화료 = 0타이, 판돈(底)만 수령(기본 타이 없음)."></p>
+    <p style="font-weight:800;color:var(--pri);margin:12px 0 2px" data-zh="1 台" data-en="1 tai" data-ja="1台" data-ko="1타이"></p>
+    <ul>
+      <li data-zh="莊家 — 莊家胡/自摸多一台;莊家放槍多給一台" data-en="Dealer — dealer win/self-draw +1; dealer discard pays one extra" data-ja="親 — 親のアガリ/ツモ+1台;親の放銃は+1台多く支払い" data-ko="친 — 친 화료/쯔모 +1타이;친 방총은 1타이 더 지불"></li>
+      <li data-zh="連莊拉莊 — 2N+1(見上)" data-en="Dealer streak — 2N+1 (see above)" data-ja="連荘 — 2N+1(上記)" data-ko="연장 — 2N+1(위 참조)"></li>
+      <li data-zh="單吊 / 中洞 / 邊張 — 獨聽:整手只聽一張(擇一不疊)" data-en="Edge / Closed / Single wait — unique wait: the hand waits on a single tile (pick one, no stacking)" data-ja="単騎 / 嵌張 / 辺張 — 単一待ち:1枚だけ待つ(いずれか1つ、重複なし)" data-ko="단기 / 중동 / 변장 — 단일 대기:한 장만 대기(하나만, 중복 없음)"></li>
+      <li data-zh="自摸 — 自己摸進胡牌張" data-en="Self-draw — you draw your winning tile" data-ja="ツモ — 自分でアガリ牌を引く" data-ko="쯔모 — 직접 화료패를 뽑음"></li>
+      <li data-zh="門清 — 無吃碰明槓(暗槓不破)" data-en="Concealed hand — no chi/pon/exposed kong (concealed kong is fine)" data-ja="門前清 — チー・ポン・明槓なし(暗槓は可)" data-ko="멘젠 — 치·퐁·명깡 없음(암깡은 가능)"></li>
+      <li data-zh="不求 — 無吃碰就自摸(門清自摸=3 台)" data-en="No claims — self-draw with no chi/pon (concealed self-draw = 3 tai)" data-ja="不求人 — チー・ポンなしのツモ(門前ツモ=3台)" data-ko="불구인 — 치·퐁 없이 쯔모(멘젠 쯔모=3타이)"></li>
+      <li data-zh="風牌 / 風圈 — 各 1 台可疊(東風東=2)" data-en="Seat / Round wind — 1 tai each, stackable (East round + East seat = 2)" data-ja="自風 / 場風 — 各1台、重複可(東場東家=2)" data-ko="자풍 / 장풍 — 각 1타이, 중복 가능(동장 동가=2)"></li>
+      <li data-zh="花牌(正花) — 每張 1 台" data-en="Seat flower — +1 per flower" data-ja="花牌(正花) — 1枚ごとに1台" data-ko="꽃패(정화) — 장당 1타이"></li>
+      <li data-zh="三元牌 — 中發白每坎 1 台(兩坎=2)" data-en="Dragons — each dragon pung = 1 tai (two = 2)" data-ja="三元牌 — 中發白の刻子1つごとに1台(2つ=2)" data-ko="삼원패 — 중발백 각 커츠 1타이(2개=2)"></li>
+      <li data-zh="半求人 — 碰吃後剩一張、自摸(自摸另計)" data-en="Half claimed — after pon/chi one tile left, self-drawn (self-draw counts separately)" data-ja="半求人 — ポン/チー後1枚残りでツモ(ツモは別計上)" data-ko="반구인 — 퐁/치 후 한 장 남기고 쯔모(쯔모 별도)"></li>
+      <li data-zh="槓上開花 — 槓牌或補花後,補進的那張牌自摸" data-en="Kong draw — win on the replacement tile drawn after a kong/flower" data-ja="嶺上開花 — 槓・花補充後の補充牌でツモ" data-ko="영상개화 — 깡·꽃 보충 후 보충패로 쯔모"></li>
+      <li data-zh="海底撈月 — 摸到牌牆最後一張時自摸" data-en="Last tile draw — self-draw on the very last wall tile" data-ja="海底摸月 — 牌山最後の1枚をツモ" data-ko="해저로월 — 산의 마지막 패를 쯔모"></li>
+      <li data-zh="河底撈魚 — 胡其他玩家打出的最後一張牌" data-en="Last discard win — win on the last tile discarded" data-ja="河底撈魚 — 他家の最後の捨牌でロン" data-ko="하저로어 — 타가의 마지막 버림패로 론"></li>
+    </ul>
+    <p style="font-weight:800;color:var(--pri);margin:12px 0 2px" data-zh="2 台" data-en="2 tai" data-ja="2台" data-ko="2타이"></p>
+    <ul>
+      <li data-zh="平胡 — 無吃碰槓、自摸不算、無字花刻、非獨聽" data-en="Ping hu — no chi/pon/kong, not a self-draw, no honors/flowers/pungs, not a unique wait" data-ja="平和 — チーポンカンなし・ツモでない・字牌/花/刻子なし・単一待ちでない" data-ko="핑후 — 치퐁깡 없음·쯔모 아님·자패/꽃/커츠 없음·단일 대기 아님"></li>
+      <li data-zh="全求人 — 碰吃後剩一張、放槍胡(自摸為半求人)" data-en="All claimed — after pon/chi one tile left, won off a discard (self-draw = half claimed)" data-ja="全求人 — ポン/チー後1枚残りで放銃アガリ(ツモは半求人)" data-ko="전구인 — 퐁/치 후 한 장 남기고 방총 화료(쯔모는 반구인)"></li>
+      <li data-zh="三暗刻 — 三組暗刻(含暗槓)" data-en="Three concealed pungs — three concealed pungs (incl. concealed kongs)" data-ja="三暗刻 — 暗刻3組(暗槓含む)" data-ko="삼암각 — 암각 3조(암깡 포함)"></li>
+    </ul>
+    <p style="font-weight:800;color:var(--pri);margin:12px 0 2px" data-zh="4 台" data-en="4 tai" data-ja="4台" data-ko="4타이"></p>
+    <ul>
+      <li data-zh="地聽 — 無吃碰、打出第一張便聽牌(需宣告)" data-en="Earthly ready — no chi/pon, tenpai after your first discard (must declare)" data-ja="地聴 — チーポンなし、最初の打牌でテンパイ(宣告要)" data-ko="지청 — 치퐁 없이 첫 버림패 후 텐파이(선언 필요)"></li>
+      <li data-zh="碰碰胡 — 全刻子" data-en="All pungs — every set is a pung" data-ja="対々和 — すべて刻子" data-ko="뽕뽕후 — 전부 커츠"></li>
+      <li data-zh="小三元 — 中發白兩坎+一對將" data-en="Small dragons — two dragon pungs + a pair" data-ja="小三元 — 三元牌2刻子+雀頭" data-ko="소삼원 — 삼원패 커츠 2개+머리"></li>
+      <li data-zh="混一色 / 湊一色 — 字牌+單一花色" data-en="Mixed one suit — honors + a single suit" data-ja="混一色 — 字牌+単一色" data-ko="혼일색 — 자패+단일 색"></li>
+    </ul>
+    <p style="font-weight:800;color:var(--pri);margin:12px 0 2px" data-zh="5 台" data-en="5 tai" data-ja="5台" data-ko="5타이"></p>
+    <ul>
+      <li data-zh="四暗刻 — 四組暗刻(蓋過碰碰胡取高)" data-en="Four concealed pungs — four concealed pungs (beats all pungs, take the higher)" data-ja="四暗刻 — 暗刻4組(対々和を上回る、高い方)" data-ko="사암각 — 암각 4조(뽕뽕후 상회, 높은 쪽)"></li>
+    </ul>
+    <p style="font-weight:800;color:var(--pri);margin:12px 0 2px" data-zh="8 台" data-en="8 tai" data-ja="8台" data-ko="8타이"></p>
+    <ul>
+      <li data-zh="天聽 — 一開局即聽牌(需宣告)" data-en="Heavenly ready — tenpai on the deal (must declare)" data-ja="天聴 — 配牌でテンパイ(宣告要)" data-ko="천청 — 배패로 텐파이(선언 필요)"></li>
+      <li data-zh="五暗刻 — 五組全暗刻(無吃碰)" data-en="Five concealed pungs — five concealed pungs (no chi/pon)" data-ja="五暗刻 — 全暗刻5組(チーポンなし)" data-ko="오암각 — 전부 암각 5조(치퐁 없음)"></li>
+      <li data-zh="大三元 — 中發白三坎" data-en="Big three dragons — three dragon pungs" data-ja="大三元 — 三元牌3刻子" data-ko="대삼원 — 삼원패 커츠 3개"></li>
+      <li data-zh="小四喜 — 東南西北三坎+一對將" data-en="Small four winds — three wind pungs + a pair" data-ja="小四喜 — 風牌3刻子+雀頭" data-ko="소사희 — 풍패 커츠 3개+머리"></li>
+      <li data-zh="清一色 / 字一色 — 單一花色 / 全字牌" data-en="Pure suit / All honors — one suit only / all honor tiles" data-ja="清一色 / 字一色 — 単一色 / 全字牌" data-ko="청일색 / 자일색 — 단일 색 / 전부 자패"></li>
+      <li data-zh="八仙過海 — 8 花直接胡" data-en="Eight flowers — all 8 flowers, instant win" data-ja="八仙過海 — 花8枚で即アガリ" data-ko="팔선과해 — 꽃 8장 즉시 화료"></li>
+    </ul>
+    <p style="font-weight:800;color:var(--pri);margin:12px 0 2px" data-zh="16 台" data-en="16 tai" data-ja="16台" data-ko="16타이"></p>
+    <ul>
+      <li data-zh="天胡 — 莊家一開局即胡" data-en="Heavenly win — dealer wins on the deal" data-ja="天和 — 親が配牌で即アガリ" data-ko="천호 — 친이 배패로 즉시 화료"></li>
+      <li data-zh="地胡 — 第一巡內第一次摸牌自摸" data-en="Earthly win — self-draw on the first draw within the first go-around" data-ja="地和 — 第一巡で最初のツモでアガリ" data-ko="지호 — 첫 순에 첫 쯔모로 화료"></li>
+      <li data-zh="人胡 — 第一巡內胡別人捨牌" data-en="Human win — win on another's discard within the first go-around" data-ja="人和 — 第一巡で他家の捨牌でアガリ" data-ko="인호 — 첫 순에 타가 버림패로 화료"></li>
+      <li data-zh="大四喜 — 東南西北四坎" data-en="Big four winds — four wind pungs" data-ja="大四喜 — 風牌4刻子" data-ko="대사희 — 풍패 커츠 4개"></li>
+    </ul>
   </div>
 </div>
 
