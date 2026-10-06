@@ -90,6 +90,8 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 .turn-clock.warn{border-color:var(--danger);color:var(--danger);animation:pulse 1s infinite}
 .turn-clock.hidden{display:none}
 .table-area{position:relative;border:1px solid #5a4726;border-radius:16px;background:linear-gradient(180deg,#3a2e1a,#2b2214);min-height:660px;padding:10px;overflow:hidden}
+/* 2026-10-06 John:大螢幕/iPad 讓牌桌也撐滿高度(原本只有手機版撐滿,iPad 會下面留一大片黑) */
+.table-area{height:calc(100vh - 86px);height:calc(100svh - 86px);height:calc(100dvh - 86px)}
 
 /* opponents */
 .opp-top{display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:6px}
@@ -418,6 +420,18 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 
 /* 2026-10-04 John:手機版隱藏上方狀態提示(對齊網頁版) */
 .status-tape{display:none}
+/* 2026-10-06 John:iPad/大螢幕自適應——收掉底部出牌記錄 log、不橫向溢出 */
+@media (min-width:760px){ .logbox{display:none} body{overflow-x:hidden} }
+/* 2026-10-06 John:iPad 手牌縮到排得下(原本排不下右邊那張被切)+ 其他三家牌適度放大 */
+@media (min-width:760px){
+  :root{--tile-w:64px;--tile-h:92px}
+  .my-hand{flex-wrap:wrap!important;align-content:flex-end!important;justify-content:center!important;min-height:0!important}
+  #opp-top .backrow .bk{width:46px;height:64px;margin-left:-13px}
+  .opp-side .backrow .bk{width:38px;height:53px;margin:0 0 -17px 0}
+  #opp-top .meld-row .tile.sm{width:46px;height:64px}
+  .opp-side .meld-row .tile.sm{width:38px;height:53px;min-width:38px}
+  .river-slot .rt{min-width:40px;height:56px;font-size:15px}
+}
 </style>
 </head>
 <body>

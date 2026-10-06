@@ -21,3 +21,6 @@ asc_api.py
 
 .env
 *.env
+
+# 信箱截圖與去重狀態(不進版控)
+mail-shots/
