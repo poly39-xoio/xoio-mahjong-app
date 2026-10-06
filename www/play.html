@@ -1301,8 +1301,8 @@ function fitMyHand(){
   const n=tiles.length, gap=3;
   // 牌面上限由 CSS --tile-w 控制 (桌面 56 / 手機直立 48 / 橫向 34), 避免把牌縮成小不點
   const maxW=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tile-w'))||56;
-  // 手機直立(≤640 且 portrait)+ iPad 直立(≥760 且 portrait): 手牌分兩層(下層最多 8 張)
-  if(matchMedia('(max-width:640px) and (orientation:portrait)').matches || matchMedia('(min-width:760px) and (orientation:portrait)').matches){
+  // 手機直立(≤640 portrait)+ 所有 iPad(≥760): 手牌分兩層(下層最多 8 張),避免橫向一多就長出螢幕
+  if(matchMedia('(max-width:640px) and (orientation:portrait)').matches || matchMedia('(min-width:760px)').matches){
     const lower=Math.min(8,n);   // 下層固定最多 8 張
     const upper=n-lower;         // 上層 = 其餘, 出牌時先減少 → 直到上層歸零才動下層
     const maxRow=Math.max(upper,lower,1);
