@@ -438,14 +438,14 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 }
 /* 2026-10-06 John:手機(直+橫) 左右二家 — 牌牆 + 明牌 都分「直的二欄」;牌河往中間縮避免壓到明牌 */
 @media (max-width:640px) and (orientation:portrait){
-  .opp-side .backrow{flex-wrap:wrap;max-height:190px;align-content:flex-start;justify-content:center}
-  .opp-side .meld-row{flex-wrap:wrap;max-height:240px;justify-content:center}
-  .river-area{left:68px;right:68px}
+  .opp-side .backrow{flex-wrap:wrap;max-height:190px;align-content:flex-start;justify-content:center;max-width:46px}
+  .opp-side .meld-row{flex-wrap:wrap;max-height:240px;justify-content:center;max-width:52px}
+  .river-area{left:92px;right:92px}
 }
 @media (orientation:landscape) and (max-height:601px){
-  .opp-side .backrow{flex-wrap:wrap;max-height:150px;align-content:flex-start;justify-content:center}
-  .opp-side .meld-row{flex-wrap:wrap;max-height:120px;justify-content:center}
-  .river-area{left:60px;right:60px}
+  .opp-side .backrow{flex-wrap:wrap;max-height:150px;align-content:flex-start;justify-content:center;max-width:42px}
+  .opp-side .meld-row{flex-wrap:wrap;max-height:120px;justify-content:center;max-width:48px}
+  .river-area{left:76px;right:76px}
 }
 </style>
 </head>
