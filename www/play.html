@@ -98,8 +98,13 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 .opp .tag b{color:var(--text-main);font-weight:700}
  .opp .wind{font-size:15px;font-weight:900;color:var(--gold)}
  .opp .cnt{font-size:13px;font-family:var(--font-num);color:var(--text-sub)}
-.opp.active .tag b{color:var(--primary)}
-.opp.active .dot2{background:var(--primary);box-shadow:0 0 6px var(--primary-glow)}
+/* 2026-10-08 John: 當前出牌家 — 名牌綠底加強 + 河牌區一起亮 */
+.opp.active .tag{background:rgba(42,212,158,.09);border-radius:9px;box-shadow:0 0 8px rgba(42,212,158,.25);outline:1px solid rgba(42,212,158,.5);outline-offset:2px;animation:turnPulse 1.5s ease-in-out infinite}
+.opp.active .tag b{color:#2ad49e}
+.opp.active .dot2{background:#2ad49e;box-shadow:0 0 6px rgba(42,212,158,.55)}
+@keyframes turnPulse{0%,100%{box-shadow:0 0 5px rgba(42,212,158,.16)}50%{box-shadow:0 0 11px rgba(42,212,158,.38)}}
+.river-slot.active{background:rgba(42,212,158,.055);outline:1.5px solid rgba(42,212,158,.48);outline-offset:-2px;animation:turnPulse 1.5s ease-in-out infinite}
+.river-slot.active .rv-tag{color:#2ad49e}
  .dot2{width:9px;height:9px;border-radius:50%;background:#444}
 .backrow{display:flex}
  .backrow .bk{width:20px;height:28px;background:linear-gradient(135deg,#2a3140,#1c212b);border:1px solid #3a4356;border-radius:3px;margin-left:-6px}
@@ -213,6 +218,10 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 .actions .btn:not(:disabled):hover{border-color:var(--primary);color:#fff}
 .actions .btn.actionable:disabled{opacity:1;background:rgba(42,212,158,.16);border-color:var(--primary);color:#7ff5d8}
 .actions .btn.actionable{opacity:1}
+/* 2026-10-08 John: 聽牌指示燈(放「吃」左邊), 聽牌就亮 */
+.ting-chip{flex:0 0 auto;align-self:stretch;display:inline-flex;align-items:center;justify-content:center;padding:0 9px;border-radius:10px;font-size:12px;font-weight:900;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid rgba(42,212,158,.16);opacity:.5;transition:all .2s;cursor:default;user-select:none}
+.ting-chip.on{color:#06231a;background:linear-gradient(135deg,#1fbf8b,#2ad49e);border-color:#2ad49e;opacity:1;box-shadow:0 0 12px rgba(42,212,158,.6);animation:tingPulse 1.3s ease-in-out infinite}
+@keyframes tingPulse{0%,100%{box-shadow:0 0 8px rgba(42,212,158,.45)}50%{box-shadow:0 0 16px rgba(42,212,158,.85)}}
 .action-flash{animation:flashin .3s}
 @keyframes flashin{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
 
@@ -540,6 +549,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
         <div class="my-melds" id="my-melds"></div>
         <div class="my-hand" id="my-hand"></div>
         <div class="actions" id="actions">
+          <span class="ting-chip" id="ting-chip" title="">聽</span>
           <button class="btn sm act-btn" id="btn-chi" disabled>吃</button>
           <button class="btn sm act-btn" id="btn-peng" disabled>碰</button>
           <button class="btn sm act-btn" id="btn-gang" disabled>槓</button>
@@ -1305,6 +1315,7 @@ function renderMyHand(){
     el.appendChild(d);
   });
   fitMyHand();
+  updateTing();
 }
 function fitMyHand(){
   const el=document.getElementById('my-hand');
@@ -1403,10 +1414,13 @@ function renderOppMelds(seatIdx){
 function seatWind(i){ var w=SEATS[i]?SEATS[i].wind:'?'; return wv(w); }
 function highlightActive(){
   document.querySelectorAll('.opp').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.river-slot').forEach(el=>el.classList.remove('active'));
   if(G&&G.phase==='ended')return;
   const opps={0:'opp-top',1:'opp-right',3:'opp-left'};
   const el=document.getElementById(opps[turn]||'');
   if(el)el.classList.add('active');
+  const rslot=document.querySelector('.river-slot[data-si="'+turn+'"]'); // 2026-10-08: 該家河牌區一起亮
+  if(rslot)rslot.classList.add('active');
   const me=document.getElementById('my-area');
   if(me)me.style.outline = turn===2?'1px solid rgba(42,212,158,.35)':'none';
 }
@@ -1419,6 +1433,7 @@ function renderRiver(){
     const p=G.players[si];
     const slot=document.createElement('div');
     slot.className='river-slot';
+    slot.dataset.si=si; // 2026-10-08: 供高亮連動
     const tag=document.createElement('div');
     tag.className='rv-tag';
     tag.textContent=seatWind(si)+(si===2?'(你)':'');
@@ -1534,6 +1549,32 @@ function findWinningTile(hand16, openMelds){
   return null;
 }
 function meldCount(p){ return p.melds? p.melds.length : 0; }
+/* ===== 聽牌指示燈 (2026-10-08) ===== */
+const TING_KINDS=[['wan',9],['tong',9],['tiao',9],['feng',4],['jian',3]];
+function tingWaits(h, mc){
+  const out=[];
+  for(const [s,max] of TING_KINDS) for(let n=1;n<=max;n++){
+    try{ if(isWin([...h,{s,n}], mc)) out.push({s,n}); }catch(e){}
+  }
+  return out;
+}
+function updateTing(s){
+  const chip=document.getElementById('ting-chip'); if(!chip) return;
+  const lbl=(typeof MJ_LANG!=='undefined'&&MJ_LANG==='en')?'READY':'聽';
+  chip.classList.remove('on'); chip.textContent=lbl; chip.title='';
+  let hand=null, mc=0;
+  if(s&&s.myHand){ hand=s.myHand.slice(); const seat=s.seats&&s.seats[myOnlineSeat]?s.seats[myOnlineSeat]:null; mc=(seat&&seat.melds)?seat.melds.length:0; }
+  else if(typeof G!=='undefined'&&G&&G.players&&G.players[2]){ hand=G.players[2].hand.slice(); mc=meldCount(G.players[2]); }
+  else return;
+  if(!hand||!hand.length) return;
+  const expectWin=(5-mc)*3+2;
+  let w=null;
+  if(hand.length===expectWin-1){ w=tingWaits(hand,mc); }
+  else if(hand.length===expectWin){
+    for(let i=0;i<hand.length;i++){ const rest=hand.slice(0,i).concat(hand.slice(i+1)); const wk=tingWaits(rest,mc); if(wk.length){ w=wk; break; } }
+  }
+  if(w&&w.length){ const names=w.map(t=>tileName(t)); chip.textContent=lbl+' '+names.join(''); chip.title=lbl+' '+names.join('、'); chip.classList.add('on'); }
+}
 function checkHuaHu(seatIdx){
   // 摸齊 8 張花 → 直接花胡(八仙過海), 算 8 台
   const p=G.players[seatIdx];
@@ -1587,6 +1628,7 @@ function draw(seatIdx){
 function afterDraw(seatIdx){
   const p=G.players[seatIdx];
   G.phase='play';
+  highlightActive(); // 2026-10-08 John: 輪到該家 → 先亮他的河牌區, 再等出牌(修正: 輪到自己時卻還亮在上家)
   if(seatIdx===2){
     G.phase='my_turn';
     status(AUTOPLAY?'(自動示範) 輪到你出牌…':'輪到你 — 點一張牌,再按「出牌」');
@@ -1765,8 +1807,8 @@ function afterAskAllPass(){
 }
 function nextTurn(){
   if(G.phase==='ended')return;
-  turn=(G.lastDiscarder+1)%4; // 出牌者的下家摸牌
-  draw(turn);
+  // 2026-10-08 John: 出牌後停頓一下, 讓「剛打出的牌/該家河牌區」先看清楚, 再換下一家亮
+  setTimeout(()=>{ if(G.phase==='ended')return; turn=(G.lastDiscarder+1)%4; draw(turn); }, AUTOPLAY?250:700); // 出牌者的下家摸牌
 }
 function takeFromRiver(tile){
   // 吃/碰/明槓拿走別人打出的牌 → 從出牌者河(river)移除, 牌移動到吃碰者面前
