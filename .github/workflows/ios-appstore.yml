@@ -125,3 +125,10 @@ jobs:
           echo "Uploading $IPA"
           xcrun altool --upload-app -f "$IPA" -t ios \
             --apiKey "$KEYID" --apiIssuer "$ISSUER" --verbose
+
+      # 2026-10-08: 上傳後務必把新 build 加入 TestFlight 內測群組(command line 2026-10-08 build 38 漏做 → TestFlight 看不到)
+      - name: Assign build to internal TestFlight group
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: node scripts/assign_beta_group.mjs
