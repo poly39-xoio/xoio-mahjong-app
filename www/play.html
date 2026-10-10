@@ -111,7 +111,8 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 .backrow .bk:first-child{margin-left:0}
 .meld-row{display:flex;min-height:22px;gap:2px;flex-wrap:wrap;justify-content:center}
 .opp-side{position:absolute;top:78px;display:flex;flex-direction:column;align-items:center;gap:4px}
-.opp-side.left{left:6px}
+.opp-side.left{left:6px;height:100%}
+.opp-side.left .tag{position:relative;top:calc(50% - 158px);z-index:3} /* 2026-10-10 John: 西名字牌下移到西河牌區旁;蓋牌不動 */
 .opp-side.right{right:6px}
 .opp-side .backrow{flex-direction:column}
 .opp-side .backrow .bk{margin:0 0 -8px 0}
@@ -304,12 +305,14 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
   .table-area{min-height:0;height:calc(100vh - 86px);height:calc(100svh - 86px);height:calc(100dvh - 86px)}
   .actions .btn{font-size:13px;max-width:76px;padding:10px 0}
   .river-area{bottom:212px}
+  .opp-side.left .tag{top:calc(50% - 149px)}
   .logbox{display:none}
 }
 /* 直立手機: 手牌分兩層, 不滾動不重疊, 全部可見 */
 @media (max-width:640px) and (orientation:portrait){
   .my-hand{flex-wrap:wrap;justify-content:center;align-content:flex-end;min-height:0;padding:2px 2px 4px}
   .river-area{bottom:250px}
+  .opp-side.left .tag{top:calc(50% - 168px)}
 }
 /* 直立且高度也吃緊的小手機: 再壓一點頂部 */
 @media (max-width:640px) and (max-height:700px){
@@ -386,6 +389,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
   #opp-top .meld-row .tile.sm{width:32px;height:45px}
   .opp-side .meld-row .tile.sm{width:28px;height:39px;min-width:28px}
   .river-area{left:104px;right:104px;top:96px;bottom:248px;gap:6px}
+  .opp-side.left .tag{top:calc(50% - 168px)}
   .river-slot .rt{min-width:30px;height:42px;font-size:13px}
   .river-slot .rv-tag{font-size:11px}
 }
@@ -407,6 +411,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
   .actions .btn{padding:4px 0;font-size:12px;max-width:64px;height:26px}
   /* 河道淨空:上不壓、下不疊手牌 */
   .river-area{left:48px;right:48px;top:40px;bottom:134px;gap:2px}
+  .opp-side.left .tag{top:calc(50% - 125px)}
   .river-slot{padding:8px 2px 2px;gap:1px}
   .river-slot .tile.sm{width:21px;height:30px;border-radius:3px}
   .river-slot .tile.sm .n{font-size:10px}
@@ -428,6 +433,7 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
 /* 2026-10-04 John:手機版隱藏上方狀態提示(對齊網頁版) */
 .status-tape{display:none}
 /* 2026-10-06 John:iPad/大螢幕自適應——收掉底部出牌記錄 log、不橫向溢出 */
+@media (orientation:landscape) and (max-height:560px){ .opp-side.left .tag{top:calc(50% - 85px)} }
 @media (min-width:760px) and (min-height:601px){ .logbox{display:none} body{overflow-x:hidden} }
 /* 2026-10-06 John:iPad 手牌縮到排得下(原本排不下右邊那張被切)+ 其他三家牌適度放大 */
 @media (min-width:760px) and (min-height:601px){
@@ -614,7 +620,7 @@ const LANGS=['zh','en','ja','ko'];
 const LNAMES={zh:'中',en:'EN',ja:'日',ko:'韓'};
 const MJ_LANG = (function(){ try{ var v=localStorage.getItem('mj_lang'); if(v==='en'||v==='zh'||v==='ja'||v==='ko') return v; }catch(e){} try{ var ls=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'']; for(var i=0;i<ls.length;i++){ var t=(ls[i]||'').toLowerCase(); if(t.indexOf('zh')===0) return 'zh'; if(t.indexOf('ja')===0) return 'ja'; if(t.indexOf('ko')===0) return 'ko'; } if(ls.length&&ls[0]) return 'en'; }catch(e){} return 'zh'; })();
 const EN = {
-  '吃':'Chi','碰':'Pong','槓':'Kong','胡':'Hu','過':'Pass','出牌':'Discard',
+  '聽':'READY','吃':'Chi','碰':'Pong','槓':'Kong','胡':'Hu','過':'Pass','出牌':'Discard',
   '要怎麼吃？':'How to chi?','要怎麼吃':'How to chi','取消不吃':'Cancel','選擇吃法':'Choose chi',
   '攤牌畫面':'Reveal','胡牌！':'Win!','自摸 8台':'Self-draw 8 tai','下一局':'Next','退出':'Exit',
   '確定中途退出?':'Quit mid-game?','確定退出(將賠償)':'Quit (compensation)','取消':'Cancel',
@@ -681,7 +687,7 @@ const EN = {
   '！':'!'
 };
 const JA = {
-  '吃':'チー','碰':'ポン','槓':'カン','胡':'ロン','過':'パス','出牌':'打牌',
+  '聽':'テンパイ','吃':'チー','碰':'ポン','槓':'カン','胡':'ロン','過':'パス','出牌':'打牌',
   '要怎麼吃？':'どうチーする?','要怎麼吃':'チーの仕方','取消不吃':'キャンセル','選擇吃法':'チーの組み合わせ',
   '攤牌畫面':'公開画面','胡牌！':'アガリ!','自摸 8台':'ツモ 8台','下一局':'次の局','退出':'退出',
   '確定中途退出?':'途中退出しますか?','確定退出(將賠償)':'退出する(補償あり)','取消':'キャンセル',
@@ -748,7 +754,7 @@ const JA = {
   '！':'!'
 };
 const KO = {
-  '吃':'치','碰':'폰','槓':'캉','胡':'론','過':'패스','出牌':'버리기',
+  '聽':'텐파이','吃':'치','碰':'폰','槓':'캉','胡':'론','過':'패스','出牌':'버리기',
   '要怎麼吃？':'어떻게 치나요?','要怎麼吃':'치기','取消不吃':'취소','選擇吃法':'치 조합 선택',
   '攤牌畫面':'공개 화면','胡牌！':'화료!','自摸 8台':'쯔모 8타이','下一局':'다음 판','退出':'나가기',
   '確定中途退出?':'중도 퇴장할까요?','確定退出(將賠償)':'퇴장(보상 발생)','取消':'취소',
@@ -1560,7 +1566,7 @@ function tingWaits(h, mc){
 }
 function updateTing(s){
   const chip=document.getElementById('ting-chip'); if(!chip) return;
-  const lbl=(typeof MJ_LANG!=='undefined'&&MJ_LANG==='en')?'READY':'聽';
+  const lbl=tl('聽');
   chip.classList.remove('on'); chip.textContent=lbl; chip.title='';
   let hand=null, mc=0;
   if(s&&s.myHand){ hand=s.myHand.slice(); const seat=s.seats&&s.seats[myOnlineSeat]?s.seats[myOnlineSeat]:null; mc=(seat&&seat.melds)?seat.melds.length:0; }
