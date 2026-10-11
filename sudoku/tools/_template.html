@@ -121,6 +121,26 @@ html[lang="en"] .tools button,html[lang="en"] .levels button,html[lang="en"] .pa
 html[lang="en"] #pnum{font-size:13px}
 /* 2026-10-06 John:iPad/平板自適應——原本主內容全部限寛 460px,iPad 上只中間一條、四周大片空白 */
 @media (min-width:760px){:root{--tgt:min(760px,60vh)}header,.board-wrap,.pad,.tools,.levels,.navbar,.picker{max-width:var(--tgt)}.panel-card{max-width:min(680px,var(--tgt))}}
+
+/* 2026-10-08 John:手機橫向改左右兩欄——左:數字網格(棋盤) 右:功能鍵(數字盤+工具) */
+@media (orientation:landscape) and (max-height:560px){
+  body{display:grid;grid-template-columns:minmax(0,auto) minmax(190px,1fr);
+    grid-template-areas:"board header" "board pad" "board tools" "board levels" "board navbar";
+    align-content:center;justify-content:center;column-gap:12px;row-gap:6px;
+    padding:calc(8px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left))}
+  header{grid-area:header;width:100%;max-width:none}
+  .board-wrap{grid-area:board;width:auto;max-width:none;height:min(calc(100dvh - 18px),50vw);aspect-ratio:1;align-self:center}
+  .pad{grid-area:pad;width:100%;max-width:none}
+  .tools{grid-area:tools;width:100%;max-width:none}
+  .levels{grid-area:levels;width:100%;max-width:none}
+  .navbar{grid-area:navbar;width:100%;max-width:none}
+  .picker{display:none}
+  .foot{display:none}
+  .panel{padding:6px}
+  .panel-card{max-width:96vw;max-height:96dvh;padding:8px}
+  .panel-grid{grid-template-columns:repeat(20,1fr);gap:5px}
+  .ans-board{width:auto;height:min(86dvh,86vw);aspect-ratio:1;margin:0 auto}
+}
 </style>
 </head>
 <body>
