@@ -119,6 +119,8 @@ html[lang="en"] .brand{text-transform:none}
 html[lang="en"] .langmenu button{text-transform:none}
 html[lang="en"] .tools button,html[lang="en"] .levels button,html[lang="en"] .pause-ov button,html[lang="en"] .foot,html[lang="en"] .toast{font-size:13px}
 html[lang="en"] #pnum{font-size:13px}
+/* 2026-10-06 John:iPad/平板自適應——原本主內容全部限寛 460px,iPad 上只中間一條、四周大片空白 */
+@media (min-width:760px){:root{--tgt:min(760px,60vh)}header,.board-wrap,.pad,.tools,.levels,.navbar,.picker{max-width:var(--tgt)}.panel-card{max-width:min(680px,var(--tgt))}}
 </style>
 </head>
 <body>
@@ -275,6 +277,11 @@ function sWrongSet(){ _tone(200,0.16,'sawtooth',0.04); }
 function sErr(){ _tone(180,0.18,'square',0.045); _tone(150,0.18,'square',0.03,0.02); }
 function sHint(){ _tone(880,0.09,'triangle',0.05); _tone(1245,0.12,'triangle',0.05,0.09); }
 function sWin(){ [523,659,784,1047].forEach(function(f,i){ _tone(f,0.22,'sine',0.06,i*0.13); }); }
+/* 2026-10-11: iOS WKWebView 需要使用者手勢才能啟動 AudioContext(照麻將/打磚已修的做法)*/
+['pointerdown','touchstart','keydown','click'].forEach(function(ev){ window.addEventListener(ev,function(){ _ac(); },{passive:true}); });
+document.addEventListener('visibilitychange',function(){ if(!document.hidden) _ac(); });
+window.addEventListener('focus',function(){ _ac(); });
+window.addEventListener('pageshow',function(){ _ac(); });
 
 function input(v){
   if(paused||sel<0||isGiven(Math.floor(sel/9), sel%9)) return;
