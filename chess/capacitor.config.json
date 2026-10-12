@@ -1,0 +1,7 @@
+{
+  "appId": "io.xoio.chess",
+  "appName": "單機西洋棋",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": { "androidScheme": "https" }
+}

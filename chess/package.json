@@ -1,0 +1,13 @@
+{
+  "name": "xoio-chess-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "XOIO 單機西洋棋 Chess Solo (iOS/Android app, Capacitor)",
+  "scripts": { "sync": "cap sync" },
+  "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/ios": "^6.2.0"
+  },
+  "devDependencies": { "@capacitor/cli": "^6.2.2" }
+}

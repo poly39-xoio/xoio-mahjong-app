@@ -1,0 +1,62 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:transparent}</style></head>
+<body>
+<script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
+<script>
+var renderer,camera,scene,cur=null;
+function boot(){
+  renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true});
+  renderer.setSize(384,384); renderer.setPixelRatio(1);
+  renderer.setClearAlpha(0);
+  if(THREE.sRGBEncoding!==undefined) renderer.outputEncoding=THREE.sRGBEncoding;
+  document.body.appendChild(renderer.domElement);
+  camera=new THREE.PerspectiveCamera(26,1,0.05,100);
+  camera.position.set(0.22,0.86,2.75); camera.lookAt(0,0.44,0);
+  scene=new THREE.Scene();
+  var hemi=new THREE.HemisphereLight(0xffffff,0x2a2620,0.55); scene.add(hemi);
+  var key=new THREE.DirectionalLight(0xfff6e8,1.15); key.position.set(2.2,3.2,2.4); scene.add(key);
+  var fill=new THREE.DirectionalLight(0xdfe8ff,0.35); fill.position.set(-2.4,1.4,-0.6); scene.add(fill);
+  var rim=new THREE.DirectionalLight(0xffffff,0.45); rim.position.set(-0.6,1.2,-2.6); scene.add(rim);
+  window.__ready=true;
+}
+function lathe(pts,seg){var v=pts.map(function(p){return new THREE.Vector2(p[0],p[1]);});return new THREE.LatheGeometry(v,seg||48);}
+function prof(prof,y0){return prof.map(function(p){return [p[0],p[1]+(y0||0)];});}
+function P(name,prof,extra){var g=lathe(prof);var m=null;return {name:name,geo:g,extra:extra};}
+var PROF={
+ P:[[0,0],[0.185,0],[0.20,0.012],[0.19,0.03],[0.135,0.045],[0.12,0.062],[0.135,0.08],[0.12,0.105],[0.085,0.19],[0.078,0.27],[0.095,0.30],[0.12,0.325],[0.105,0.37],[0.06,0.40],[0.085,0.425],[0.125,0.45],[0.135,0.49],[0.115,0.53],[0.06,0.56],[0.045,0.575],[0,0.585]],
+ R:[[0,0],[0.215,0],[0.23,0.013],[0.215,0.033],[0.15,0.05],[0.135,0.075],[0.14,0.10],[0.122,0.15],[0.118,0.40],[0.125,0.45],[0.165,0.49],[0.17,0.545],[0.155,0.575],[0.175,0.61],[0.16,0.645],[0.09,0.66],[0,0.66]],
+ B:[[0,0],[0.20,0],[0.215,0.013],[0.20,0.033],[0.15,0.05],[0.135,0.075],[0.14,0.10],[0.115,0.15],[0.10,0.26],[0.098,0.40],[0.11,0.46],[0.13,0.50],[0.112,0.55],[0.085,0.60],[0.078,0.66],[0.10,0.70],[0.112,0.735],[0.08,0.775],[0.045,0.80],[0.03,0.815],[0,0.82]],
+ Q:[[0,0],[0.215,0],[0.23,0.013],[0.215,0.033],[0.155,0.05],[0.14,0.075],[0.15,0.105],[0.125,0.16],[0.105,0.28],[0.098,0.42],[0.11,0.48],[0.145,0.53],[0.165,0.56],[0.15,0.60],[0.155,0.65],[0.20,0.70],[0.205,0.735],[0.165,0.76],[0.18,0.79],[0.125,0.83],[0.06,0.86],[0.09,0.885],[0.06,0.90],[0,0.905]],
+ K:[[0,0],[0.225,0],[0.24,0.014],[0.225,0.036],[0.16,0.052],[0.148,0.078],[0.16,0.11],[0.132,0.17],[0.112,0.30],[0.105,0.45],[0.118,0.52],[0.155,0.57],[0.175,0.61],[0.16,0.65],[0.165,0.70],[0.205,0.755],[0.21,0.80],[0.16,0.83],[0.18,0.855],[0.12,0.875],[0.06,0.885],[0,0.888]],
+ N:[[0,0],[0.215,0],[0.23,0.013],[0.215,0.033],[0.15,0.05],[0.135,0.075],[0.14,0.10],[0.125,0.16],[0.12,0.235],[0.135,0.30],[0,0.30]]
+};
+var wood={w:new THREE.MeshStandardMaterial({color:0xf1e7d0,roughness:0.55,metalness:0.0}),b:new THREE.MeshStandardMaterial({color:0x2a1d11,roughness:0.5,metalness:0.0})};
+function buildPiece(type,mat){
+  var g=new THREE.Group();
+  if(type==='N'){
+    g.add(new THREE.Mesh(lathe(PROF.N),mat));
+    var s=new THREE.Shape();
+    s.moveTo(0.05,0.0); s.lineTo(0.13,0.0); s.lineTo(0.15,0.06); s.lineTo(0.12,0.13);
+    s.lineTo(0.17,0.20); s.lineTo(0.30,0.30); s.lineTo(0.31,0.36); s.lineTo(0.22,0.40);
+    s.lineTo(0.10,0.44); s.lineTo(0.13,0.52); s.lineTo(0.05,0.46); s.lineTo(0.02,0.40);
+    s.lineTo(0.0,0.30); s.lineTo(-0.02,0.16); s.lineTo(0.03,0.06); s.closePath();
+    var eg=new THREE.ExtrudeGeometry(s,{depth:0.16,bevelEnabled:true,bevelSize:0.015,bevelThickness:0.015,bevelSegments:2,curveSegments:8});
+    eg.translate(0,0.26,-0.08); g.add(new THREE.Mesh(eg,mat));
+  } else {
+    g.add(new THREE.Mesh(lathe(PROF[type]),mat));
+    if(type==='R'){for(var i=0;i<4;i++){var a=i*Math.PI/2+Math.PI/4;var b2=new THREE.Mesh(new THREE.BoxGeometry(0.11,0.10,0.11),mat);b2.position.set(Math.cos(a)*0.12,0.70,Math.sin(a)*0.12);g.add(b2);}}
+    if(type==='K'){var v=new THREE.Mesh(new THREE.BoxGeometry(0.055,0.17,0.055),mat);v.position.set(0,0.965,0);g.add(v);var h=new THREE.Mesh(new THREE.BoxGeometry(0.14,0.055,0.055),mat);h.position.set(0,0.99,0);g.add(h);}
+    if(type==='Q'){for(var j=0;j<8;j++){var a2=j*Math.PI/4;var p2=new THREE.Mesh(new THREE.SphereGeometry(0.028,10,10),mat);p2.position.set(Math.cos(a2)*0.175,0.905,Math.sin(a2)*0.175);g.add(p2);}}
+    if(type==='B'){var bb=new THREE.Mesh(new THREE.SphereGeometry(0.035,12,12),mat);bb.position.set(0,0.845,0);g.add(bb);
+      var sl=new THREE.Mesh(new THREE.BoxGeometry(0.02,0.14,0.30),mat);sl.position.set(0.02,0.66,0);sl.rotation.z=0.5;g.add(sl);}
+    if(type==='P'){ }
+  }
+  return g;
+}
+function renderPiece(color,type){
+  if(cur){scene.remove(cur);} cur=buildPiece(type,wood[color]); scene.add(cur);
+  renderer.render(scene,camera);
+  return renderer.domElement.toDataURL('image/png');
+}
+window.__boot=boot; window.__render=renderPiece;
+</script>
+</body></html>
