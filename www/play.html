@@ -2327,7 +2327,7 @@ function showModeChooser(){
   opts.forEach(function(o){
     const b=document.createElement('button');
     b.className='btn'; b.style.cssText='display:block;width:100%;text-align:left;padding:14px 16px';
-    b.innerHTML='<b style="font-size:18px;color:var(--text-main)">'+o[1]+'</b><div style="margin-top:5px;font-size:13.5px;font-weight:500;color:var(--text-main);opacity:.85;line-height:1.45">'+o[2]+'</div>';
+    b.innerHTML='<b style="font-size:18px;color:#04120c">'+o[1]+'</b><div style="margin-top:5px;font-size:13.5px;font-weight:500;color:#04120c;opacity:.92;line-height:1.45">'+o[2]+'</div>';
     b.onclick=function(){ beginSession(o[0]); };
     box.appendChild(b);
   });
