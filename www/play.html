@@ -613,6 +613,9 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
   <div class="modal" style="max-width:520px">
     <h2 id="mode-title" style="font-size:19px;color:var(--primary);margin-bottom:4px">選擇局數</h2>
     <div id="mode-opts" style="display:flex;flex-direction:column;gap:10px;margin-top:12px"></div>
+    <div style="display:flex;justify-content:center;margin-top:14px">
+      <button class="btn sm ghost" id="btn-mode-quit" style="width:150px;padding:10px 0;font-size:14px">退出</button>
+    </div>
   </div>
 </div>
 
@@ -643,7 +646,7 @@ const MJ_LANG = (function(){ try{ var v=localStorage.getItem('mj_lang'); if(v===
 const EN = {
   '選擇局數':'Game length','隨意':'Free','一圈':'One round','一將':'One set',
   '不限局數,按「退出」結束':'No limit — end anytime with Exit','打完一圈(四家各作莊一次)':'Play one round (each player deals once)','打完四圈(至少 16 局)':'Play four rounds (16 hands minimum)',
-  '本場結束':'Session complete','共 {n} 局':'{n} hands played','你胡 {w} 局':'You won {w}','累計台數 {t} 台':'Total tai {t}','累計底數 {b} 底':'Total base {b}','重新開始':'Play again','返回首頁':'Home',
+  '本場結束':'Session complete','共 {n} 局':'{n} hands played','你胡 {w} 局':'You won {w}','累計台數 {t} 台':'Total tai {t}','累計底數 {b} 家':'Base won {b}','重新開始':'Play again','返回首頁':'Home',
   '聽':'READY','吃':'Chi','碰':'Pong','槓':'Kong','胡':'Hu','過':'Pass','出牌':'Discard',
   '要怎麼吃？':'How to chi?','要怎麼吃':'How to chi','取消不吃':'Cancel','選擇吃法':'Choose chi',
   '攤牌畫面':'Reveal','胡牌！':'Win!','自摸 8台':'Self-draw 8 tai','下一局':'Next','退出':'Exit',
@@ -713,7 +716,7 @@ const EN = {
 const JA = {
   '選擇局數':'対局数','隨意':'自由','一圈':'1回戦','一將':'1将',
   '不限局數,按「退出」結束':'回数無制限 — 終了は「退出」','打完一圈(四家各作莊一次)':'1回戦(4人とも親を1回)','打完四圈(至少 16 局)':'4回戦(最低16局)',
-  '本場結束':'対局終了','共 {n} 局':'{n}局','你胡 {w} 局':'アガリ {w}回','累計台數 {t} 台':'合計台数 {t}','累計底數 {b} 底':'合計底 {b}','重新開始':'もう一度','返回首頁':'ホームへ',
+  '本場結束':'対局終了','共 {n} 局':'{n}局','你胡 {w} 局':'アガリ {w}回','累計台數 {t} 台':'合計台数 {t}','累計底數 {b} 家':'合計底 {b}家','重新開始':'もう一度','返回首頁':'ホームへ',
   '聽':'テンパイ','吃':'チー','碰':'ポン','槓':'カン','胡':'ロン','過':'パス','出牌':'打牌',
   '要怎麼吃？':'どうチーする?','要怎麼吃':'チーの仕方','取消不吃':'キャンセル','選擇吃法':'チーの組み合わせ',
   '攤牌畫面':'公開画面','胡牌！':'アガリ!','自摸 8台':'ツモ 8台','下一局':'次の局','退出':'退出',
@@ -783,7 +786,7 @@ const JA = {
 const KO = {
   '選擇局數':'대국 수','隨意':'자유','一圈':'1라운드','一將':'1장',
   '不限局數,按「退出」結束':'제한 없음 — 「나가기」로 종료','打完一圈(四家各作莊一次)':'1라운드(4명 각 1회 친)','打完四圈(至少 16 局)':'4라운드(최소 16판)',
-  '本場結束':'대국 종료','共 {n} 局':'{n}판','你胡 {w} 局':'화료 {w}회','累計台數 {t} 台':'합계 타이 {t}','累計底數 {b} 底':'합계 바닥 {b}','重新開始':'다시 시작','返回首頁':'홈으로',
+  '本場結束':'대국 종료','共 {n} 局':'{n}판','你胡 {w} 局':'화료 {w}회','累計台數 {t} 台':'합계 타이 {t}','累計底數 {b} 家':'합계 바닥 {b}명','重新開始':'다시 시작','返回首頁':'홈으로',
   '聽':'텐파이','吃':'치','碰':'폰','槓':'캉','胡':'론','過':'패스','出牌':'버리기',
   '要怎麼吃？':'어떻게 치나요?','要怎麼吃':'치기','取消不吃':'취소','選擇吃法':'치 조합 선택',
   '攤牌畫面':'공개 화면','胡牌！':'화료!','自摸 8台':'쯔모 8타이','下一局':'다음 판','退出':'나가기',
@@ -2220,15 +2223,15 @@ function endGame(winnerIdx,selfDraw){
     const iAmWinner = winnerIdx===2;
     const iPay = payers.includes(2); // 你是否要付錢
     const lastP=G.players[G.lastDiscarder];
-    // 本場統計(自己 = seat 2):淨計台數 / 淨計底數
+    // 本場統計(自己 = seat 2):台數=胡的台數、底數=胡到的家數(自摸3家/放炮胡1家);輸的局扣回去 → 可為負
     myStats.plays++;
     if(winnerIdx===2){
       myStats.wins++;
-      myStats.tai += ct.tai*payers.length + (dealerExtraTai||0);
-      myStats.base += BASE*payers.length;
+      myStats.tai += ct.tai;
+      myStats.base += (selfDraw?3:1);
     }else if(payers.includes(2)){
-      myStats.tai -= ct.tai + ((dealerExtraTai && dealer===2)?dealerExtraTai:0);
-      myStats.base -= BASE;
+      myStats.tai -= ct.tai;
+      myStats.base -= 1;
     }
     // —— 台數明細共用 ——
     function taiRows(){
@@ -2324,11 +2327,12 @@ function showModeChooser(){
   opts.forEach(function(o){
     const b=document.createElement('button');
     b.className='btn'; b.style.cssText='display:block;width:100%;text-align:left;padding:14px 16px';
-    b.innerHTML='<b style="font-size:17px">'+o[1]+'</b><div class="small muted" style="margin-top:3px;font-weight:400">'+o[2]+'</div>';
+    b.innerHTML='<b style="font-size:18px;color:var(--text-main)">'+o[1]+'</b><div style="margin-top:5px;font-size:13.5px;font-weight:500;color:var(--text-main);opacity:.85;line-height:1.45">'+o[2]+'</div>';
     b.onclick=function(){ beginSession(o[0]); };
     box.appendChild(b);
   });
   document.getElementById('mode-mask').classList.remove('hidden');
+  const bb=document.getElementById('bottom-bar'); if(bb) bb.style.display='none'; // #1: 退出被遮罩蓋住沒作用
 }
 function beginSession(mode){
   gameMode=(mode==='circle'||mode==='jiang')?mode:'free';
@@ -2336,12 +2340,14 @@ function beginSession(mode){
   roundNo=1; handsAtRoundStart=1; circlesDone=0;
   myStats.wins=0; myStats.tai=0; myStats.base=0; myStats.plays=0;
   const m=document.getElementById('mode-mask'); if(m) m.classList.add('hidden');
+  const bb=document.getElementById('bottom-bar'); if(bb) bb.style.display='';
   startGame();
 }
 function _sgn(v){ return (v>0?'+':(v<0?'−':''))+Math.abs(v); }
 function endSession(){
   stopTurnClock(); stopNextRoundTimer();
   document.getElementById('result-mask').classList.add('hidden');
+  const bb=document.getElementById('bottom-bar'); if(bb) bb.style.display='none'; // 同上:避免底部「退出」被遮罩蓋住
   const mt=document.getElementById('sum-mode');
   if(mt){ mt.textContent=(gameMode==='jiang')?tl('一將'):tl('一圈'); }
   const box=document.getElementById('sum-body');
@@ -2349,7 +2355,7 @@ function endSession(){
     box.innerHTML='<div>'+tf('共 {n} 局',{n:myStats.plays})+'</div>'+
       '<div>'+tf('你胡 {w} 局',{w:myStats.wins})+'</div>'+
       '<div style="font-size:20px;font-weight:900;color:var(--primary)">'+tf('累計台數 {t} 台',{t:_sgn(myStats.tai)})+'</div>'+
-      '<div style="font-size:20px;font-weight:900;color:var(--primary)">'+tf('累計底數 {b} 底',{b:_sgn(myStats.base)})+'</div>';
+      '<div style="font-size:20px;font-weight:900;color:var(--primary)">'+tf('累計底數 {b} 家',{b:_sgn(myStats.base)})+'</div>';
   }
   document.getElementById('summary-mask').classList.remove('hidden');
 }
@@ -2523,6 +2529,7 @@ document.getElementById('btn-replay').addEventListener('click',replay);
 document.getElementById('btn-back-lobby').addEventListener('click',backLobby);
 document.getElementById('btn-sum-home').addEventListener('click',backLobby);
 document.getElementById('btn-sum-again').addEventListener('click',function(){ document.getElementById('summary-mask').classList.add('hidden'); showModeChooser(); });
+document.getElementById('btn-mode-quit').addEventListener('click',quitGame);
 renderLobby();
 log('👋 歡迎遊玩台灣16張麻將!');
 </script>
