@@ -608,6 +608,27 @@ h1,h2,h3,h4,button{font-family:var(--font-ui);text-transform:none;letter-spacing
   </div>
 </div>
 
+<!-- 局數模式選擇(點「開始遊戲」後) -->
+<div class="modal-mask hidden" id="mode-mask" style="background:rgba(0,0,0,.55);z-index:75">
+  <div class="modal" style="max-width:520px">
+    <h2 id="mode-title" style="font-size:19px;color:var(--primary);margin-bottom:4px">選擇局數</h2>
+    <div id="mode-opts" style="display:flex;flex-direction:column;gap:10px;margin-top:12px"></div>
+  </div>
+</div>
+
+<!-- 本場總結算(一圈 / 一將 打完) -->
+<div class="modal-mask hidden" id="summary-mask" style="background:rgba(0,0,0,.6);z-index:78">
+  <div class="modal" style="max-width:520px;text-align:center">
+    <h2 style="font-size:22px;color:var(--primary);margin-bottom:2px">本場結束</h2>
+    <div class="small muted" id="sum-mode" style="margin-bottom:14px"></div>
+    <div id="sum-body" style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700"></div>
+    <div style="display:flex;justify-content:center;gap:10px;margin-top:16px">
+      <button class="btn sm" id="btn-sum-home" style="width:120px;padding:10px 0;font-size:14px">返回首頁</button>
+      <button class="btn sm ghost" id="btn-sum-again" style="width:120px;padding:10px 0;font-size:14px">重新開始</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ================= 基本資料 ================= */
 const WINDS = ['東','南','西','北'];
@@ -617,9 +638,12 @@ const SUITS = ['wan','tong','tiao'];
 
 /* ================= i18n (zh/en) — 語言沿用大廳 localStorage mj_lang ================= */
 const LANGS=['zh','en','ja','ko'];
-const LNAMES={zh:'中',en:'EN',ja:'日',ko:'韓'};
+const LNAMES={zh:'中',en:'EN',ja:'日',ko:'한'};
 const MJ_LANG = (function(){ try{ var v=localStorage.getItem('mj_lang'); if(v==='en'||v==='zh'||v==='ja'||v==='ko') return v; }catch(e){} try{ var ls=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'']; for(var i=0;i<ls.length;i++){ var t=(ls[i]||'').toLowerCase(); if(t.indexOf('zh')===0) return 'zh'; if(t.indexOf('ja')===0) return 'ja'; if(t.indexOf('ko')===0) return 'ko'; } if(ls.length&&ls[0]) return 'en'; }catch(e){} return 'zh'; })();
 const EN = {
+  '選擇局數':'Game length','隨意':'Free','一圈':'One round','一將':'One set',
+  '不限局數,按「退出」結束':'No limit — end anytime with Exit','打完一圈(四家各作莊一次)':'Play one round (each player deals once)','打完四圈(至少 16 局)':'Play four rounds (16 hands minimum)',
+  '本場結束':'Session complete','共 {n} 局':'{n} hands played','你胡 {w} 局':'You won {w}','累計台數 {t} 台':'Total tai {t}','累計底數 {b} 底':'Total base {b}','重新開始':'Play again','返回首頁':'Home',
   '聽':'READY','吃':'Chi','碰':'Pong','槓':'Kong','胡':'Hu','過':'Pass','出牌':'Discard',
   '要怎麼吃？':'How to chi?','要怎麼吃':'How to chi','取消不吃':'Cancel','選擇吃法':'Choose chi',
   '攤牌畫面':'Reveal','胡牌！':'Win!','自摸 8台':'Self-draw 8 tai','下一局':'Next','退出':'Exit',
@@ -687,6 +711,9 @@ const EN = {
   '！':'!'
 };
 const JA = {
+  '選擇局數':'対局数','隨意':'自由','一圈':'1回戦','一將':'1将',
+  '不限局數,按「退出」結束':'回数無制限 — 終了は「退出」','打完一圈(四家各作莊一次)':'1回戦(4人とも親を1回)','打完四圈(至少 16 局)':'4回戦(最低16局)',
+  '本場結束':'対局終了','共 {n} 局':'{n}局','你胡 {w} 局':'アガリ {w}回','累計台數 {t} 台':'合計台数 {t}','累計底數 {b} 底':'合計底 {b}','重新開始':'もう一度','返回首頁':'ホームへ',
   '聽':'テンパイ','吃':'チー','碰':'ポン','槓':'カン','胡':'ロン','過':'パス','出牌':'打牌',
   '要怎麼吃？':'どうチーする?','要怎麼吃':'チーの仕方','取消不吃':'キャンセル','選擇吃法':'チーの組み合わせ',
   '攤牌畫面':'公開画面','胡牌！':'アガリ!','自摸 8台':'ツモ 8台','下一局':'次の局','退出':'退出',
@@ -754,6 +781,9 @@ const JA = {
   '！':'!'
 };
 const KO = {
+  '選擇局數':'대국 수','隨意':'자유','一圈':'1라운드','一將':'1장',
+  '不限局數,按「退出」結束':'제한 없음 — 「나가기」로 종료','打完一圈(四家各作莊一次)':'1라운드(4명 각 1회 친)','打完四圈(至少 16 局)':'4라운드(최소 16판)',
+  '本場結束':'대국 종료','共 {n} 局':'{n}판','你胡 {w} 局':'화료 {w}회','累計台數 {t} 台':'합계 타이 {t}','累計底數 {b} 底':'합계 바닥 {b}','重新開始':'다시 시작','返回首頁':'홈으로',
   '聽':'텐파이','吃':'치','碰':'폰','槓':'캉','胡':'론','過':'패스','出牌':'버리기',
   '要怎麼吃？':'어떻게 치나요?','要怎麼吃':'치기','取消不吃':'취소','選擇吃法':'치 조합 선택',
   '攤牌畫面':'공개 화면','胡牌！':'화료!','自摸 8台':'쯔모 8타이','下一局':'다음 판','退出':'나가기',
@@ -1045,7 +1075,7 @@ function isUniqueWait(hand, openMelds, winTile){
   return winKinds===1 && winKey===winTile.s+winTile.n;
 }
 
-function calcTai(hand, selfDraw, isDealer, seatIdx, roundNo, streak, melds, flowers, meldTiles, winTile, discarderIsDealer, ctx){
+function calcTai(hand, selfDraw, isDealer, seatIdx, roundWindIdx, streak, melds, flowers, meldTiles, winTile, discarderIsDealer, ctx){
   // 依 mahjongtw.com 台數表為標準(John 2026-09-08 定案)。與後端引擎 calcTai 相同規則。
   ctx=ctx||{};
   const all=[...hand, ...(meldTiles||[])];
@@ -1060,7 +1090,7 @@ function calcTai(hand, selfDraw, isDealer, seatIdx, roundNo, streak, melds, flow
   const seatWindName=seatWind(seatIdx);
   const WIND_SEQ=['東','南','西','北'];
   const windIdx=WIND_SEQ.indexOf(seatWindName); // 0東1南2西3北
-  const roundWind=(roundNo<=4?'東':'南');
+  const roundWind=['東','南','西','北'][Math.max(0,Math.min(3,roundWindIdx|0))]; // 圈風:支援東南西北四圈(一將)
   const fengNo=w=>w==='東'?1:w==='南'?2:w==='西'?3:4;
   const hasHonor=all.some(x=>x.s==='feng'||x.s==='jian');
   // 牌張計數
@@ -1244,6 +1274,12 @@ let roundNo=1;
 let dealerStreak=1;   // 連莊次數(含本局, 1=無連莊); 莊家胡牌才連莊
 let lastHuSeat=-1;    // 上局胡牌者(-1=流局)
 let winKongDraw=false;  // 本局胡牌是否為槓上開花(槓後補牌自摸)
+// —— 局數模式 / 本場統計(2026-10-12 John) ——
+let gameMode='free';        // 'free'(隨意) | 'circle'(一圈) | 'jiang'(一將)
+let dealerStart=1;          // 本場起始莊(判定搬莊完成一圈)
+let circlesDone=0;          // 本場已完成圈數
+let handsAtRoundStart=1;    // 本圈開始時的局號(顯示圈內局數)
+const myStats={wins:0, tai:0, base:0, plays:0}; // 自己的本場統計(淨計台/底)
 
 function seatInfo(i){return SEATS[i]}
 
@@ -1482,7 +1518,7 @@ async function deal(){
   for(let i=0;i<4;i++){G.players.push({hand:[],melds:[],river:[],hiddenCnt:16,name:(i===2?ME.name:AI_NAMES[i<2?i:i-1]),flowers:[]});}
   turn=dealer;
   renderWall();
-  document.getElementById('r-label').textContent=tl(roundNo<=4?'東風圈':'南風圈')+' '+tf('第{n}局',{n:roundNo});
+  updateRoundLabel();
   document.getElementById('dealer-label').textContent=seatWind(dealer);
   document.getElementById('dealer-badge').classList.remove('hidden');
   document.getElementById('dealer-badge').textContent=tl('莊')+' '+seatWind(dealer);
@@ -2166,7 +2202,7 @@ function endGame(winnerIdx,selfDraw){
     const huaHu=(p.flowers||[]).length>=8; // 花胡(八仙過海)
     const meldTiles=(p.melds||[]).flatMap(m=>m.tiles);
     const winTileX=huaHu?null:(selfDraw?G.drawTile:G.lastDiscard);
-    const ct=calcTai(p.hand,selfDraw,winnerIdx===dealer, winnerIdx, roundNo, dealerStreak, p.melds||[], p.flowers, meldTiles, winTileX, !selfDraw && G.lastDiscarder===dealer, {gangShang: selfDraw && winKongDraw, haiDi: !!selfDraw && G.wall.length===0, heDi: !selfDraw && G.wall.length===0, tianHu: !!selfDraw && winnerIdx===dealer && G._discardsMade===0, diHu: !!selfDraw && winnerIdx!==dealer && !!G._curFirstDraw && G._discardsMade<=1, renHu: !selfDraw && winnerIdx!==dealer && G._discardsMade===1 && G.lastDiscarder===dealer, tianTing: winnerIdx===dealer && !!G._dealerInitialTenpai, diTing: winnerIdx!==dealer && !!G._seatFirstDrawTenpai[winnerIdx]});
+    const ct=calcTai(p.hand,selfDraw,winnerIdx===dealer, winnerIdx, circlesDone, dealerStreak, p.melds||[], p.flowers, meldTiles, winTileX, !selfDraw && G.lastDiscarder===dealer, {gangShang: selfDraw && winKongDraw, haiDi: !!selfDraw && G.wall.length===0, heDi: !selfDraw && G.wall.length===0, tianHu: !!selfDraw && winnerIdx===dealer && G._discardsMade===0, diHu: !!selfDraw && winnerIdx!==dealer && !!G._curFirstDraw && G._discardsMade<=1, renHu: !selfDraw && winnerIdx!==dealer && G._discardsMade===1 && G.lastDiscarder===dealer, tianTing: winnerIdx===dealer && !!G._dealerInitialTenpai, diTing: winnerIdx!==dealer && !!G._seatFirstDrawTenpai[winnerIdx]});
     // 注意: winVerb 必須在 ct 之後(ct.tai 判斷屁胡 0 台)
     const winVerb=huaHu?'花胡':(ct.tai===0?'屁胡':(selfDraw?'自摸':'胡牌'));
     lastHuSeat=winnerIdx;
@@ -2184,6 +2220,16 @@ function endGame(winnerIdx,selfDraw){
     const iAmWinner = winnerIdx===2;
     const iPay = payers.includes(2); // 你是否要付錢
     const lastP=G.players[G.lastDiscarder];
+    // 本場統計(自己 = seat 2):淨計台數 / 淨計底數
+    myStats.plays++;
+    if(winnerIdx===2){
+      myStats.wins++;
+      myStats.tai += ct.tai*payers.length + (dealerExtraTai||0);
+      myStats.base += BASE*payers.length;
+    }else if(payers.includes(2)){
+      myStats.tai -= ct.tai + ((dealerExtraTai && dealer===2)?dealerExtraTai:0);
+      myStats.base -= BASE;
+    }
     // —— 台數明細共用 ——
     function taiRows(){
       let r='';
@@ -2247,9 +2293,65 @@ function replay(){
   document.getElementById('result-mask').classList.add('hidden');
   roundNo++;
   document.getElementById('logbox').innerHTML='';
+  let advanced=false;
   if(lastHuSeat===dealer || lastHuSeat===-1){ dealerStreak++; /* 莊家胡牌或臭莊流局 → 連莊, dealer 不變 */ }
-  else { dealer=(dealer+1)%4; dealerStreak=1; }
+  else { dealer=(dealer+1)%4; dealerStreak=1; advanced=true; }
+  // 搬莊回到本場起始莊 → 完成一圈
+  if(advanced && dealer===dealerStart){ circlesDone++; handsAtRoundStart=roundNo; }
+  // 局數達標(一圈=1圈 / 一將=4圈) → 出總結算,結束本場
+  if(gameMode!=='free' && circlesDone>=(gameMode==='circle'?1:4)){ endSession(); return; }
   startGame();
+}
+
+/* ================= 局數模式(隨意 / 一圈 / 一將) ================= */
+function updateRoundLabel(){
+  const winds=['東風圈','南風圈','西風圈','北風圈'];
+  const inRound=(roundNo-handsAtRoundStart)+1;
+  let s=tl(winds[Math.min(circlesDone,3)])+' '+tf('第{n}局',{n:inRound});
+  if(gameMode==='circle') s+=' · '+tl('一圈');
+  else if(gameMode==='jiang') s+=' · '+tl('一將')+' '+Math.min(circlesDone+1,4)+'/4';
+  const el=document.getElementById('r-label'); if(el) el.textContent=s;
+}
+function showModeChooser(){
+  const box=document.getElementById('mode-opts'); if(!box) return;
+  const t=document.getElementById('mode-title'); if(t) t.textContent=tl('選擇局數');
+  const opts=[
+    ['free', tl('隨意'), tl('不限局數,按「退出」結束')],
+    ['circle', tl('一圈'), tl('打完一圈(四家各作莊一次)')],
+    ['jiang', tl('一將'), tl('打完四圈(至少 16 局)')]
+  ];
+  box.innerHTML='';
+  opts.forEach(function(o){
+    const b=document.createElement('button');
+    b.className='btn'; b.style.cssText='display:block;width:100%;text-align:left;padding:14px 16px';
+    b.innerHTML='<b style="font-size:17px">'+o[1]+'</b><div class="small muted" style="margin-top:3px;font-weight:400">'+o[2]+'</div>';
+    b.onclick=function(){ beginSession(o[0]); };
+    box.appendChild(b);
+  });
+  document.getElementById('mode-mask').classList.remove('hidden');
+}
+function beginSession(mode){
+  gameMode=(mode==='circle'||mode==='jiang')?mode:'free';
+  dealer=1; dealerStart=1; dealerStreak=1; lastHuSeat=-1; winKongDraw=false;
+  roundNo=1; handsAtRoundStart=1; circlesDone=0;
+  myStats.wins=0; myStats.tai=0; myStats.base=0; myStats.plays=0;
+  const m=document.getElementById('mode-mask'); if(m) m.classList.add('hidden');
+  startGame();
+}
+function _sgn(v){ return (v>0?'+':(v<0?'−':''))+Math.abs(v); }
+function endSession(){
+  stopTurnClock(); stopNextRoundTimer();
+  document.getElementById('result-mask').classList.add('hidden');
+  const mt=document.getElementById('sum-mode');
+  if(mt){ mt.textContent=(gameMode==='jiang')?tl('一將'):tl('一圈'); }
+  const box=document.getElementById('sum-body');
+  if(box){
+    box.innerHTML='<div>'+tf('共 {n} 局',{n:myStats.plays})+'</div>'+
+      '<div>'+tf('你胡 {w} 局',{w:myStats.wins})+'</div>'+
+      '<div style="font-size:20px;font-weight:900;color:var(--primary)">'+tf('累計台數 {t} 台',{t:_sgn(myStats.tai)})+'</div>'+
+      '<div style="font-size:20px;font-weight:900;color:var(--primary)">'+tf('累計底數 {b} 底',{b:_sgn(myStats.base)})+'</div>';
+  }
+  document.getElementById('summary-mask').classList.remove('hidden');
 }
 
 /* ================= 大廳 ================= */
@@ -2361,7 +2463,7 @@ function startGame(){
 
 /* ================= init ================= */
 
-document.getElementById('btn-start').addEventListener('click',startGame);
+document.getElementById('btn-start').addEventListener('click',showModeChooser);
 document.getElementById('btn-custom-add').addEventListener('click',submitCustom);
 document.getElementById('c-tai').addEventListener('input',updateBuyin);
 document.getElementById('c-base').addEventListener('input',updateBuyin);
@@ -2378,7 +2480,9 @@ if(qTai>0&&qBase>0){
     if(e1)e1.value=qTai; if(e2)e2.value=qBase;
   }
 }
-setTimeout(startGame,120); // 直接進牌桌
+// 進牌桌前:先選局數(隨意 / 一圈 / 一將);?mode= 可指定
+const qMode=QP.get('mode');
+setTimeout(function(){ if(qMode==='free'||qMode==='circle'||qMode==='jiang'){ beginSession(qMode); } else { showModeChooser(); } },120);
 window.openLangMenu=function(e){ if(e&&e.stopPropagation) e.stopPropagation(); var m=document.getElementById('lang-menu'); if(m) m.classList.toggle('on'); };
 window.chooseLang=function(l){ try{ localStorage.setItem('mj_lang', l); }catch(e){} location.reload(); };
 document.addEventListener('click', function(){ var m=document.getElementById('lang-menu'); if(m) m.classList.remove('on'); });
@@ -2417,6 +2521,8 @@ document.getElementById('btn-replay').addEventListener('click',replay);
   window.addEventListener('pointerup',()=>{ if(drag){ if(drag.el) drag.el.style.cursor='grab'; drag=null; } });
 })();
 document.getElementById('btn-back-lobby').addEventListener('click',backLobby);
+document.getElementById('btn-sum-home').addEventListener('click',backLobby);
+document.getElementById('btn-sum-again').addEventListener('click',function(){ document.getElementById('summary-mask').classList.add('hidden'); showModeChooser(); });
 renderLobby();
 log('👋 歡迎遊玩台灣16張麻將!');
 </script>
