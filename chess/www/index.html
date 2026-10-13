@@ -136,10 +136,10 @@ h1{font-size:17px;margin:0;color:var(--gold);letter-spacing:3px;font-weight:600}
     <button class="b" id="bExit">退出</button>
   </div>
 </div>
-<div id="lobby"><div class="lb-title" id="lbTitle">單機西洋棋</div><div id="lbLevels"></div><div id="lbTools"><button class="lb-t" id="lbRules">規則</button><button class="lb-t" id="lbAbout">關於</button><button class="lb-t" id="lbLang">中文 ▾</button><div id="langMenu"><button type="button" data-l="zh">中文</button><button type="button" data-l="en">English</button><button type="button" data-l="ja">日本語</button><button type="button" data-l="ko">한국어</button></div></div><button class="lb-go" id="lbStart"></button><div id="lbFoot" style="margin-top:12px;font-size:12px;color:#c2ab84;text-align:center">© XOIO · <a href="https://xoio.io" target="_blank" rel="noopener" style="color:#2ad49e;text-decoration:none">xoio.io</a></div></div>
+<div id="lobby"><div class="lb-title" id="lbTitle">單機西洋棋</div><div id="lbLevels"></div><div id="lbTools"><button class="lb-t" id="lbRules">規則</button><button class="lb-t" id="lbAbout">關於</button><button class="lb-t" id="lbLang">中文 ▾</button><div id="langMenu"><button type="button" data-l="zh">中文</button><button type="button" data-l="en">English</button><button type="button" data-l="ja">日本語</button><button type="button" data-l="ko">한국어</button></div></div><button class="lb-go" id="lbStart"></button><div id="lbFoot" style="margin-top:12px;font-size:12px;color:#c2ab84;text-align:center">© XOIO</div></div>
 <div id="rules"><div class="ov-card"><h3 id="ruT">規則</h3><div class="txt" id="ruB"></div><div id="ruFigs"></div><button class="ov-x" id="ruX">關閉</button></div></div>
 <div id="about"><div class="ov-card"><h3 id="abT">關於</h3><div class="txt" id="abB"></div><div class="txt" style="margin-top:10px">&#9993; <a href="mailto:io@xoio.io" style="color:#2ad49e;text-decoration:none">io@xoio.io</a></div>
-<div class="txt" style="margin-top:6px">&#127760; <a href="https://xoio.io" target="_blank" rel="noopener" style="color:#2ad49e;text-decoration:none">xoio.io</a></div><button class="ov-x" id="abX">關閉</button></div></div>
+<button class="ov-x" id="abX">關閉</button></div></div>
 <div id="promo"><div class="box" id="promoBox"></div></div>
 
 <script>
@@ -325,7 +325,7 @@ function bookMove(s){
   var pick=arr[Math.floor(Math.random()*arr.length)];
   for(var i=0;i<legal.length;i++)if(legal[i].from===pick[0]&&legal[i].to===pick[1])return legal[i];}
  return null;}
-function POSKEY(s){return s.turn+'|'+s.cast+'|'+s.b.join('');}
+function POSKEY(s){return s.turn+'|'+s.cast+'|'+s.b.map(function(x){return x||'.';}).join('');}
 function buildBook(lines){
  var book={};
  lines.forEach(function(seq){
@@ -431,7 +431,7 @@ function aiTurn(){
   document.getElementById('thk').textContent=''; render(); gameOverCheck(); status();
  },30);
 }
-function posKey(s){var k=s.b.join('')+s.turn+s.cast;if(s.ep>=0){var f=F(s.ep),r=R(s.ep),rp=r+((s.turn==='w')?1:-1),can=false;if(rp>=0&&rp<8){if(f-1>=0){var p1=s.b[rp*8+f-1];if(p1&&p1.toUpperCase()==='P'&&col(p1)===s.turn)can=true;}if(f+1<8){var p2=s.b[rp*8+f+1];if(p2&&p2.toUpperCase()==='P'&&col(p2)===s.turn)can=true;}}if(can)k+='|e'+s.ep;}return k;}
+function posKey(s){var k=s.b.map(function(x){return x||'.';}).join('')+s.turn+s.cast;if(s.ep>=0){var f=F(s.ep),r=R(s.ep),rp=r+((s.turn==='w')?1:-1),can=false;if(rp>=0&&rp<8){if(f-1>=0){var p1=s.b[rp*8+f-1];if(p1&&p1.toUpperCase()==='P'&&col(p1)===s.turn)can=true;}if(f+1<8){var p2=s.b[rp*8+f+1];if(p2&&p2.toUpperCase()==='P'&&col(p2)===s.turn)can=true;}}if(can)k+='|e'+s.ep;}return k;}
 function insufficient(s){
  var pc=[],w=0,b=0,bs=[];
  for(var i=0;i<64;i++){var p=s.b[i];if(!p)continue;var t=p.toUpperCase();if(t==='K')continue;
