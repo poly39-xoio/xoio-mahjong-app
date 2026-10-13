@@ -448,12 +448,12 @@ function insufficient(s){
 /* ===== 音效(WebAudio 合成,離線、無音檔;iOS 需手勢解鎖) ===== */
 var _actx=null, sndOn=true;
 try{ sndOn = (localStorage.getItem('ch_snd')!=='0'); }catch(e){}
-function actx(){ try{ if(!_actx){_actx=new (window.AudioContext||window.webkitAudioContext)();} if(_actx&&_actx.state==='suspended')_actx.resume(); }catch(e){} return _actx; }
-['pointerdown','touchstart','keydown','click'].forEach(function(ev){ window.addEventListener(ev,function(){ actx(); }); });
-document.addEventListener('visibilitychange',function(){ try{ if(!document.hidden) actx(); }catch(e){} });
-window.addEventListener('pageshow',function(){ try{ actx(); }catch(e){} });
-function beep(freq,dur,type,vol,when,slideTo){ var c=actx(); if(!c||!sndOn)return;
- if(c.state==='suspended'){ try{ c.resume(); }catch(e){} } if(c.state==='closed')return;
+function actx(){ if(!_actx){ try{ _actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ _actx=false; } } if(_actx&&_actx.state==='closed'){ _actx=null; try{ _actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ _actx=false; } } if(_actx&&_actx.state!=='running'){ try{ _actx.resume(); }catch(e){} } return _actx; }
+function unlockAudio(){ var a=actx(); if(a&&a.state!=='running'){ try{ a.resume(); }catch(e){} } }
+['pointerdown','touchstart','keydown','click'].forEach(function(ev){ window.addEventListener(ev,unlockAudio,{passive:true}); });
+document.addEventListener('visibilitychange',function(){ if(!document.hidden) unlockAudio(); });
+window.addEventListener('focus',unlockAudio); window.addEventListener('pageshow',unlockAudio);
+function beep(freq,dur,type,vol,when,slideTo){ var c=actx(); if(!c||!sndOn)return; if(c.state!=='running'){ try{ c.resume(); }catch(e){} }
  try{
  var t0=c.currentTime+(when||0), o=c.createOscillator(), g=c.createGain();
  o.type=type||'sine'; o.frequency.value=freq; if(slideTo)o.frequency.exponentialRampToValueAtTime(slideTo,t0+dur);
