@@ -537,7 +537,7 @@ function gameOverCheck(){
 function status(msg){
  var el=document.getElementById('status'); if(msg){el.textContent=msg;return;}
  if(over)return;
- if(inCheck(st,st.turn))el.textContent=t('check'); else if(st.turn!==human)el.textContent=t('think'); else el.textContent='';
+ if(inCheck(st,st.turn))el.textContent=t('check'); else if(st.turn!==human)el.textContent=t('think'); else el.textContent=t('you');
 }
 function askPromo(cb){var box=document.getElementById('promoBox');box.innerHTML='<div class="pt">'+t('promo')+'</div><div class="prow"></div>';var row=box.querySelector('.prow');[['Q','pq'],['R','pr'],['B','pb'],['N','pn']].forEach(function(x){
  var d=document.createElement('div');d.className='p';d.innerHTML=pieceSVG(x[0].toLowerCase(),human==='w')+'<span class="pl">'+t(x[1])+'</span>';d.onclick=function(){document.getElementById('promo').classList.remove('on');cb(x[0]);};row.appendChild(d);});
