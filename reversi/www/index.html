@@ -41,7 +41,7 @@ header{width:100%;max-width:560px;display:flex;align-items:center;justify-conten
 .disc.on{transform:scale(1)}
 .disc.b{background:radial-gradient(circle at 35% 30%,#5c5c5c,#141414 72%)}
 .disc.w{background:radial-gradient(circle at 35% 30%,#ffffff,#d9d9d2 72%)}
-.disc.flip{animation:rvflip .34s ease}
+.disc.flip{animation:rvflip .52s ease}
 @keyframes rvflip{0%{transform:scale(1) rotateY(0)}49%{transform:scale(1) rotateY(88deg)}50%{transform:scale(0.2,1)}100%{transform:scale(1) rotateY(0)}}
 .cell.legal::after{content:'';width:24%;height:24%;border-radius:50%;background:rgba(20,86,56,.75);box-shadow:0 0 6px rgba(20,86,56,.5)}
 .cell.last::before{content:'';position:absolute;inset:0;border:3px solid #0e6b45;border-radius:6px;z-index:3}
@@ -260,7 +260,9 @@ function sLose(){beep(400,0.14,'sine',0.14);beep(260,0.24,'sine',0.14,0.14);}
 
 /* ===== 狀態 ===== */
 var board=newBoard(), turn=BLACK, over=false, level=2, twoP=false, lastMove=-1, hist=[], hintIdx=-1, busy=false, prevBoard=board.slice();
-var previewIdx=-1, seq=0, MOVE_PAUSE=460, AI_DELAY=700;
+var previewIdx=-1, seq=0, AI_DELAY=820;
+var FLIP_START=240, FLIP_STAGGER=95, FLIP_DUR=520;   /* 落子後先停一下,再逐顆翻,看得清 */
+function flipSpan(n){n=n||0;return FLIP_START+Math.max(0,n-1)*FLIP_STAGGER+FLIP_DUR+120;}
 // seq:每次新局/退出/悔棋都 +1 → 讓先前排定的計時器自動失效
 function later(fn,ms){var s=seq;return setTimeout(function(){if(s===seq)fn();},ms);}
 var boardEl=document.getElementById('board');
@@ -272,12 +274,14 @@ function render(){
   var pf=flips(board,(previewIdx/8)|0,previewIdx%8,turn);
   if(pf){pvSet=pf;pvColor=turn;} else previewIdx=-1;
  }
+ var flN=0;
  for(var i=0;i<64;i++){
   var el=cells[i]; el.className='cell';
   var d=el.firstChild; var v=board[i];
   d.className='disc '+(v===BLACK?'b':(v===WHITE?'w':''));
+  d.style.animationDelay='';
   if(v!==EMPTY)d.classList.add('on');
-  if(prevBoard[i]!==EMPTY && v!==EMPTY && prevBoard[i]!==v) d.classList.add('flip');
+  if(prevBoard[i]!==EMPTY && v!==EMPTY && prevBoard[i]!==v){ d.classList.add('flip'); d.style.animationDelay=(FLIP_START+flN*FLIP_STAGGER)+'ms'; flN++; }
   if(i===lastMove)el.classList.add('last');
   if(!over&&humanTurn&&!busy&&flips(board,(i/8)|0,i%8,turn)) el.classList.add('legal');
   if(i===hintIdx)el.classList.add('hint');
@@ -310,9 +314,9 @@ function onCell(i){
 function doMove(r,c,p){
  hist.push({b:board.slice(),turn:turn,last:lastMove,twoP:twoP});
  var f=applyMove(board,r,c,p); lastMove=I(r,c); hintIdx=-1; previewIdx=-1;
- if(f&&f.length){ sPlace(); var n=Math.min(f.length,6); for(var k=0;k<n;k++){(function(k){later(function(){sFlip();},45+k*60);})(k);} }
+ if(f&&f.length){ sPlace(); var n=Math.min(f.length,8); for(var k=0;k<n;k++){(function(k){later(function(){sFlip();},FLIP_START+k*FLIP_STAGGER);})(k);} }
  render();
- if(!gameOverCheck()) later(nextTurn, p===WHITE?560:MOVE_PAUSE);
+ if(!gameOverCheck()) later(nextTurn, flipSpan(f?f.length:0)+(p===WHITE?300:0));
 }
 function nextTurn(){
  var other=opp(turn);
