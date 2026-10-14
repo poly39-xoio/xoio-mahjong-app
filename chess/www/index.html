@@ -354,8 +354,10 @@ function bestMove(s,level){
    var sc=(s.b[m.to]?VAL[s.b[m.to].toUpperCase()]:0)+((m.flag==='p')?800:0)+((m.flag==='e')?900:0)+Math.random()*25;
    unmakeMove(s,u); if(sc>bv){bv=sc;best=m;}}
   return best||ms[0];}
- var capMS={2:160,3:750,4:2500}[level]||1200;
- var maxD={2:4,3:7,4:12}[level]||6;
+ var blunder={2:0.32,3:0.16,4:0.0}[level]||0.32;   // 低等級刻意失誤;高手=0(不失誤)
+ if(Math.random()<blunder)return ms[Math.floor(Math.random()*ms.length)];
+ var capMS={2:250,3:800,4:3200}[level]||1200;
+ var maxD={2:4,3:6,4:16}[level]||6;
  var r=searchRoot(s,maxD,Date.now()+capMS,level);
  if(!r||!r.best)return ms[0];
  return r.best;}
