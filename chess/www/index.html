@@ -354,12 +354,14 @@ function bestMove(s,level){
    var sc=(s.b[m.to]?VAL[s.b[m.to].toUpperCase()]:0)+((m.flag==='p')?800:0)+((m.flag==='e')?900:0)+Math.random()*25;
    unmakeMove(s,u); if(sc>bv){bv=sc;best=m;}}
   return best||ms[0];}
- var blunder={2:0.32,3:0.16}[level]||0;   // 低等級刻意失誤;高手(4)=0(不失誤)
- if(Math.random()<blunder)return ms[Math.floor(Math.random()*ms.length)];
- var capMS={2:250,3:800,4:3200}[level]||1200;
- var maxD={2:4,3:6,4:16}[level]||6;
+ var capMS={2:200,3:700,4:3200}[level]||1200;
+ var maxD={2:3,3:6,4:16}[level]||6;
  var r=searchRoot(s,maxD,Date.now()+capMS,level);
  if(!r||!r.best)return ms[0];
+ var badP={2:0.22,3:0.09}[level]||0;   // 低等級以機率改下「搜尋評分較差」的手;高手(4)=0
+ if(badP>0 && r.scores && r.scores.length>3 && Math.random()<badP){
+  var lo=Math.floor(r.scores.length*0.5);
+  return r.scores[lo+Math.floor(Math.random()*(r.scores.length-lo))].m;}
  return r.best;}
 
 /* ===== UI 狀態 / i18n / 棋子 / applyLang(2026-10-12 補回) ===== */
