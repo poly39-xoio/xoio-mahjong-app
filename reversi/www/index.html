@@ -64,13 +64,13 @@ header{width:100%;max-width:560px;display:flex;align-items:center;justify-conten
 .ovx{margin-top:14px;width:100%;padding:12px 0;border:none;border-radius:12px;background:var(--elem);color:var(--txt);font-weight:800;font-family:inherit}
 .foot{font-size:12px;color:var(--muted)}
 @media (orientation:landscape) and (min-width:640px){
- #app{display:grid;grid-template-columns:auto minmax(150px,230px);grid-template-rows:auto auto auto minmax(0,1fr);align-items:stretch;align-content:center;justify-content:center;column-gap:14px;row-gap:8px;max-width:none;padding:8px 12px}
+ #app{display:grid;grid-template-columns:auto minmax(150px,230px);grid-template-rows:auto auto auto auto;align-items:stretch;align-content:space-between;justify-content:center;column-gap:14px;row-gap:8px;max-width:none;padding:8px 12px}
  #wrap{grid-column:1;grid-row:1 / span 4;display:flex;align-items:center;justify-content:center}
  header{grid-column:2;grid-row:1;width:100%;align-self:start}
  #statusbar{grid-column:2;grid-row:2;width:100%;align-self:start}
- #levels{grid-column:2;grid-row:3;grid-template-columns:1fr 1fr;align-self:start}
- #bar{grid-column:2;grid-row:4;grid-template-columns:1fr;grid-template-rows:repeat(4,1fr);gap:7px;width:100%;align-self:stretch}
- #bar .btn{height:auto}
+ #levels{grid-column:2;grid-row:3;grid-template-columns:repeat(4,1fr);align-self:start}
+ #bar{grid-column:2;grid-row:4;grid-template-columns:1fr;gap:7px;width:100%;align-self:end}
+ #bar .btn{height:48px}
  #board{width:min(94vh,calc(100vw - 300px),640px);height:min(94vh,calc(100vw - 300px),640px)}
 }
 /* ===== 大廳（尺寸/排列對齊西洋棋的大廳）===== */
@@ -101,6 +101,10 @@ header{width:100%;max-width:560px;display:flex;align-items:center;justify-conten
  #lobby .lb-go{width:calc((min(58vw,470px) - 10px)/2);height:56px;font-size:17px}
  #lobby .lb-tools{width:min(58vw,470px)}
  #lobby .lb-tools .lb-btn{height:46px;font-size:15px}
+}
+/* 橫向:大廳所有按鈕統一高度(與遊戲頁一致)*/
+@media (orientation:landscape){
+ #lobby .lb-btn,#lobby .lb-go,#lobby .lb-tools .lb-btn,#lobby .lb-grid .lb-btn{height:48px}
 }
 /* ===== 遊戲內按鈕高度統一 ===== */
 .btn,.m,.lv{height:48px;padding:0;display:flex;align-items:center;justify-content:center;line-height:1}
