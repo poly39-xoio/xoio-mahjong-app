@@ -64,7 +64,7 @@ header{width:100%;max-width:560px;display:flex;align-items:center;justify-conten
 .ovx{margin-top:14px;width:100%;padding:12px 0;border:none;border-radius:12px;background:var(--elem);color:var(--txt);font-weight:800;font-family:inherit}
 .foot{font-size:12px;color:var(--muted)}
 @media (orientation:landscape) and (min-width:640px){
- #app{display:grid;grid-template-columns:auto minmax(150px,230px);grid-template-rows:auto auto auto auto;align-items:stretch;align-content:space-between;justify-content:center;column-gap:14px;row-gap:8px;max-width:none;padding:8px 12px}
+ #app{display:grid;grid-template-columns:auto minmax(150px,230px);grid-template-rows:auto auto auto auto;align-items:stretch;align-content:center;justify-content:center;column-gap:14px;row-gap:8px;max-width:none;padding:8px 12px}
  #wrap{grid-column:1;grid-row:1 / span 4;display:flex;align-items:center;justify-content:center}
  header{grid-column:2;grid-row:1;width:100%;align-self:start}
  #statusbar{grid-column:2;grid-row:2;width:100%;align-self:start}
@@ -98,7 +98,7 @@ header{width:100%;max-width:560px;display:flex;align-items:center;justify-conten
 @media (min-width:700px){
  #lobby .lb-title{font-size:32px}
  #lobby .lb-grid{width:min(58vw,470px)}
- #lobby .lb-go{width:calc((min(58vw,470px) - 10px)/2);height:56px;font-size:17px}
+ #lobby .lb-go{width:calc((min(58vw,470px) - 10px)/2);height:48px;font-size:15px}
  #lobby .lb-tools{width:min(58vw,470px)}
  #lobby .lb-tools .lb-btn{height:48px;font-size:15px}
 }
@@ -155,25 +155,25 @@ header{width:100%;max-width:560px;display:flex;align-items:center;justify-conten
 <script>
 /* ===== i18n ===== */
 var T={
- zh:{app:'翻轉棋',you:'輪到你',think:'電腦思考中…',win:'你贏了! 🎉',lose:'你輸了',draw:'平手',
+ zh:{app:'翻轉棋',appLobby:'單機翻轉棋',you:'輪到你',think:'電腦思考中…',win:'你贏了! 🎉',lose:'你輸了',draw:'平手',
    blackwin:'黑方勝',whitewin:'白方勝',bturn:'黑方走',wturn:'白方走',newg:'新局',undo:'悔棋',hint:'提示',
    resign:'認輸',exit:'退出',confirm:'再點一次確認落子',lv:['入門','初級','中級','高手'],invalid:'這裡不能下',pass:'無處可下,自動跳過',passAi:'電腦無處可下,跳過',noundo:'沒有可悔的棋',how:'教學',close:'關閉',
    modeAi:'對 AI',mode2p:'同機雙人',onlyAi:'提示只用於對 AI 模式',start:'開始遊戲',sub:'離線・無廣告・買斷',about:'關於',abT:'關於',abB:'翻轉棋・SOLO\n\n• 單機 / 離線,免連線\n• 無廣告、無內購,買一次永久玩\n• 對 AI(4 難度,高手近乎完美)+ 同機雙人\n• 四語介面\n\n獨立工作室製作',
    howT:'翻轉棋規則',
    howB:'目標:終局時棋子較多的一方獲勝。\n\n【怎麼下】\n• 落子後,若在橫/豎/斜任一方向「夾住」對方棋子(兩端都是你的子),被夾住的全部翻成你的顏色。\n• 一次落子至少要能翻到一顆,否則不能下;輪到你但無處可下時會「自動跳過」。\n• 雙方都無處可下 → 結束,子多者勝,平手為和。\n\n【口訣/技巧】\n• 搶角:四個角落最穩,永遠不會被翻 → 有機會先佔。\n• 保行動力:讓自己「能下的位置」多、對方少,是關鍵。\n• 別送角:角旁邊的 X 格(斜)與 C 格(邊)很危險,送了常被對手吃角。\n• 開局別貪子,中後段再比子數。\n\n【模式】\n• 對 AI:4 個難度(高手近完美)。\n• 同機雙人:兩人用同一台手機輪流下。'},
- en:{app:'Reversi',you:'Your turn',think:'Computer thinking…',win:'You win! 🎉',lose:'You lose',draw:'Draw',
+ en:{app:'Reversi',appLobby:'Reversi Solo',you:'Your turn',think:'Computer thinking…',win:'You win! 🎉',lose:'You lose',draw:'Draw',
    blackwin:'Black wins',whitewin:'White wins',bturn:'Black to move',wturn:'White to move',newg:'New',undo:'Undo',hint:'Hint',
    resign:'Resign',exit:'Exit',confirm:'Tap again to place',lv:['Easy','Beginner','Medium','Hard'],invalid:'Illegal move',pass:'No move — pass',passAi:'Computer has no move — pass',noundo:'Nothing to undo',how:'Guide',close:'Close',
    modeAi:'vs AI',mode2p:'2 Players',onlyAi:'Hint is for vs-AI mode',start:'Start',sub:'Offline · No ads · one-time',about:'About',abT:'About',abB:'Reversi · SOLO\n\n• Offline, single purchase\n• No ads, no in-app purchases\n• vs AI (4 levels; Hard plays near-perfectly) + 2-player\n• 4 languages\n\nMade by an independent studio',
    howT:'How to play Reversi',
    howB:'Goal: when the game ends, the side with more discs wins.\n\n[HOW]\n• After you place a disc, if it traps a line of the opponent\'s discs (horizontally, vertically or diagonally) between your new disc and one of your existing discs, those trapped discs all flip to your colour.\n• A move must flip at least one disc. If you have no legal move, it is skipped automatically.\n• When neither side can move, the game ends — most discs wins; a tie is a draw.\n\n[TIPS]\n• Corners: the four corners can never be flipped — grab them when safe.\n• Mobility: keep your own legal moves plentiful and your opponent\'s few.\n• Avoid X and C squares (the ones diagonally / along the edge next to a corner) — they hand your opponent the corner.\n• Don\'t get greedy early; count discs at the end.\n\n[MODES]\n• vs AI — 4 levels (Hard plays near-perfectly).\n• 2 Players — take turns on one device.'},
- ja:{app:'リバーシ',you:'あなたの番',think:'考え中…',win:'あなたの勝ち! 🎉',lose:'負けました',draw:'引き分け',
+ ja:{app:'リバーシ',appLobby:'リバーシ・ソロ',you:'あなたの番',think:'考え中…',win:'あなたの勝ち! 🎉',lose:'負けました',draw:'引き分け',
    blackwin:'黒の勝ち',whitewin:'白の勝ち',bturn:'黒の番',wturn:'白の番',newg:'新規',undo:'待った',hint:'ヒント',
    resign:'投了',exit:'やめる',confirm:'もう一度タップで確定',lv:['入門','初級','中級','上級'],invalid:'そこには打てません',pass:'打てる所がなくパス',passAi:'相手はパス',noundo:'戻せる手がありません',how:'遊び方',close:'閉じる',
    modeAi:'AI 対戦',mode2p:'2人対戦',onlyAi:'ヒントはAI対戦のみ',start:'ゲーム開始',sub:'オフライン・広告なし・買い切り',about:'このアプリについて',abT:'このアプリについて',abB:'リバーシ・ソロ\n\n• オフライン対応・買い切り\n• 広告なし・課金なし\n• AI対戦(4段階/上級はほぼ完全)+ 2人対戦\n• 4言語対応\n\n個人スタジオ制作',
    howT:'リバーシの遊び方',
    howB:'目標:終了時に石が多い方が勝ち。\n\n【打ち方】\n• 縦・横・斜めいずれかで相手の石を「挟む」と、挟まれた石は全て自分の色に返ります。\n• 1つも返せない場所には打てません。打てる所が無ければ自動でパス。\n• 両者とも打てなくなったら終了、石が多い方の勝ち(同数は引き分け)。\n\n【コツ】\n• 角:四隅は絶対に返らない → 取れる時は取る。\n• 着手可能数(モビリティ)を自分多く・相手少なく。\n• 角の隣の X と C は打たない方が無難。\n• 序盤は枚数にこだわらない。\n\n【モード】\n• AI 対戦 — 4段階(上級はほぼ完全)。\n• 2人対戦 — 1台で交互に。'},
- ko:{app:'리버시',you:'당신 차례',think:'생각 중…',win:'당신 승리! 🎉',lose:'패배',draw:'무승부',
+ ko:{app:'리버시',appLobby:'리버시 솔로',you:'당신 차례',think:'생각 중…',win:'당신 승리! 🎉',lose:'패배',draw:'무승부',
    blackwin:'흑 승',whitewin:'백 승',bturn:'흑 차례',wturn:'백 차례',newg:'새 게임',undo:'무르기',hint:'힌트',
    resign:'기권',exit:'나가기',confirm:'한 번 더 탭하여 확정',lv:['입문','초급','중급','상급'],invalid:'둘 수 없는 곳',pass:'둘 곳이 없어 패스',passAi:'상대 패스',noundo:'무를 수 없음',how:'방법',close:'닫기',
    modeAi:'AI 대전',mode2p:'2인 대전',onlyAi:'힌트는 AI 대전에서만',start:'시작',sub:'오프라인·광고 없음·1회 구매',about:'정보',abT:'정보',abB:'리버시 · 솔로\n\n• 오프라인·1회 구매\n• 광고 없음·인앱 결제 없음\n• AI 대전(4단계, 상급은 거의 완벽) + 2인 대전\n• 4개 언어\n\n독립 스튜디오 제작',
@@ -390,7 +390,7 @@ var _bl0=document.getElementById('btnLang');if(_bl0)_bl0.onclick=function(e){if(
 document.addEventListener('click',function(){var m=document.getElementById('langMenu');if(m)m.classList.remove('on');});
 function pickLang(l){LANG=(LANGS.indexOf(l)>=0?l:'zh');try{localStorage.setItem('rv_lang',LANG);}catch(e){}
  document.documentElement.lang=(LANG==='zh'?'zh-Hant':LANG);
- document.getElementById('appTitle').textContent=t('app');var _bl1=document.getElementById('btnLang');if(_bl1)_bl1.textContent=LNAME[LANG]+' ▾';
+ document.getElementById('appTitle').textContent=t('app');var _lbt=document.getElementById('lbTitle');if(_lbt)_lbt.textContent=t('appLobby');var _bl1=document.getElementById('btnLang');if(_bl1)_bl1.textContent=LNAME[LANG]+' ▾';
  [].forEach.call(document.querySelectorAll('#langMenu button'),function(b){b.className=(b.getAttribute('data-l')===LANG)?'cur':'';});
  var _bh=document.getElementById('btnHow');if(_bh)_bh.textContent=t('how');
  document.getElementById('bNew').textContent=t('newg');document.getElementById('bUndo').textContent=t('undo');document.getElementById('bHint').textContent=t('hint');
