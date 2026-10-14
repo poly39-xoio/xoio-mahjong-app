@@ -233,20 +233,34 @@ function search(b,p,depth,alpha,beta,ply){
  return best;
 }
 function flipsLen(b,idx,p){var r=(idx/8)|0,c=idx%8;var f=flips(b,r,c,p);return f?f.length:0;}
+function rk(b,idx,p){var r=(idx/8)|0,c=idx%8;var s=(CORNERS.indexOf(idx)>=0?100:0);return s+flipsLen(b,idx,p);}
 function bestMove(b,p,level){
  var moves=legalMoves(b,p); if(!moves.length)return null;
- var empt=64-counts(b).b-counts(b).w, depth,capMs,noise;
- if(level<=1){depth=1;capMs=120;noise=3;}
- else if(level===2){depth=3;capMs=400;noise=1;}
- else if(level===3){depth=6;capMs=1000;noise=0;}
- else {depth=8;capMs=1800;noise=0;}
- if(empt<=12 && level>=3) depth=Math.max(depth,14);   // 殘局加深(近完全解)
- _abort=false;_nodes=0;_deadline=Date.now()+capMs;
- var best=moves[0],bestV=-Infinity,scored=[];
- for(var i=0;i<moves.length;i++){var idx=moves[i],r=(idx/8)|0,c=idx%8,nb=b.slice();applyMove(nb,r,c,p);
-  var v=-search(nb,opp(p),depth-1,-Infinity,Infinity,1); if(_abort && i>0)break;
-  if(noise>0)v+=(Math.random()*2-1)*noise*30; scored.push({idx:idx,v:v}); if(v>bestV){bestV=v;best=idx;}}
- if(noise>0&&scored.length){scored.sort(function(a,b2){return b2.v-a.v;});var top=scored.filter(function(s){return s.v>=scored[0].v-noise*25;});best=top[(Math.random()*top.length)|0].idx;}
+ if(moves.length===1)return moves[0];
+ var empt=64-counts(b).b-counts(b).w, maxDepth,capMs,noise;
+ if(level<=1){maxDepth=1;capMs=160;noise=3;}
+ else if(level===2){maxDepth=3;capMs=520;noise=1;}
+ else if(level===3){maxDepth=7;capMs=1100;noise=0;}
+ else {maxDepth=13;capMs=2000;noise=0;}
+ if(empt<=12 && level>=3) maxDepth=Math.max(maxDepth,16);   // 殘局加深(近完全解)
+ _nodes=0; _deadline=Date.now()+capMs;
+ moves.sort(function(a,c){return rk(b,c,p)-rk(b,a,p);});   // 根節點排序有助剪枝
+ var best=moves[0];
+ for(var d=1; d<=maxDepth; d++){
+  _abort=false;
+  var ordered=[best].concat(moves.filter(function(x){return x!==best;}));  // 上層最佳手先搜
+  var localBest=null, localV=-Infinity;
+  for(var i=0;i<ordered.length;i++){
+   var idx=ordered[i], r=(idx/8)|0, c=idx%8, nb=b.slice(); applyMove(nb,r,c,p);
+   var v=-search(nb,opp(p),d-1,-Infinity,Infinity,1);
+   if(_abort)break;
+   if(noise>0)v+=(Math.random()*2-1)*noise*30;
+   if(v>localV){localV=v;localBest=idx;}
+  }
+  if(_abort)break;                 // 逾時→保留上一個「完整」深度的最佳手(不再回傳殘缺結果)
+  best=localBest; moves=ordered;
+  if(Date.now()>_deadline)break;
+ }
  return best;
 }
 
