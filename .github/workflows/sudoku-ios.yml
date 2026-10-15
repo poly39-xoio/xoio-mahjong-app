@@ -89,3 +89,12 @@ jobs:
           IPA=$(find build/ipa -maxdepth 1 -name '*.ipa' | head -1)
           echo "Uploading $IPA"
           xcrun altool --upload-app -f "$IPA" -t ios --apiKey "$KEYID" --apiIssuer "$ISSUER" --verbose
+
+      # 2026-10-15: 上傳後務必把新 build 加入 TestFlight 內測群組
+      # (數獨原本漏做這步 → build 9/11/12 上傳後沒進群組,TestFlight 看不到)
+      - name: Assign build to internal TestFlight group
+        working-directory: sudoku
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: node scripts/assign_beta_group.mjs
