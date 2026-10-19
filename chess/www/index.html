@@ -49,21 +49,22 @@ h1{font-size:17px;margin:0;color:var(--gold);letter-spacing:3px;font-weight:600}
 #promo .p svg{width:50px;height:50px;flex:none}
 #promo .p .pl{font-size:11px;font-weight:800;color:#e8dcc0}
 #levels{display:none}
-#lobby{position:fixed;inset:0;z-index:30;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:radial-gradient(circle at 50% 0%, #2a2a35, #101014 70%);padding:24px 24px 130px}
+#lobby{--lbw:min(80vw,306px);position:fixed;inset:0;z-index:30;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:radial-gradient(circle at 50% 0%, #2a2a35, #101014 70%);padding:calc(20px + env(safe-area-inset-top,0px)) calc(20px + env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) calc(20px + env(safe-area-inset-left,0px))}
 #lobby.on{display:flex}
-#lobby .lb-title{font-size:26px;font-weight:700;color:#d8c9a8;letter-spacing:6px;transform:translateY(-12px)}
+#lobby>*{flex:0 0 auto}
+#lobby .lb-title{font-size:26px;line-height:1.2;font-weight:700;color:#d8c9a8;letter-spacing:6px;text-align:center}
 #lobby .lb-sub{font-size:14px;color:#e8dcc0}
-#lobby #lbLevels{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:min(80vw,306px)}
+#lobby #lbLevels{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:var(--lbw)}
 #lobby .lb-lv{width:100%;height:48px;padding:0;display:flex;align-items:center;justify-content:center;border:1px solid rgba(247,181,0,.30);border-radius:12px;background:transparent;color:#d9c79a;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;transition:transform .25s,box-shadow .2s,filter .2s,background .12s,color .12s}
 #lobby .lb-lv:hover{background:rgba(247,181,0,.12)}
 #lobby .lb-lv:active{transform:scale(.97);filter:brightness(.9)}
 #lobby .lb-lv.on{background:rgba(247,181,0,.08);border-color:#f7b500;color:#f7b500;box-shadow:0 0 12px rgba(247,181,0,.30)}
-#lobby .lb-go{margin:8px auto 0;height:48px;padding:0;border:1px solid transparent;display:flex;align-items:center;justify-content:center;width:calc((min(80vw,306px) - 10px) / 2);border:none;border-radius:12px;background:linear-gradient(135deg,#2ad49e,#0e8f5f);color:#04231a;font-size:15px;font-weight:800;font-family:inherit;letter-spacing:1px;cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .2s ease,filter .2s ease;box-shadow:0 8px 22px -12px rgba(42,212,158,.9)}
+#lobby .lb-go{margin:0 auto;height:48px;padding:0;border:1px solid transparent;display:flex;align-items:center;justify-content:center;width:calc((var(--lbw) - 10px) / 2);border:none;border-radius:12px;background:linear-gradient(135deg,#2ad49e,#0e8f5f);color:#04231a;font-size:15px;font-weight:800;font-family:inherit;letter-spacing:1px;cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .2s ease,filter .2s ease;box-shadow:0 8px 22px -12px rgba(42,212,158,.9)}
 #lobby .lb-go:hover{box-shadow:0 0 16px rgba(42,212,158,.55)}
 #lobby .lb-go:active{transform:translateY(3px) scale(.97);filter:brightness(.9);box-shadow:0 1px 4px rgba(0,0,0,.45)}
 #bar2{grid-template-columns:repeat(2,1fr)}
-#lbTools{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:min(80vw,307px);margin-top:2px}
-.lb-t{width:100%;padding:9px 0;border:1px solid rgba(247,181,0,.35);border-radius:10px;background:rgba(247,181,0,.10);color:#e6cf9a;font-size:13px;font-weight:800;font-family:inherit;cursor:pointer;transition:background .12s,box-shadow .2s}
+#lbTools{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:var(--lbw)}
+.lb-t{width:100%;height:48px;padding:0;border:1px solid rgba(247,181,0,.35);border-radius:10px;background:rgba(247,181,0,.10);color:#e6cf9a;font-size:13px;font-weight:800;font-family:inherit;cursor:pointer;transition:background .12s,box-shadow .2s}
 .lb-t:hover{box-shadow:0 0 12px rgba(247,181,0,.30)}
 #rules,#about{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:40;padding:20px}
 #rules.on,#about.on{display:flex}
@@ -111,13 +112,20 @@ h1{font-size:17px;margin:0;color:var(--gold);letter-spacing:3px;font-weight:600}
  #bar,#bar2{width:100%;min-width:190px}
  #status{min-height:auto}
 }
-/* iPad 大廳稍微放大 */
-@media (min-width:700px){
+/* iPad 大廳稍微放大(限定真正的大螢幕,避免 iPhone 橫向 844x390 誤觸) */
+@media (min-width:700px) and (min-height:700px){
+ #lobby{--lbw:min(58vw,470px)}
  #lobby .lb-title{font-size:32px}
- #lobby #lbLevels{width:min(58vw,470px)}
- #lobby .lb-go{width:calc((min(58vw,470px) - 10px) / 2);height:56px;font-size:17px}
  #lobby .lb-lv{height:56px;font-size:16px}
- #lbTools{width:min(58vw,470px)}
+ #lobby .lb-go{height:56px;font-size:17px}
+ #lobby .lb-t{height:56px;font-size:14px}
+}
+/* 短螢幕(手機橫向):壓縮間距但按鈕維持一致 48px,全部塞得下 */
+@media (orientation:landscape) and (max-height:600px){
+ #lobby{--lbw:min(72vw,420px);gap:8px;padding:calc(8px + env(safe-area-inset-top,0px)) calc(16px + env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) calc(16px + env(safe-area-inset-left,0px))}
+ #lobby .lb-title{font-size:21px;letter-spacing:4px}
+ #lobby .lb-lv,#lobby .lb-go,#lobby .lb-t{height:48px}
+ #lbFoot{margin-top:4px !important;font-size:11px}
 }
 </style>
 </head>
